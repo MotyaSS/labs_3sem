@@ -83,7 +83,8 @@ int pi_lim(double eps, double* result) {
   double numerator = 0, prev_numerator;
   do {
     prev = cur;
-    numerator =
+    prev_numerator = numerator;
+    numerator = //2^n * n!
     n++;
 
   } while (fabs(cur - prev) > eps);
