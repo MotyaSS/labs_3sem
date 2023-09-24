@@ -14,7 +14,7 @@ bool if_flag(const char arg[]) {
 
 bool if_ll(const char arg[]) {
   char temp1[80];
-  if(strlen(arg) >=80)
+  if (strlen(arg) >= 80)
     return false;
 
   char* temp2;
@@ -38,6 +38,15 @@ bool if_ll(const char arg[]) {
     number += temp2[i] - '0';
   }
   return true;
+}
+
+bool if_lf(const char arg[]) {
+  char** endptr = NULL;
+  double res = strtod(arg, endptr);
+
+  if (endptr == arg + strlen(arg))
+    return true;
+  return false;
 }
 
 void strcpy_without_first(const char cpy[], char var[]) {

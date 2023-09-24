@@ -1,7 +1,8 @@
 
 enum {
-  TOO_FEW_ARGS,
-  FLAG_ERROR
+  TOO_FEW_ARGS = -10,
+  FLAG_ERROR,
+  FLAG_TOO_LONG
 };
 
 int flags();
