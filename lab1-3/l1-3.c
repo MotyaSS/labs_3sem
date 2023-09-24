@@ -31,13 +31,31 @@ int q_fl_print(const int argc, const char* argv[]) {
   return code;
 }
 
+bool abc_unique(double a, double b, double c, const bool unique[3]) {
+  if (a == unique[0] && b == unique[1] && c == unique[2])
+    return false;
+  return true;
+}
+
+int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, double c, double eps, bool unique[6][3],
+                    int* len) {
+  for (int i = 0; i < *len; i++) {
+    if (abc_unique(a, b, c, unique[i]))
+      return 0;
+  }
+  ans_errs[*len] = solve_quadr_eq(ans[*len], a, b, c, eps);
+  (*len)++;
+}
+
 int quadratic_eq(double ans[6][2], int ans_errs[6], double first, double second, double third, double eps) {
-  ans_errs[0] = solve_quadr_eq(ans[0], first, second, third, eps);
-  ans_errs[1] = solve_quadr_eq(ans[1], first, third, second, eps);
-  ans_errs[2] = solve_quadr_eq(ans[2], second, third, first, eps);
-  ans_errs[3] = solve_quadr_eq(ans[3], second, first, third, eps);
-  ans_errs[4] = solve_quadr_eq(ans[4], third, first, second, eps);
-  ans_errs[5] = solve_quadr_eq(ans[5], third, second, first, eps);
+  bool ans_unique[6][3];
+  int len = 0;
+  quad_unique_add(ans, ans_errs, first, second, third, eps, ans_unique, &len);
+  quad_unique_add(ans, ans_errs, first, third, second, eps, ans_unique, &len);
+  quad_unique_add(ans, ans_errs, second, third, first, eps, ans_unique, &len);
+  quad_unique_add(ans, ans_errs, second, first, third, eps, ans_unique, &len);
+  quad_unique_add(ans, ans_errs, third, first, second, eps, ans_unique, &len);
+  quad_unique_add(ans, ans_errs, third, second, first, eps, ans_unique, &len);
   return 0;
 }
 
