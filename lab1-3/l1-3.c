@@ -6,7 +6,7 @@
 
 #define BUFF_SIZE 100
 
-int q_fl(const int argc, const char* argv[]) {
+int q_fl_print(const int argc, const char* argv[]) {
   if (argc != 6)
     return ARGC_ERROR;
   if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_ll(argv[5]))
@@ -17,10 +17,14 @@ int q_fl(const int argc, const char* argv[]) {
   first = strtod(argv[3], NULL);
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
-  return quadratic_eq(ans, first, second, third, epsilon);;
+  int code = quadratic_eq(ans, first, second, third, epsilon);;
+  if(code == 0){
+
+  }
+  return code;
 }
 
-int m_fl(const int argc, const char* argv[]) {
+int m_fl_print(const int argc, const char* argv[]) {
   if (argc != 4)
     return ARGC_ERROR;
   if (!if_ll(argv[2]) || !if_ll(argv[3]))
@@ -33,15 +37,15 @@ int m_fl(const int argc, const char* argv[]) {
   return 0;
 }
 
-int t_fl(const int argc, const char* argv[]) {
+int t_fl_print(const int argc, const char* argv[]) {
   return 0;
 }
 
 int flags_handling(char* flag, int argc, char* argv[]) {
   if (strcmp(flag, "q")) {
-    return q_fl(argc, argv);
+    return q_fl_print(argc, argv);
   } else if (strcmp(flag, "m")) {
-    return m_fl(argc, argv);
+    return m_fl_print(argc, argv);
   } else if (strcmp(flag, "t")) {
     if (argc != 6)
       return ARGC_ERROR;

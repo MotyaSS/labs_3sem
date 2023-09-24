@@ -9,6 +9,10 @@ enum {
   ARGUMENT_IR
 };
 
+int q_fl_print(const int argc, const char* argv[]);
+int m_fl_print(const int argc, const char* argv[]);
+int t_fl_print(const int argc, const char* argv[]);
+
 int flags_handling(char* flag, int argc, char* argv[]);
 int input(int argc, char* argv[]);
 
