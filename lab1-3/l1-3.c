@@ -132,17 +132,14 @@ bool triangle(double a, double b, double c, double eps) {
 }
 
 int flags_handling(char* flag, int argc, char* argv[]) {
-  if (strcmp(flag, "q") == 0) {
+  if (strcmp(flag, "q") == 0)
     return q_fl_print(argc, argv);
-  } else if (strcmp(flag, "m") == 0) {
+  else if (strcmp(flag, "m") == 0)
     return m_fl_print(argc, argv);
-  } else if (strcmp(flag, "t") == 0) {
-    if (argc != 6)
-      return ARGC_ERROR;
-  } else {
+  else if (strcmp(flag, "t") == 0)
+    return t_fl_print(argc, argv);
+  else
     return FLAG_UNKNOWN;
-  }
-  return 0;
 }
 
 int input(int argc, char* argv[]) {
