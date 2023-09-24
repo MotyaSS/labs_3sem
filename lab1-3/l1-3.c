@@ -29,7 +29,7 @@ int m_fl(const int argc, const char* argv[]) {
   if (multiplicity(first, second))
     printf("OK, divisible\n");
   else
-    printf("Not OKб not divisible\n");
+    printf("Not OK, not divisible\n");
   return 0;
 }
 
