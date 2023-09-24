@@ -18,7 +18,7 @@ int q_fl_print(const int argc, const char* argv[]) {
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
   int code = quadratic_eq(ans, first, second, third, epsilon);;
-  if(code == 0){
+  if (code == 0) {
 
   }
   return code;

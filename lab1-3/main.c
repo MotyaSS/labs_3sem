@@ -3,7 +3,7 @@
 #include "l1-3.h"
 
 int main(int argc, char* argv[]) {
-  switch(input(argc, argv)){
+  switch (input(argc, argv)) {
 
   }
   return 0;
