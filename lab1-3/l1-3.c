@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -19,9 +20,28 @@ int q_fl_print(const int argc, const char* argv[]) {
   third = strtod(argv[5], NULL);
   int code = quadratic_eq(ans, first, second, third, epsilon);;
   if (code == 0) {
-
+    //some stuff
   }
   return code;
+}
+
+int quadratic_eq(double ans[6][2], double first, double second, double third, double eps) {
+  solve_quadr_eq(ans[0], first, second, third, eps);
+  solve_quadr_eq(ans[1], first, third, second, eps);
+  solve_quadr_eq(ans[2], second, third, first, eps);
+  solve_quadr_eq(ans[3], second, first, third, eps);
+  solve_quadr_eq(ans[4], third, first, second, eps);
+  solve_quadr_eq(ans[5], third, second, first, eps);
+  return 0;
+
+}
+
+int solve_quadr_eq(double ans[2], double a, double b, double c, double eps) {
+  double discr = b * b - 4 * a * c;
+  if(fabs(discr) < eps){
+    ans[0];
+    ans[1];
+  }
 }
 
 int m_fl_print(const int argc, const char* argv[]) {
