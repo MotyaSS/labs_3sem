@@ -14,6 +14,9 @@ bool if_flag(const char arg[]) {
 
 bool if_ll(const char arg[]) {
   char temp1[80];
+  if(strlen(arg) >=80)
+    return false;
+
   char* temp2;
   strcpy(temp1, arg);
   temp2 = temp1;
