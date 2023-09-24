@@ -4,7 +4,8 @@
 #define BUFF_SIZE 100
 
 typedef enum {
-  H_NO_SUCH_NUMBERS = 1,
+  FLAG_UNDEF = 1,
+  H_NO_SUCH_NUMBERS,
   E_MORE_THAN_TEN,
   E_NON_POSITIVE,
   A_NEGATIVE,

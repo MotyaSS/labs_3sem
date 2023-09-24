@@ -86,7 +86,9 @@ int flag_sw_case(const char* flag, const long long number) {
   } else if (strcmp(flag, "a") == 0) {
     return a_fl_handle(number);
   } else if (strcmp(flag, "f") == 0) {
-    f_fl_handle(number);
+    return f_fl_handle(number);
+  } else {
+    return FLAG_UNDEF;
   }
 
   return 0;

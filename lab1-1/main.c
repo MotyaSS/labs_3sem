@@ -55,6 +55,9 @@ int main(int argc, char* argv[]) {
     case F_MORE_THAN_LLMAX:
       printf("Factorial is too huge\n");
       break;
+    case FLAG_UNDEF:
+      printf("Undefined flag\n");
+      break;
     default:
       printf("All went ok\n");
   }
