@@ -91,7 +91,6 @@ int pi_lim(double eps, double* result) {  //govno
     cur /= pow(2 * n + 1, 2);
     cur *= pow(2, 4) * pow(n + 1, 3);
     cur /= pow(2 * n + 2, 2);
-
     n++;
   } while (fabs(cur - prev) > eps);
   *result = cur;
