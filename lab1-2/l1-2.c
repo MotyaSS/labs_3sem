@@ -83,7 +83,7 @@ long long factorial(int x) {
   return x * factorial(x - 1);
 }
 
-int pi_lim(double eps, double* result) { //govno
+int pi_lim(double eps, double* result) {  //govno
   double cur = 0, prev;
   long long n = 1;
   long long numerator = 0, denominator;
