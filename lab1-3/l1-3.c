@@ -6,11 +6,14 @@
 
 int flags_handling(char* flag, int argc, char* argv[]) {
   if (strcmp(flag, "q")) {
-
+    if (argc != 6)
+      return ARGC_ERROR;
   } else if (strcmp(flag, "m")) {
-
+    if (argc != 4)
+      return ARGC_ERROR;
   } else if (strcmp(flag, "t")) {
-
+    if (argc != 6)
+      return ARGC_ERROR;
   } else {
     return FLAG_UNKNOWN;
   }

@@ -3,7 +3,8 @@ enum {
   TOO_FEW_ARGS = -10,
   FLAG_ERROR,
   FLAG_UNKNOWN,
-  FLAG_TOO_LONG
+  FLAG_TOO_LONG,
+  ARGC_ERROR
 };
 
 int flags_handling(char* flag, int argc, char* argv[]);
