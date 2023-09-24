@@ -16,7 +16,7 @@ int q_fl_print(const int argc, const char* argv[]) {
   if (argc != 6)
     return ARGC_ERROR;
   if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
-    return ARGUMENT_IR;
+    return NUMBER_IR;
   double ans[6][2];
   quadr_st_codes ans_errs[6];
   double first, second, third, epsilon;
@@ -84,7 +84,7 @@ int m_fl_print(const int argc, const char* argv[]) {
   if (argc != 4)
     return ARGC_ERROR;
   if (!if_ll(argv[2]) || !if_ll(argv[3]))
-    return ARGUMENT_IR;
+    return NUMBER_IR;
   long long first = strtoll(argv[2], NULL, 10), second = strtoll(argv[3], NULL, 10);
   if (multiplicity(first, second))
     printf("OK, divisible\n");
@@ -101,7 +101,7 @@ int t_fl_print(const int argc, const char* argv[]) {
   if (argc != 6)
     return ARGC_ERROR;
   if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
-    return ARGUMENT_IR;
+    return NUMBER_IR;
   double ans[6][2];
   quadr_st_codes ans_errs[6];
   double first, second, third, epsilon;

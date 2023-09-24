@@ -6,7 +6,7 @@ enum {
   FLAG_UNKNOWN,
   FLAG_TOO_LONG,
   ARGC_ERROR,
-  ARGUMENT_IR
+  NUMBER_IR
 };
 
 int q_fl_print(const int argc, const char* argv[]);
