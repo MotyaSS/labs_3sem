@@ -17,7 +17,7 @@ int flags_handling(char* flag, int argc, char* argv[]);
 int input(int argc, char* argv[]);
 
 bool multiplicity(int first, int second);
-int quadratic_eq(double ans[6][2], double first, double second, double third, double eps);
+int quadratic_eq(double ans[6][2], int ans_errs[6], double first, double second, double third, double eps);
 int solve_quadr_eq(double ans[2], double a, double b, double c, double eps);
 
 bool triangle(double first, double second, double third, double eps);
