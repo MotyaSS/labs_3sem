@@ -4,7 +4,7 @@
 
 #define BUFF_SIZE 100
 
-int flags(char* flag, int argc, char* argv[]) {
+int flags_handling(char* flag, int argc, char* argv[]) {
   if (strcmp(flag, "q")) {
 
   } else if (strcmp(flag, "m")) {
@@ -27,5 +27,5 @@ int input(int argc, char* argv[]) {
   if (strlen(argv[1]) >= BUFF_SIZE)
     return FLAG_TOO_LONG;
   strcpy_without_first(argv[1], flag);
-  return flags(flag, argc, argv);
+  return flags_handling(flag, argc, argv);
 }

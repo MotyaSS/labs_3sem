@@ -6,5 +6,5 @@ enum {
   FLAG_TOO_LONG
 };
 
-int flags(char* flag, int argc, char* argv[]);
+int flags_handling(char* flag, int argc, char* argv[]);
 int input(int argc, char* argv[]);
