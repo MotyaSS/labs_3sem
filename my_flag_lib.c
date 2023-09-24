@@ -41,9 +41,8 @@ bool if_ll(const char arg[]) {
 }
 
 bool if_lf(const char arg[]) {
-  char** endptr = NULL;
-  double res = strtod(arg, endptr);
-
+  char* endptr = NULL;
+  double res = strtod(arg, &endptr);
   if (endptr == arg + strlen(arg))
     return true;
   return false;
