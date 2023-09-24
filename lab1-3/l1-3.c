@@ -7,13 +7,18 @@
 
 #define BUFF_SIZE 100
 
+typedef enum{
+  DISCRIMINANT_OK,
+  DISCRIMINANT_LESS_ZERO = -1
+}quadr_st_codes;
+
 int q_fl_print(const int argc, const char* argv[]) {
   if (argc != 6)
     return ARGC_ERROR;
   if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
     return ARGUMENT_IR;
   double ans[6][2];
-  int ans_errs[6];
+  quadr_st_codes ans_errs[6];
   double first, second, third, epsilon;
   epsilon = strtod(argv[2], NULL);
   first = strtod(argv[3], NULL);
@@ -21,34 +26,36 @@ int q_fl_print(const int argc, const char* argv[]) {
   third = strtod(argv[5], NULL);
   int code = quadratic_eq(ans, ans_errs, first, second, third, epsilon);;
   for (int i = 0; i < 6; i++) {
-    if (ans_errs[i] == -1) {
+    if (ans_errs[i] == DISCRIMINANT_LESS_ZERO) {
       continue;
     }
-    if (ans_errs[i] == 0) {
+    if (ans_errs[i] == DISCRIMINANT_OK) {
       printf("%lf %lf\n", ans[i][0], ans[i][1]);
     }
   }
   return code;
 }
 
-bool abc_unique(double a, double b, double c, const bool unique[3]) {
+bool abc_unique(double a, double b, double c, const double unique[3]) {
   if (a == unique[0] && b == unique[1] && c == unique[2])
     return false;
   return true;
 }
 
-int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, double c, double eps, bool unique[6][3],
+int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, double c, double eps, double unique[6][3],
                     int* len) {
   for (int i = 0; i < *len; i++) {
-    if (abc_unique(a, b, c, unique[i]))
-      return 0;
+    if (!abc_unique(a, b, c, unique[i]))
+      return -1;
   }
   ans_errs[*len] = solve_quadr_eq(ans[*len], a, b, c, eps);
   (*len)++;
+  unique[*len][0] = a, unique[*len][1] = b, unique[*len][2] = c;
+  return 0;
 }
 
 int quadratic_eq(double ans[6][2], int ans_errs[6], double first, double second, double third, double eps) {
-  bool ans_unique[6][3];
+  double ans_unique[6][3];
   int len = 0;
   quad_unique_add(ans, ans_errs, first, second, third, eps, ans_unique, &len);
   quad_unique_add(ans, ans_errs, first, third, second, eps, ans_unique, &len);
@@ -64,14 +71,14 @@ int solve_quadr_eq(double ans[2], double a, double b, double c, double eps) {
   if (fabs(discr) < eps) {
     ans[0] = (-b + sqrt(discr)) / (2 * a);
     ans[1] = ans[0];
-    return 0;
+    return DISCRIMINANT_OK;
   }
   if (discr < 0) {
-    return -1;
+    return DISCRIMINANT_LESS_ZERO;
   }
   ans[0] = (-b + sqrt(discr)) / (2 * a);
   ans[1] = (-b - sqrt(discr)) / (2 * a);
-  return 0;
+  return DISCRIMINANT_OK;
 }
 
 int m_fl_print(const int argc, const char* argv[]) {
