@@ -25,14 +25,6 @@ int q_fl_print(const int argc, const char* argv[]) {
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
   int code = quadratic_eq(ans, ans_errs, first, second, third, epsilon);;
-  for (int i = 0; i < 6; i++) {
-    if (ans_errs[i] == DISCRIMINANT_LESS_ZERO) {
-      continue;
-    }
-    if (ans_errs[i] == DISCRIMINANT_OK) {
-      printf("%lf %lf\n", ans[i][0], ans[i][1]);
-    }
-  }
   return code;
 }
 
@@ -42,27 +34,36 @@ bool abc_unique(double a, double b, double c, const double unique[3]) {
   return true;
 }
 
-int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, double c, double eps, double unique[6][3],
+int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, double c, double eps, double comb_unique[6][3],
                     int* len) {
   for (int i = 0; i < *len; i++) {
-    if (!abc_unique(a, b, c, unique[i]))
+    if (!abc_unique(a, b, c, comb_unique[i]))
       return -1;
   }
   ans_errs[*len] = solve_quadr_eq(ans[*len], a, b, c, eps);
-  unique[*len][0] = a, unique[*len][1] = b, unique[*len][2] = c;
+  comb_unique[*len][0] = a, comb_unique[*len][1] = b, comb_unique[*len][2] = c;
   (*len)++;
   return 0;
 }
 
 int quadratic_eq(double ans[6][2], int ans_errs[6], double first, double second, double third, double eps) {
-  double ans_unique[6][3];
+  double comb_unique[6][3];
   int len = 0;
-  quad_unique_add(ans, ans_errs, first, second, third, eps, ans_unique, &len);
-  quad_unique_add(ans, ans_errs, first, third, second, eps, ans_unique, &len);
-  quad_unique_add(ans, ans_errs, second, third, first, eps, ans_unique, &len);
-  quad_unique_add(ans, ans_errs, second, first, third, eps, ans_unique, &len);
-  quad_unique_add(ans, ans_errs, third, first, second, eps, ans_unique, &len);
-  quad_unique_add(ans, ans_errs, third, second, first, eps, ans_unique, &len);
+  quad_unique_add(ans, ans_errs, first, second, third, eps, comb_unique, &len);
+  quad_unique_add(ans, ans_errs, first, third, second, eps, comb_unique, &len);
+  quad_unique_add(ans, ans_errs, second, third, first, eps, comb_unique, &len);
+  quad_unique_add(ans, ans_errs, second, first, third, eps, comb_unique, &len);
+  quad_unique_add(ans, ans_errs, third, first, second, eps, comb_unique, &len);
+  quad_unique_add(ans, ans_errs, third, second, first, eps, comb_unique, &len);
+  for (int i = 0; i < len; i++) {
+    if (ans_errs[i] == DISCRIMINANT_LESS_ZERO) {
+      continue;
+    }
+    if (ans_errs[i] == DISCRIMINANT_OK) {
+      printf("%lf %lf\n", ans[i][0], ans[i][1]);
+    }
+  }
+
   return 0;
 }
 
