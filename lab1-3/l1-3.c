@@ -1,9 +1,9 @@
 #include "l1-3.h"
 #include "../my_flag_lib.h"
+#define BUFF_SIZE 100
 
-
-int flags() {
-
+int flags(char* flag) {
+  return 0;
 }
 
 int input(int argc, char* argv[]) {
@@ -12,6 +12,7 @@ int input(int argc, char* argv[]) {
   if (!if_flag(argv[1])) {
     return FLAG_ERROR;
   }
-  char* flag;
+  char flag[BUFF_SIZE];
+  strcpy_without_first(argv[1], flag);
   return 0;
 }
