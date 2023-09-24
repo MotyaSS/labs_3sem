@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 #include "l1-3.h"
 #include "../my_flag_lib.h"
 
@@ -20,6 +21,15 @@ int q_fl(const int argc, const char* argv[]) {
 }
 
 int m_fl(const int argc, const char* argv[]) {
+  if (argc != 4)
+    return ARGC_ERROR;
+  if (!if_ll(argv[2]) || !if_ll(argv[3]))
+    return ARGUMENT_IR;
+  long long first = strtoll(argv[2], NULL, 10), second = strtoll(argv[3], NULL, 10);
+  if (multiplicity(first, second))
+    printf("OK, divisible\n");
+  else
+    printf("Not OKб not divisible\n");
   return 0;
 }
 
@@ -31,10 +41,7 @@ int flags_handling(char* flag, int argc, char* argv[]) {
   if (strcmp(flag, "q")) {
     return q_fl(argc, argv);
   } else if (strcmp(flag, "m")) {
-    if (argc != 4)
-      return ARGC_ERROR;
-    if (!if_ll(argv[2]) || !if_ll(argv[3]))
-      return ARGUMENT_IR;
+    return m_fl(argc, argv);
   } else if (strcmp(flag, "t")) {
     if (argc != 6)
       return ARGC_ERROR;
