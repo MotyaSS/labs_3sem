@@ -49,8 +49,8 @@ int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, doubl
       return -1;
   }
   ans_errs[*len] = solve_quadr_eq(ans[*len], a, b, c, eps);
-  (*len)++;
   unique[*len][0] = a, unique[*len][1] = b, unique[*len][2] = c;
+  (*len)++;
   return 0;
 }
 
