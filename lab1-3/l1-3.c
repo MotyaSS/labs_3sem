@@ -24,7 +24,7 @@ int q_fl_print(const int argc, const char* argv[]) {
   first = strtod(argv[3], NULL);
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
-  int code = quadratic_eq(ans, ans_errs, first, second, third, epsilon);;
+  int code = quadratic_eq_all_solves(ans, ans_errs, first, second, third, epsilon);;
   return code;
 }
 
@@ -44,7 +44,7 @@ int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, doubl
   return 0;
 }
 
-int quadratic_eq(double ans[6][2], int ans_errs[6], double first, double second, double third, double eps) {
+int quadratic_eq_all_solves(double ans[6][2], int ans_errs[6], double first, double second, double third, double eps) {
   double comb_unique[6][3];
   int len = 0;
   quad_unique_add(ans, ans_errs, first, second, third, eps, comb_unique, &len);
