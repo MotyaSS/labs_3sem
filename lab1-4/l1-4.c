@@ -113,11 +113,12 @@ int non_digit_ascii_replace(FILE* input, FILE* output) {
   while (!feof(input)) {
     char a;
     while ((a = fgetc(input)) != '\n' && !feof(input)) {
-      if (!isdigit(a))
-        fprintf(output, "%X", a);
-      else
+      if (isdigit(a))
         fprintf(output, "%c\n", a);
+      else
+        fprintf(output, "%X", a);
     }
+    fprintf(output, "\n");
   }
   return 0;
 }
