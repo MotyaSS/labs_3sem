@@ -7,35 +7,42 @@
 int flags_handling(const char* flag, int argc, char* argv[], bool if_output) {
   int argc_targ = 3 + (if_output ? 1 : 0);
 
-  if(argc != argc_targ)
+  if (argc != argc_targ)
     return ARGC_ERROR;
 
   FILE* input = fopen(argv[2], "r");
   FILE* output = NULL;
-  if(if_output)
+  if (if_output)
     output = fopen(argv[3], "r");
   else {
     size_t size = (strlen(argv[2]) + 4);
-    char* out_name = (char*)malloc(sizeof(char) * (size + 1));
+    char* out_name = (char*) malloc(sizeof(char) * (size + 1));
     out_name = "out_";
     strncat(out_name, argv[2], size - 4);
     output = fopen(out_name, "w");
     free(out_name);
   }
 
-
+  int code;
   switch (*flag) {
     case 'd':
-      return d_fl(input, output);
+      code = d_fl(input, output);
+      break;
     case 'i':
-      return i_fl(input, output);
+      code = i_fl(input, output);
+      break;
     case 's':
-      return s_fl(input, output);
+      code = s_fl(input, output);
+      break;
     case 'a':
-      return a_fl(input, output);
+      code = a_fl(input, output);
+      break;
     default:
-      return FLAG_UNKNOWN;
+      code = FLAG_UNKNOWN;
   }
+  fclose(input);
+  fclose(output);
+  return code;
 }
 
 int input(int argc, char* argv[]) {
@@ -50,7 +57,7 @@ int input(int argc, char* argv[]) {
   strcpy_without_first(argv[1], flag);
   bool if_output = false;
   char* t_fl = flag;
-  if(flag[0] == 'n') {
+  if (flag[0] == 'n') {
     if_output = true;
     t_fl++;
   }
