@@ -16,7 +16,7 @@ enum {
 int input(int argc, char* argv[]);
 int flags_handling(const char* flag, int argc, char* argv[], bool if_output);
 
-int d_fl(FILE* input, FILE* output);
-int i_fl(FILE* input, FILE* output);
-int s_fl(FILE* input, FILE* output);
-int a_fl(FILE* input, FILE* output);
+int digit_exclude(FILE* input, FILE* output);
+int alpha_count(FILE* input, FILE* output);
+int non_digit_non_space_non_alpha_count(FILE* input, FILE* output);
+int non_digit_ascii_replace(FILE* input, FILE* output);

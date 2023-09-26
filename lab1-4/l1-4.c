@@ -23,16 +23,16 @@ int flags_handling(const char* flag, int argc, char* argv[], bool if_output) {
   int code;
   switch (*flag) {
     case 'd':
-      code = d_fl(input, output);
+      code = digit_exclude(input, output);
       break;
     case 'i':
-      code = i_fl(input, output);
+      code = alpha_count(input, output);
       break;
     case 's':
-      code = s_fl(input, output);
+      code = non_digit_non_space_non_alpha_count(input, output);
       break;
     case 'a':
-      code = a_fl(input, output);
+      code = non_digit_ascii_replace(input, output);
       break;
     default:
       code = FLAG_UNKNOWN;
@@ -62,7 +62,7 @@ int input(int argc, char* argv[]) {
   return flags_handling(t_fl, argc, argv, if_output);
 }
 
-int d_fl(FILE* input, FILE* output) {
+int digit_exclude(FILE* input, FILE* output) {
   if (input == NULL || output == NULL)
     return FILE_IS_NULL;
   char a = '\0';
@@ -75,14 +75,49 @@ int d_fl(FILE* input, FILE* output) {
   return 0;
 }
 
-int i_fl(FILE* input, FILE* output) {
+int alpha_count(FILE* input, FILE* output) {
+  if (input == NULL || output == NULL)
+    return FILE_IS_NULL;
 
+  while (!feof(input)) {
+    char a;
+    int cntr = 0;
+    while ((a = fgetc(input)) != '\n' && !feof(input)) {
+      if (isalpha(a))
+        cntr++;
+    }
+    fprintf(output, "%d\n", cntr);
+  }
+  return 0;
 }
 
-int s_fl(FILE* input, FILE* output) {
-
+int non_digit_non_space_non_alpha_count(FILE* input, FILE* output) {
+  if (input == NULL || output == NULL)
+    return FILE_IS_NULL;
+  while (!feof(input)) {
+    char a;
+    int cntr = 0;
+    while ((a = fgetc(input)) != '\n' && !feof(input)) {
+      if (!isalpha(a) || !isdigit(a) || a != ' ')
+        cntr++;
+    }
+    fprintf(output, "%d\n", cntr);
+  }
+  return 0;
 }
 
-int a_fl(FILE* input, FILE* output) {
+int non_digit_ascii_replace(FILE* input, FILE* output) {
+  if (input == NULL || output == NULL)
+    return FILE_IS_NULL;
 
+  while (!feof(input)) {
+    char a;
+    while ((a = fgetc(input)) != '\n' && !feof(input)) {
+      if (!isdigit(a))
+        fprintf(output, "%X", a);
+      else
+        fprintf(output, "%c\n", a);
+    }
+  }
+  return 0;
 }
