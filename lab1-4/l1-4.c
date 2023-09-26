@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include <stdio.h>
 #include "l1-4.h"
 #include "..\my_flag_lib.h"
@@ -13,16 +14,12 @@ int flags_handling(const char* flag, int argc, char* argv[], bool if_output) {
   FILE* input = fopen(argv[2], "r");
   FILE* output = NULL;
   if (if_output)
-    output = fopen(argv[3], "r");
+    output = fopen(argv[3], "w");
   else {
-    size_t size = (strlen(argv[2]) + 4);
-    char* out_name = (char*) malloc(sizeof(char) * (size + 1));
-    out_name = "out_";
-    strncat(out_name, argv[2], size - 4);
+    char out_name[BUFF_SIZE] = "out_";
+    strncat(out_name, argv[2], BUFF_SIZE - 4);
     output = fopen(out_name, "w");
-    free(out_name);
   }
-
   int code;
   switch (*flag) {
     case 'd':
@@ -40,6 +37,7 @@ int flags_handling(const char* flag, int argc, char* argv[], bool if_output) {
     default:
       code = FLAG_UNKNOWN;
   }
+
   fclose(input);
   fclose(output);
   return code;
@@ -62,4 +60,29 @@ int input(int argc, char* argv[]) {
     t_fl++;
   }
   return flags_handling(t_fl, argc, argv, if_output);
+}
+
+int d_fl(FILE* input, FILE* output) {
+  if (input == NULL || output == NULL)
+    return FILE_IS_NULL;
+  char a = '\0';
+  while (!feof(input)) {
+    fscanf(input, "%c", &a);
+    if (isdigit(a))
+      continue;
+    fprintf(output, "%c", a);
+  }
+  return 0;
+}
+
+int i_fl(FILE* input, FILE* output) {
+
+}
+
+int s_fl(FILE* input, FILE* output) {
+
+}
+
+int a_fl(FILE* input, FILE* output) {
+
 }

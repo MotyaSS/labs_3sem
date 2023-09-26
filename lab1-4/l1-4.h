@@ -9,6 +9,9 @@ enum {
   FLAG_TOO_LONG,
   ARGC_ERROR,
 };
+enum {
+  FILE_IS_NULL = -1
+};
 
 int input(int argc, char* argv[]);
 int flags_handling(const char* flag, int argc, char* argv[], bool if_output);
