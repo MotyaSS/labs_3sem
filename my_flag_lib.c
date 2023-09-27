@@ -13,7 +13,7 @@ bool if_flag(const char arg[]) {
 }
 
 bool if_ll(const char arg[]) {
-  if(arg == NULL)
+  if (arg == NULL)
     return false;
   char temp1[80];
   if (strlen(arg) >= 80)
@@ -43,7 +43,7 @@ bool if_ll(const char arg[]) {
 }
 
 bool if_lf(const char arg[]) {
-  if(arg == NULL)
+  if (arg == NULL)
     return false;
   char* endptr = NULL;
   double res = strtod(arg, &endptr);
