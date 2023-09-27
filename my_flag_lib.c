@@ -12,6 +12,36 @@ bool if_flag(const char arg[]) {
   return true;
 }
 
+bool if_l(const char arg[]) {
+  if (arg == NULL)
+    return false;
+  char temp1[80];
+  if (strlen(arg) >= 80)
+    return false;
+
+  char* temp2;
+  strcpy(temp1, arg);
+  temp2 = temp1;
+  int len = strlen(arg);
+  if (arg[0] == '-') {
+    temp2 = temp1 + 1;
+    len--;
+  }
+
+  long long number = 0;
+  for (int i = 0; i < len; i++) {
+    if (temp2[i] < '0' || temp2[i] > '9')
+      return false;
+    if (number > LONG_MAX / 10)
+      return false;
+    if (number == (LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10))
+      return false;
+    number *= 10;
+    number += temp2[i] - '0';
+  }
+  return true;
+}
+
 bool if_ll(const char arg[]) {
   if (arg == NULL)
     return false;
