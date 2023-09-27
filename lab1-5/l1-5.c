@@ -40,15 +40,23 @@ double sum_b(long x, double eps) {
   double cur = -1.0 * (x * x) / 2;
   double prev;
   do {
-    n++;
     prev = cur;
     cur = -1 * prev * x / (2 * n + 1) * x / (2 * n + 2);
+    n++;
   } while (fabs(cur - prev) > eps);
   return cur;
 }
 
 double sum_c(long x, double eps) {
-
+  long n = 1;
+  double cur = pow(3, 3) * x * x / (3 * 2);
+  double prev;
+  do {
+    prev = cur;
+    cur = prev * pow(3, 3) / (3 * n + 1) * pow(n + 1, 3) / (3 * n + 2) * x * x / (3 * n + 3);
+    n++;
+  } while (fabs(cur - prev) > eps);
+  return cur;
 }
 
 double sum_d(long x, double eps) {
