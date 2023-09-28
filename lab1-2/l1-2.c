@@ -72,7 +72,7 @@ int print_all_pi(double eps) {
   return 0;
 }
 
-int pi_lim(double eps, double* result) {  //govno
+int pi_lim(double eps, double* result) {  // :-(
   double cur = pow(2, 4) / pow(2, 2), prev;
   long n = 1;
   do {
@@ -102,11 +102,28 @@ int pi_sum(double eps, double* result) {
 }
 
 int pi_equation(double eps, double* result) {
-
+  double left = 3, right = 3.5, mid;
+  double cur = 0;
+  do {
+    mid = (right + left) / 2;
+    cur = sin(mid);
+    if(cur > 0)
+      left = mid;
+    else
+      right = mid;
+  } while (fabs(left - right) > eps);
+  *result = mid;
+  return 0;
 }
 
 int print_all_ln2(double eps) {
+  double lim_res, sum_res, equ_res;
+  int a = ln2_lim(eps, &lim_res);
+  int b = ln2_sum(eps, &sum_res);
+  int c = ln2_equation(eps, &equ_res);
 
+  printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
+  return 0;
 }
 
 int ln2_lim(double eps, double* result) {
