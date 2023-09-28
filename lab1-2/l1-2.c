@@ -107,7 +107,7 @@ int pi_equation(double eps, double* result) {
   do {
     mid = (right + left) / 2;
     cur = sin(mid);
-    if(cur > 0)
+    if (cur > 0)
       left = mid;
     else
       right = mid;
@@ -121,14 +121,27 @@ int print_all_ln2(double eps) {
   int a = ln2_lim(eps, &lim_res);
   int b = ln2_sum(eps, &sum_res);
   int c = ln2_equation(eps, &equ_res);
-
+  if (a != 0) {
+    printf("lim is not ok\n");
+    return a;
+  }
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
   return 0;
 }
 
-
 int ln2_lim(double eps, double* result) {
-
+  double cur = 0, prev;
+  long n = 1;
+  do {
+    prev = cur;
+    cur = n * (pow(2, 1.0 / n) - 1);
+    if (n < LONG_MAX / 2)
+      n *= 2;
+    else
+      return -1; // err code
+  } while (fabs(cur - prev) > eps);
+  *result = cur;
+  return 0;
 }
 
 int ln2_sum(double eps, double* result) {
