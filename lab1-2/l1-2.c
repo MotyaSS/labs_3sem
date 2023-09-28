@@ -67,24 +67,14 @@ int print_all_pi(double eps) {
   int a = pi_lim(eps, &lim_res);
   int b = pi_sum(eps, &sum_res);
   int c = pi_equation(eps, &equ_res);
-  if (a != 0) {
-    printf("lim is not ok\n");
-    return a;
-  }
+
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
   return 0;
 }
 
-long long factorial(int x) {
-  if (x <= 1) {
-    return 1;
-  }
-  return x * factorial(x - 1);
-}
-
 int pi_lim(double eps, double* result) {  //govno
   double cur = pow(2, 4) / pow(2, 2), prev;
-  long long n = 1;
+  long n = 1;
   do {
     prev = cur;
     cur = prev * n;
@@ -99,7 +89,16 @@ int pi_lim(double eps, double* result) {  //govno
 
 
 int pi_sum(double eps, double* result) {
-
+  double cur = 1;
+  long n = 1;
+  double sum = cur;
+  do {
+    n++;
+    cur = 1.0 * (n % 2 == 0 ? -1 : 1) / (2 * n - 1);
+    sum += cur;
+  } while (fabs(cur) > eps);
+  *result = 4 * sum;
+  return 0;
 }
 
 int pi_equation(double eps, double* result) {
