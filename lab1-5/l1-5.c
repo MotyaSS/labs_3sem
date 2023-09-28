@@ -14,7 +14,7 @@ int input(int argc, char* argv[]) {
 
   if (!if_lf(argv[2]))
     return INCORRECT_ARG;
-  double eps = strtod(argv[1], NULL);
+  double eps = strtod(argv[2], NULL);
 
   printf("%lf\n", sum_a(x, eps));
   printf("%lf\n", sum_b(x, eps));
@@ -24,8 +24,8 @@ int input(int argc, char* argv[]) {
 }
 
 double sum_a(long x, double eps) {
-  long n = 1;
-  double cur = x;
+  long n = 0;
+  double cur = 1;
   double sum = cur;
   double prev;
   do {
@@ -38,8 +38,8 @@ double sum_a(long x, double eps) {
 }
 
 double sum_b(long x, double eps) {
-  long n = 1;
-  double cur = -1.0 * (x * x) / 2;
+  long n = 0;
+  double cur = 1;
   double sum = cur;
   double prev;
   do {
@@ -52,13 +52,14 @@ double sum_b(long x, double eps) {
 }
 
 double sum_c(long x, double eps) {
-  long n = 1;
-  double cur = pow(3, 3) * x * x / (3 * 2);
+  long n = 0;
+  double cur = 1;
+  //pow(3, 3) * x * x / (3 * 2)
   double sum = cur;
   double prev;
   do {
     prev = cur;
-    cur = prev * pow(3, 3) / (3 * n + 1) * pow(n + 1, 3) / (3 * n + 2) * x * x / (3 * n + 3);
+    cur = prev * pow(3, 3) * pow(n + 1, 3) / (3 * n + 1) / (3 * n + 2) * x / (3 * n + 3) * x;
     sum += cur;
     n++;
   } while (fabs(cur) > eps);
