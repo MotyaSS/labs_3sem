@@ -67,8 +67,8 @@ fsc sum_b(double x, double eps, double* res) {
 }
 
 fsc sum_c(double x, double eps, double* res) {
-  if (fabs(x) >= 1)
-    return INCORRECT_ARG;
+  if (fabs(x) > 0.9999999) //чем ближе к 1, тем медленее работает, может даже сломается
+    return INCORRECT_ARG;     //поэтому сделаем вот так >///<, так вроде еще правильно считает
   long n = 0;
   double cur = 1;
   double sum = cur;
