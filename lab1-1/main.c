@@ -4,13 +4,7 @@
 #include "..\my_flag_lib.h"
 #include "l1-1.h"
 
-enum {
-  ARGUMENTS_COUNT_IR = -10,
-  FLAG_ISSUE,
-  NOT_NUMBER
-} INNER_HANDLERS;
-
-int my_func(int argc, char* argv[]) {
+HANDLER my_func(int argc, char* argv[]) {
   if (argc != 3)
     return ARGUMENTS_COUNT_IR;
   if (!if_flag(argv[1]) || strlen(argv[1]) >= BUFF_SIZE)
@@ -61,5 +55,5 @@ int main(int argc, char* argv[]) {
     default:
       printf("All went ok\n");
   }
-  return code;
+  return 0;
 }

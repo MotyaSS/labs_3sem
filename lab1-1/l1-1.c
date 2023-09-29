@@ -18,7 +18,7 @@ int h_fl_handle(const long long number) {
     printf("%d ", buff[i]);
   }
   printf("\n");
-  return 0;
+  return OK;
 }
 
 int p_fl_handle(const long long number) {
@@ -26,7 +26,7 @@ int p_fl_handle(const long long number) {
     printf("Prime\n");
   else
     printf("Complex\n");
-  return 0;
+  return OK;
 }
 
 int s_fl_handle(const long long number) {
@@ -35,7 +35,7 @@ int s_fl_handle(const long long number) {
   s_fl(buff, &len, number);
 
   printf("%s\n", buff);
-  return 0;
+  return OK;
 }
 
 int e_fl_handle(const long long number) {
@@ -52,7 +52,7 @@ int e_fl_handle(const long long number) {
     }
     printf("\n");
   }
-  return 0;
+  return OK;
 }
 
 int a_fl_handle(const long long number) {
@@ -62,7 +62,7 @@ int a_fl_handle(const long long number) {
   if (ans == A_MORE_THAN_LLMAX)
     return A_MORE_THAN_LLMAX;
   printf("%lld\n", ans);
-  return 0;
+  return OK;
 }
 
 
@@ -71,7 +71,7 @@ int f_fl_handle(const long long number) {
   if (ans == F_MORE_THAN_LLMAX)
     return F_MORE_THAN_LLMAX;
   printf("%lld\n", ans);
-  return 0;
+  return OK;
 }
 
 int flag_sw_case(const char* flag, const long long number) {
@@ -90,8 +90,6 @@ int flag_sw_case(const char* flag, const long long number) {
   } else {
     return FLAG_UNDEF;
   }
-
-  return 0;
 }
 
 int h_fl(int* arr, int* len, const long long number) {
@@ -100,7 +98,7 @@ int h_fl(int* arr, int* len, const long long number) {
     arr[(*len)] = i;
     (*len)++;
   }
-  return 0;
+  return OK;
 }
 
 int p_fl(const long long number) {
@@ -147,7 +145,7 @@ int s_fl(char* buff, int* len, const int number) {
   }
 
   strrev(buff);
-  return 0;
+  return OK;
 }
 
 
@@ -159,7 +157,7 @@ int e_fl(int buff[10][10], const long long number) {
       x *= (i + 1);
     }
   }
-  return 0;
+  return OK;
 }
 
 long long int a_fl(const long long number) {
