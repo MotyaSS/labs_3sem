@@ -2,19 +2,18 @@
 
 #define BUFF_SIZE 100
 
-enum {
-  TOO_FEW_ARGS = 1,
+typedef enum {
+  FILE_IS_NULL = -1,
+  OK,
+  TOO_FEW_ARGS,
   FLAG_ERROR,
   FLAG_UNKNOWN,
   FLAG_TOO_LONG,
   ARGC_ERROR,
-};
-enum {
-  FILE_IS_NULL = -1
-};
+} st_code;
 
-int input(int argc, char* argv[]);
-int flags_handling(const char* flag, int argc, char* argv[], bool if_output);
+st_code input(int argc, char* argv[]);
+st_code flags_handling(const char* flag, int argc, char* argv[], bool if_output);
 
 int digit_exclude(FILE* input, FILE* output);
 int alpha_count(FILE* input, FILE* output);

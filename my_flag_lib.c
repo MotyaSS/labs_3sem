@@ -6,8 +6,9 @@
 
 
 bool if_flag(const char arg[]) {
-  if (arg == NULL)
+  if (arg == NULL) {
     return false;
+  }
   if (arg[0] != '-' && arg[0] != '/') {
     return false;
   }
@@ -15,11 +16,13 @@ bool if_flag(const char arg[]) {
 }
 
 bool if_l(const char arg[]) {
-  if (arg == NULL)
+  if (arg == NULL) {
     return false;
+  }
   char temp1[80];
-  if (strlen(arg) >= 80)
+  if (strlen(arg) >= 80) {
     return false;
+  }
 
   char* temp2;
   strcpy(temp1, arg);
@@ -32,12 +35,15 @@ bool if_l(const char arg[]) {
 
   long long number = 0;
   for (int i = 0; i < len; i++) {
-    if (temp2[i] < '0' || temp2[i] > '9')
+    if (temp2[i] < '0' || temp2[i] > '9') {
       return false;
-    if (number > LONG_MAX / 10)
+    }
+    if (number > LONG_MAX / 10) {
       return false;
-    if (number == (LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10))
+    }
+    if (number == (LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10)) {
       return false;
+    }
     number *= 10;
     number += temp2[i] - '0';
   }
@@ -45,11 +51,13 @@ bool if_l(const char arg[]) {
 }
 
 bool if_ll(const char arg[]) {
-  if (arg == NULL)
+  if (arg == NULL) {
     return false;
+  }
   char temp1[80];
-  if (strlen(arg) >= 80)
+  if (strlen(arg) >= 80) {
     return false;
+  }
 
   char* temp2;
   strcpy(temp1, arg);
@@ -62,12 +70,15 @@ bool if_ll(const char arg[]) {
 
   long long number = 0;
   for (int i = 0; i < len; i++) {
-    if (temp2[i] < '0' || temp2[i] > '9')
+    if (temp2[i] < '0' || temp2[i] > '9') {
       return false;
-    if (number > LONG_LONG_MAX / 10)
+    }
+    if (number > LONG_LONG_MAX / 10) {
       return false;
-    if (number == (LONG_LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10))
+    }
+    if (number == (LONG_LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10)) {
       return false;
+    }
     number *= 10;
     number += temp2[i] - '0';
   }
@@ -75,17 +86,20 @@ bool if_ll(const char arg[]) {
 }
 
 bool if_lf(const char arg[]) {
-  if (arg == NULL)
+  if (arg == NULL) {
     return false;
+  }
   char* endptr = NULL;
   strtod(arg, &endptr);
-  if (endptr == arg + strlen(arg))
+  if (endptr == arg + strlen(arg)) {
     return true;
+  }
   return false;
 }
 
 void strcpy_without_first(const char cpy[], char var[]) {
-  if (cpy == NULL)
+  if (cpy == NULL) {
     return;
+  }
   strcpy(var, (cpy + 1));
 }
