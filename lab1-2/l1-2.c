@@ -25,9 +25,9 @@ st_code input_handle(int argc, char* argv[]) {
 
 st_code print_all_e(double eps) {
   double lim_res, sum_res, equ_res;
-  int a = e_lim(eps, &lim_res);
-  int b = e_sum(eps, &sum_res);
-  int c = e_equation(eps, &equ_res);
+  st_code a = e_lim(eps, &lim_res);
+  e_sum(eps, &sum_res);
+  e_equation(eps, &equ_res);
   if (a != OK) {
     printf("lim is not ok\n");
     return a;
@@ -38,11 +38,11 @@ st_code print_all_e(double eps) {
 
 st_code e_lim(double eps, double* result) {
   double cur = 0, prev;
-  long long n = 1;
+  long n = 1;
   do {
     prev = cur;
     cur = pow((1 + 1.0 / n), n); //влоб (?)
-    if (n < LONG_LONG_MAX / 2)
+    if (n < LONG_MAX / 2)
       n *= 2;
     else
       return LIM_NOT_OK;
@@ -53,7 +53,7 @@ st_code e_lim(double eps, double* result) {
 
 st_code e_sum(double eps, double* result) {
   double cur = 0, prev;
-  long long n = 1;
+  long n = 1;
   double n_fact = 1;
   do {
     prev = cur;
@@ -66,7 +66,7 @@ st_code e_sum(double eps, double* result) {
 
 st_code e_equation(double eps, double* result) {
   double left = 2.0, right = 3.0, mid = 0;
-  double cur = 0, prev;
+  double cur, prev;
   do {
     prev = mid;
     mid = (left + right) / 2;
@@ -84,9 +84,9 @@ st_code e_equation(double eps, double* result) {
 
 st_code print_all_pi(double eps) {
   double lim_res, sum_res, equ_res;
-  int a = pi_lim(eps, &lim_res);
-  int b = pi_sum(eps, &sum_res);
-  int c = pi_equation(eps, &equ_res);
+  pi_lim(eps, &lim_res);
+  pi_sum(eps, &sum_res);
+  pi_equation(eps, &equ_res);
 
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
   return OK;
@@ -123,7 +123,7 @@ st_code pi_sum(double eps, double* result) {
 
 st_code pi_equation(double eps, double* result) {
   double left = 3, right = 3.5, mid;
-  double cur = 0;
+  double cur;
   do {
     mid = (right + left) / 2;
     cur = sin(mid);
@@ -138,9 +138,9 @@ st_code pi_equation(double eps, double* result) {
 
 st_code print_all_ln2(double eps) {
   double lim_res, sum_res, equ_res;
-  int a = ln2_lim(eps, &lim_res);
-  int b = ln2_sum(eps, &sum_res);
-  int c = ln2_equation(eps, &equ_res);
+  st_code a = ln2_lim(eps, &lim_res);
+  ln2_sum(eps, &sum_res);
+  ln2_equation(eps, &equ_res);
   if (a != OK) {
     printf("lim is not ok\n");
     return a;
@@ -179,7 +179,7 @@ st_code ln2_sum(double eps, double* result) {
 
 st_code ln2_equation(double eps, double* result) {
   double left = 0, right = 1, mid;
-  double cur = 0;
+  double cur;
   do {
     mid = (right + left) / 2;
     cur = exp(mid);
@@ -194,9 +194,9 @@ st_code ln2_equation(double eps, double* result) {
 
 st_code print_all_sqrt2(double eps) {
   double lim_res, sum_res, equ_res;
-  int a = sqrt2_lim(eps, &lim_res);
-  int b = sqrt2_sum(eps, &sum_res);
-  int c = sqrt2_equation(eps, &equ_res);
+  st_code a = sqrt2_lim(eps, &lim_res);
+  sqrt2_sum(eps, &sum_res);
+  sqrt2_equation(eps, &equ_res);
   if (a != OK) {
     printf("lim is not ok\n");
     return a;
