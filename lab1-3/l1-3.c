@@ -21,6 +21,7 @@ int q_fl_print(const int argc, const char* argv[]) {
   quadr_st_codes ans_errs[6];
   double first, second, third, epsilon;
   epsilon = strtod(argv[2], NULL);
+  epsilon = fabs(epsilon);
   first = strtod(argv[3], NULL);
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
@@ -72,7 +73,7 @@ int solve_quadr_eq(double ans[2], double a, double b, double c, double eps) {
     ans[1] = ans[0];
     return DISCRIMINANT_OK;
   }
-  if (discr < 0) {
+  if (discr < -eps) {
     return DISCRIMINANT_LESS_ZERO;
   }
   ans[0] = (-b + sqrt(discr)) / (2 * a);
