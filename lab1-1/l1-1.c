@@ -12,7 +12,7 @@ int h_fl_handle(const long long number) {
     return H_NO_SUCH_NUMBERS;
   int buff[BUFF_SIZE];
   int len = 0;
-  h_fl(buff, &len, n_temp);
+  multiples(buff, &len, n_temp);
 
   for (int i = 0; i < len; i++) {
     printf("%d ", buff[i]);
@@ -22,7 +22,7 @@ int h_fl_handle(const long long number) {
 }
 
 int p_fl_handle(const long long number) {
-  if (p_fl(number))
+  if (is_prime(number))
     printf("Prime\n");
   else
     printf("Complex\n");
@@ -32,7 +32,7 @@ int p_fl_handle(const long long number) {
 int s_fl_handle(const long long number) {
   char buff[BUFF_SIZE];
   int len = 0;
-  s_fl(buff, &len, number);
+  string_separate(buff, &len, number);
 
   printf("%s\n", buff);
   return OK;
@@ -44,7 +44,7 @@ int e_fl_handle(const long long number) {
   if (number <= 0)
     return E_NON_POSITIVE;
   int arr[10][10];
-  e_fl(arr, number);
+  exp_table(arr, number);
   for (int i = 0; i < 10; i++) {
     for (int j = 0; j < number; j++) {
       int x = i + 1, y = j + 1;
@@ -56,7 +56,7 @@ int e_fl_handle(const long long number) {
 }
 
 int a_fl_handle(const long long number) {
-  long long ans = a_fl(number);
+  long long ans = sum_to_n(number);
   if (number <= 0)
     return A_NEGATIVE;
   if (ans == A_MORE_THAN_LLMAX)
@@ -67,7 +67,7 @@ int a_fl_handle(const long long number) {
 
 
 int f_fl_handle(const long long number) {
-  long long ans = f_fl(number);
+  long long ans = factorial(number);
   if (ans == F_MORE_THAN_LLMAX)
     return F_MORE_THAN_LLMAX;
   printf("%lld\n", ans);
@@ -92,7 +92,7 @@ int flag_sw_case(const char* flag, const long long number) {
   }
 }
 
-int h_fl(int* arr, int* len, const long long number) {
+int multiples(int* arr, int* len, const long long number) {
   long long n_temp = number;
   for (long long i = n_temp; i < BUFF_SIZE; i += number) {
     arr[(*len)] = i;
@@ -101,7 +101,7 @@ int h_fl(int* arr, int* len, const long long number) {
   return OK;
 }
 
-int p_fl(const long long number) {
+int is_prime(const long long number) {
   long long temp_n = number < 0 ? -number : number;
   double limit = floor(sqrt(temp_n));
   if (number == 1)
@@ -118,7 +118,7 @@ int p_fl(const long long number) {
   return true;
 }
 
-int s_fl(char* buff, int* len, const int number) {
+int string_separate(char* buff, int* len, const int number) {
   bool flag = false;
   int temp_n = number;
   if (number < 0) {
@@ -149,7 +149,7 @@ int s_fl(char* buff, int* len, const int number) {
 }
 
 
-int e_fl(int buff[10][10], const long long number) {
+int exp_table(int buff[10][10], const long long number) {
   for (int i = 0; i < 10; i++) {
     int x = i + 1;
     for (int j = 0; j < number; j++) {
@@ -160,7 +160,7 @@ int e_fl(int buff[10][10], const long long number) {
   return OK;
 }
 
-long long int a_fl(const long long number) {
+long long int sum_to_n(const long long number) {
   if (number <= 0)
     return A_NEGATIVE;
   long long sum = 0;
@@ -172,11 +172,11 @@ long long int a_fl(const long long number) {
   return sum;
 }
 
-int f_fl(const long long number) {
+int factorial(const long long number) {
   if (number <= 1)
     return 1;
 
-  long long temp = f_fl(number - 1);
+  long long temp = factorial(number - 1);
   if (temp <= LONG_LONG_MAX / number) {
     return temp * number;
   }

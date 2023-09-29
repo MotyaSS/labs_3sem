@@ -1,5 +1,5 @@
-#ifndef _L1_1_H_
-#define _L1_1_H_
+#ifndef L1_1_H
+#define L1_1_H
 
 #define BUFF_SIZE 100
 #include <stdbool.h>
@@ -22,28 +22,28 @@ typedef enum {
 
 int flag_sw_case(const char* flag, long long number);
 
-HANDLER h_fl_handle(const long long number);
+HANDLER h_fl_handle(long long number);
 
-int h_fl(int arr[], int* len, const long long number);
+int multiples(int arr[], int* len, long long number);
 
-HANDLER p_fl_handle(const long long number);
+HANDLER p_fl_handle(long long number);
 
-int p_fl(const long long number);
+int is_prime(long long number);
 
-HANDLER s_fl_handle(const long long number);
+HANDLER s_fl_handle(long long number);
 
-int s_fl(char* buff, int* len, const int number);
+int string_separate(char* buff, int* len, int number);
 
-HANDLER e_fl_handle(const long long number);
+HANDLER e_fl_handle(long long number);
 
-int e_fl(int buff[10][10], const long long number);
+int exp_table(int buff[10][10], long long number);
 
-HANDLER a_fl_handle(const long long number);
+HANDLER a_fl_handle(long long number);
 
-long long int a_fl(const long long number);
+long long int sum_to_n(long long number);
 
-HANDLER f_fl_handle(const long long number);
+HANDLER f_fl_handle(long long number);
 
-int f_fl(const long long number);
+int factorial(long long number);
 
 #endif

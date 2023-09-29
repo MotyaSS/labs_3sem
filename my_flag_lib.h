@@ -1,5 +1,5 @@
-#ifndef _MY_FL_L_
-#define _MY_FL_L_
+#ifndef MY_FL_L
+#define MY_FL_L
 
 #include <stdbool.h>
 
