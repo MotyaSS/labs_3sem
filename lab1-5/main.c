@@ -9,7 +9,10 @@ int main(int argc, char* argv[]) {
     case INCORRECT_ARG:
       printf("Incorrect argument entered\n");
       break;
-    default:
+    case OK:
       printf("All ok\n");
+      break;
+    default:
+      printf("Status code unknown\n");
   }
 }

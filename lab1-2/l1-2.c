@@ -145,15 +145,44 @@ int ln2_lim(double eps, double* result) {
 }
 
 int ln2_sum(double eps, double* result) {
-
+  double cur = 1;
+  long n = 1;
+  double sum = cur;
+  do {
+    n++;
+    cur = -1.0 * (n % 2 == 0 ? 1 : -1) / n;
+    sum += cur;
+  } while (fabs(cur) > eps);
+  *result = sum;
+  return 0;
 }
 
 int ln2_equation(double eps, double* result) {
-
+  double left = 0, right = 1, mid;
+  double cur = 0;
+  do {
+    mid = (right + left) / 2;
+    cur = exp(mid);
+    if (cur > 2)
+      right = mid;
+    else
+      left = mid;
+  } while (fabs(left - right) > eps);
+  *result = mid;
+  return 0;
 }
 
 int print_all_sqrt2(double eps) {
-
+  double lim_res, sum_res, equ_res;
+  int a = sqrt2_lim(eps, &lim_res);
+  int b = sqrt2_sum(eps, &sum_res);
+  int c = sqrt2_equation(eps, &equ_res);
+  if (a != 0) {
+    printf("lim is not ok\n");
+    return a;
+  }
+  printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
+  return 0;
 }
 
 int sqrt2_lim(double eps, double* result) {
