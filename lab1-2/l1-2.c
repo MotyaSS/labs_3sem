@@ -3,6 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <string.h>
+
 #define EPS_LOWER_BOUND 0.00000001
 
 st_code input_handle(int argc, char* argv[]) {
@@ -12,9 +13,9 @@ st_code input_handle(int argc, char* argv[]) {
   double eps;
   char* endptr = NULL;
   eps = strtod(argv[1], &endptr);
-  if(endptr != (argv[1] + strlen(argv[1])) || eps < EPS_LOWER_BOUND) // endptr указывает после строки? || tiny eps
+  if (endptr != (argv[1] + strlen(argv[1])) || eps < EPS_LOWER_BOUND) { // endptr указывает после строки? || tiny eps
     return INVALID_EPS;
-
+  }
   print_all_e(eps);
   print_all_pi(eps);
   print_all_ln2(eps);
@@ -42,10 +43,11 @@ st_code e_lim(double eps, double* result) {
   do {
     prev = cur;
     cur = pow((1 + 1.0 / n), n); //влоб (?)
-    if (n < LONG_MAX / 2)
+    if (n < LONG_MAX / 2) {
       n *= 2;
-    else
+    } else {
       return LIM_NOT_OK;
+    }
   } while (fabs(cur - prev) > eps);
   *result = cur;
   return OK;
@@ -127,10 +129,11 @@ st_code pi_equation(double eps, double* result) {
   do {
     mid = (right + left) / 2;
     cur = sin(mid);
-    if (cur > 0)
+    if (cur > 0) {
       left = mid;
-    else
+    } else {
       right = mid;
+    }
   } while (fabs(left - right) > eps);
   *result = mid;
   return OK;
@@ -155,10 +158,12 @@ st_code ln2_lim(double eps, double* result) {
   do {
     prev = cur;
     cur = n * (pow(2, 1.0 / n) - 1);
-    if (n < LONG_MAX / 2)
+    if (n < LONG_MAX / 2) {
       n *= 2;
-    else
+    }
+    else {
       return LIM_NOT_OK;
+    }
   } while (fabs(cur - prev) > eps);
   *result = cur;
   return OK;
@@ -183,10 +188,11 @@ st_code ln2_equation(double eps, double* result) {
   do {
     mid = (right + left) / 2;
     cur = exp(mid);
-    if (cur > 2)
+    if (cur > 2) {
       right = mid;
-    else
+    } else {
       left = mid;
+    }
   } while (fabs(left - right) > eps);
   *result = mid;
   return OK;
@@ -206,30 +212,42 @@ st_code print_all_sqrt2(double eps) {
 }
 
 st_code sqrt2_lim(double eps, double* result) {
+  double cur = 0.5, prev;
+  do {
+    prev = cur;
+    cur = prev - pow(prev, 2) / 2 + 1;
+  } while (fabs(cur - prev) > eps);
+  *result = cur;
   return OK;
 }
 
 st_code sqrt2_sum(double eps, double* result) {
+
   return OK;
 }
 
 st_code sqrt2_equation(double eps, double* result) {
+
   return OK;
 }
 
 
 st_code print_all_y(double eps) {
+
   return OK;
 }
 
 st_code y_lim(double eps, double* result) {
+
   return OK;
 }
 
 st_code y_sum(double eps, double* result) {
+
   return OK;
 }
 
 st_code y_equation(double eps, double* result) {
+
   return OK;
 }
