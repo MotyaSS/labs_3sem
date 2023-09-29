@@ -2,21 +2,41 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <string.h>
+#define EPS_LOWER_BOUND 0.00000001
 
-int print_all_e(double eps) {
+st_code input_handle(int argc, char* argv[]) {
+  if (argc != 2) {
+    return INVALID_ARGC;
+  }
+  double eps;
+  char* endptr = NULL;
+  eps = strtod(argv[1], &endptr);
+  if(endptr != (argv[1] + strlen(argv[1])) || eps < EPS_LOWER_BOUND) // endptr указывает после строки? || tiny eps
+    return INVALID_EPS;
+
+  print_all_e(eps);
+  print_all_pi(eps);
+  print_all_ln2(eps);
+  print_all_sqrt2(eps);
+  print_all_y(eps);
+  return 0;
+}
+
+st_code print_all_e(double eps) {
   double lim_res, sum_res, equ_res;
   int a = e_lim(eps, &lim_res);
   int b = e_sum(eps, &sum_res);
   int c = e_equation(eps, &equ_res);
-  if (a != 0) {
+  if (a != OK) {
     printf("lim is not ok\n");
     return a;
   }
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
-  return 0;
+  return OK;
 }
 
-int e_lim(double eps, double* result) {
+st_code e_lim(double eps, double* result) {
   double cur = 0, prev;
   long long n = 1;
   do {
@@ -25,13 +45,13 @@ int e_lim(double eps, double* result) {
     if (n < LONG_LONG_MAX / 2)
       n *= 2;
     else
-      return -1; // err code
+      return LIM_NOT_OK;
   } while (fabs(cur - prev) > eps);
   *result = cur;
-  return 0;
+  return OK;
 }
 
-int e_sum(double eps, double* result) {
+st_code e_sum(double eps, double* result) {
   double cur = 0, prev;
   long long n = 1;
   double n_fact = 1;
@@ -41,10 +61,10 @@ int e_sum(double eps, double* result) {
     n_fact /= (1.0 * n++);
   } while (fabs(cur - prev) > eps);
   *result = cur;
-  return 0;
+  return OK;
 }
 
-int e_equation(double eps, double* result) {
+st_code e_equation(double eps, double* result) {
   double left = 2.0, right = 3.0, mid = 0;
   double cur = 0, prev;
   do {
@@ -59,20 +79,20 @@ int e_equation(double eps, double* result) {
     }
   } while (fabs(prev - mid) > eps);
   *result = mid;
-  return 0;
+  return OK;
 }
 
-int print_all_pi(double eps) {
+st_code print_all_pi(double eps) {
   double lim_res, sum_res, equ_res;
   int a = pi_lim(eps, &lim_res);
   int b = pi_sum(eps, &sum_res);
   int c = pi_equation(eps, &equ_res);
 
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
-  return 0;
+  return OK;
 }
 
-int pi_lim(double eps, double* result) {  // :-(
+st_code pi_lim(double eps, double* result) {  // :-(
   double cur = pow(2, 4) / pow(2, 2), prev;
   long n = 1;
   do {
@@ -84,11 +104,11 @@ int pi_lim(double eps, double* result) {  // :-(
     n++;
   } while (fabs(cur - prev) > eps);
   *result = cur;
-  return 0;
+  return OK;
 }
 
 
-int pi_sum(double eps, double* result) {
+st_code pi_sum(double eps, double* result) {
   double cur = 1;
   long n = 1;
   double sum = cur;
@@ -98,10 +118,10 @@ int pi_sum(double eps, double* result) {
     sum += cur;
   } while (fabs(cur) > eps);
   *result = 4 * sum;
-  return 0;
+  return OK;
 }
 
-int pi_equation(double eps, double* result) {
+st_code pi_equation(double eps, double* result) {
   double left = 3, right = 3.5, mid;
   double cur = 0;
   do {
@@ -113,23 +133,23 @@ int pi_equation(double eps, double* result) {
       right = mid;
   } while (fabs(left - right) > eps);
   *result = mid;
-  return 0;
+  return OK;
 }
 
-int print_all_ln2(double eps) {
+st_code print_all_ln2(double eps) {
   double lim_res, sum_res, equ_res;
   int a = ln2_lim(eps, &lim_res);
   int b = ln2_sum(eps, &sum_res);
   int c = ln2_equation(eps, &equ_res);
-  if (a != 0) {
+  if (a != OK) {
     printf("lim is not ok\n");
     return a;
   }
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
-  return 0;
+  return OK;
 }
 
-int ln2_lim(double eps, double* result) {
+st_code ln2_lim(double eps, double* result) {
   double cur = 0, prev;
   long n = 1;
   do {
@@ -138,13 +158,13 @@ int ln2_lim(double eps, double* result) {
     if (n < LONG_MAX / 2)
       n *= 2;
     else
-      return -1; // err code
+      return LIM_NOT_OK;
   } while (fabs(cur - prev) > eps);
   *result = cur;
-  return 0;
+  return OK;
 }
 
-int ln2_sum(double eps, double* result) {
+st_code ln2_sum(double eps, double* result) {
   double cur = 1;
   long n = 1;
   double sum = cur;
@@ -154,10 +174,10 @@ int ln2_sum(double eps, double* result) {
     sum += cur;
   } while (fabs(cur) > eps);
   *result = sum;
-  return 0;
+  return OK;
 }
 
-int ln2_equation(double eps, double* result) {
+st_code ln2_equation(double eps, double* result) {
   double left = 0, right = 1, mid;
   double cur = 0;
   do {
@@ -169,47 +189,47 @@ int ln2_equation(double eps, double* result) {
       left = mid;
   } while (fabs(left - right) > eps);
   *result = mid;
-  return 0;
+  return OK;
 }
 
-int print_all_sqrt2(double eps) {
+st_code print_all_sqrt2(double eps) {
   double lim_res, sum_res, equ_res;
   int a = sqrt2_lim(eps, &lim_res);
   int b = sqrt2_sum(eps, &sum_res);
   int c = sqrt2_equation(eps, &equ_res);
-  if (a != 0) {
+  if (a != OK) {
     printf("lim is not ok\n");
     return a;
   }
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
-  return 0;
+  return OK;
 }
 
-int sqrt2_lim(double eps, double* result) {
-
+st_code sqrt2_lim(double eps, double* result) {
+  return OK;
 }
 
-int sqrt2_sum(double eps, double* result) {
-
+st_code sqrt2_sum(double eps, double* result) {
+  return OK;
 }
 
-int sqrt2_equation(double eps, double* result) {
-
+st_code sqrt2_equation(double eps, double* result) {
+  return OK;
 }
 
 
-int print_all_y(double eps) {
-
+st_code print_all_y(double eps) {
+  return OK;
 }
 
-int y_lim(double eps, double* result) {
-
+st_code y_lim(double eps, double* result) {
+  return OK;
 }
 
-int y_sum(double eps, double* result) {
-
+st_code y_sum(double eps, double* result) {
+  return OK;
 }
 
-int y_equation(double eps, double* result) {
-
+st_code y_equation(double eps, double* result) {
+  return OK;
 }
