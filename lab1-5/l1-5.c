@@ -10,28 +10,29 @@ fsc input(int argc, char* argv[]) {
   if (!if_lf(argv[1]))
     return INCORRECT_ARG;
   double x = strtod(argv[1], NULL);
-  if (x <= 0)
-    return INCORRECT_ARG;
   if (!if_lf(argv[2]))
     return INCORRECT_ARG;
   double eps = strtod(argv[2], NULL);
   double res;
   sum_a(x, eps, &res);
-  printf("%lf\n", res);
+  printf("a. %.10lf\n", res);
 
   sum_b(x, eps, &res);
-  printf("%lf\n", res);
+  printf("b. %.10lf\n", res);
 
+  printf("c. ");
   fsc status_code = sum_c(x, eps, &res);
   if (status_code == INCORRECT_ARG)
-    printf("Enter x less than 1\n");
+    printf("Enter x which absolute value is less than 1\n");
   else
-    printf("%lf\n", res);
+    printf("%.10lf\n", res);
+
+  printf("d. ");
   status_code = sum_d(x, eps, &res);
   if (status_code == INCORRECT_ARG)
-    printf("Enter x less (or equal) than 1\n");
+    printf("Enter x which absolute value is less than 1\n");
   else
-    printf("%lf\n", res);
+    printf("%.10lf\n", res);
   return OK;
 }
 
@@ -66,11 +67,10 @@ fsc sum_b(double x, double eps, double* res) {
 }
 
 fsc sum_c(double x, double eps, double* res) {
-  if (x >= 1)
+  if (fabs(x) >= 1)
     return INCORRECT_ARG;
   long n = 0;
   double cur = 1;
-  //pow(3, 3) * x * x / (3 * 2)
   double sum = cur;
   double prev;
   do {
@@ -84,7 +84,7 @@ fsc sum_c(double x, double eps, double* res) {
 }
 
 fsc sum_d(double x, double eps, double* res) {
-  if (x > 1)
+  if (fabs(x) >= 1)
     return INCORRECT_ARG;
   long n = 1;
   double cur = -1.0 * 1 * pow(x, 2) / 2;
