@@ -24,7 +24,7 @@ bool if_l(const char arg[]) {
   char* temp2;
   strcpy(temp1, arg);
   temp2 = temp1;
-  int len = strlen(arg);
+  size_t len = strlen(arg);
   if (arg[0] == '-') {
     temp2 = temp1 + 1;
     len--;
@@ -54,7 +54,7 @@ bool if_ll(const char arg[]) {
   char* temp2;
   strcpy(temp1, arg);
   temp2 = temp1;
-  int len = strlen(arg);
+  size_t len = strlen(arg);
   if (arg[0] == '-') {
     temp2 = temp1 + 1;
     len--;
@@ -78,7 +78,7 @@ bool if_lf(const char arg[]) {
   if (arg == NULL)
     return false;
   char* endptr = NULL;
-  double res = strtod(arg, &endptr);
+  strtod(arg, &endptr);
   if (endptr == arg + strlen(arg))
     return true;
   return false;

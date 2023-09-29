@@ -12,11 +12,11 @@ typedef enum {
   DISCRIMINANT_LESS_ZERO = -1
 } quadr_st_codes;
 
-int q_fl_print(const int argc, const char* argv[]) {
+st_code q_fl_print(const int argc, char* argv[]) {
   if (argc != 6)
     return ARGC_ERROR;
   if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
-    return NUMBER_IR;
+    return WRONG_NUMBER;
   double ans[6][2];
   quadr_st_codes ans_errs[6];
   double first, second, third, epsilon;
@@ -25,7 +25,7 @@ int q_fl_print(const int argc, const char* argv[]) {
   first = strtod(argv[3], NULL);
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
-  int code = quadratic_eq_all_solves(ans, ans_errs, first, second, third, epsilon);;
+  int code = quadratic_eq_all_solves(ans, ans_errs, first, second, third, epsilon);
   return code;
 }
 
@@ -81,30 +81,28 @@ int solve_quadr_eq(double ans[2], double a, double b, double c, double eps) {
   return DISCRIMINANT_OK;
 }
 
-int m_fl_print(const int argc, const char* argv[]) {
+st_code m_fl_print(int argc, char* argv[]) {
   if (argc != 4)
     return ARGC_ERROR;
   if (!if_ll(argv[2]) || !if_ll(argv[3]))
-    return NUMBER_IR;
+    return WRONG_NUMBER;
   long long first = strtoll(argv[2], NULL, 10), second = strtoll(argv[3], NULL, 10);
   if (multiplicity(first, second))
     printf("OK, divisible\n");
   else
     printf("Not OK, not divisible\n");
-  return 0;
+  return OK;
 }
 
 bool multiplicity(long long first, long long second) {
   return first % second == 0;
 }
 
-int t_fl_print(const int argc, const char* argv[]) {
+st_code t_fl_print(const int argc, char* argv[]) {
   if (argc != 6)
     return ARGC_ERROR;
   if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
-    return NUMBER_IR;
-  double ans[6][2];
-  quadr_st_codes ans_errs[6];
+    return WRONG_NUMBER;
   double first, second, third, epsilon;
   epsilon = strtod(argv[2], NULL);
   first = strtod(argv[3], NULL);
@@ -114,7 +112,7 @@ int t_fl_print(const int argc, const char* argv[]) {
     printf("Triangle - OK\n");
   else
     printf("Triangle - not OK");
-  return 0;
+  return OK;
 }
 
 double max(double a, double b) {
@@ -132,7 +130,7 @@ bool triangle(double a, double b, double c, double eps) {
   return fabs(max_ * max_ - mid_ * mid_ - min_ * min_) < eps;
 }
 
-int flags_handling(char* flag, int argc, char* argv[]) {
+st_code flags_handling(char* flag, int argc, char* argv[]) {
   if (strcmp(flag, "q") == 0)
     return q_fl_print(argc, argv);
   else if (strcmp(flag, "m") == 0)
@@ -143,7 +141,7 @@ int flags_handling(char* flag, int argc, char* argv[]) {
     return FLAG_UNKNOWN;
 }
 
-int input(int argc, char* argv[]) {
+st_code input(int argc, char* argv[]) {
   if (argc < 2)
     return TOO_FEW_ARGS;
   if (!if_flag(argv[1])) {

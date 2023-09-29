@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include "../my_flag_lib.h"
 #include "l1-3.h"
 
 int main(int argc, char* argv[]) {
@@ -19,7 +18,7 @@ int main(int argc, char* argv[]) {
     case ARGC_ERROR:
       printf("Argument count error\n");
       break;
-    case NUMBER_IR:
+    case WRONG_NUMBER:
       printf("Number entered incorrectly\n");
       break;
     default:
