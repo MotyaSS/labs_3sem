@@ -1,8 +1,8 @@
 #ifndef L1_1_H
 #define L1_1_H
 
-#define BUFF_SIZE 100
 #include <stdbool.h>
+#define BUFF_SIZE 100
 
 typedef enum {
   ARGUMENTS_COUNT_IR = -10,
