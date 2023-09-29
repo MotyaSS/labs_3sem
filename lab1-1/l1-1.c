@@ -3,8 +3,24 @@
 #include <string.h>
 #include <math.h>
 #include "l1-1.h"
+#include "..\my_flag_lib.h"
 
 #define BUFF_SIZE 100
+
+HANDLER my_func(int argc, char* argv[]) {
+  if (argc != 3)
+    return ARGUMENTS_COUNT_IR;
+  if (!if_flag(argv[1]) || strlen(argv[1]) >= BUFF_SIZE)
+    return FLAG_ISSUE;
+  char flag[BUFF_SIZE];
+  strcpy_without_first(argv[1], flag);
+  if (!if_ll(argv[2]))
+    return NOT_NUMBER;
+  long long number = strtoll(argv[2], NULL, 10);
+  int code = flag_sw_case(flag, number);
+
+  return code;
+}
 
 int h_fl_handle(const long long number) {
   long long n_temp = number < 0 ? -number : number;

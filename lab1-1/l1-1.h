@@ -2,6 +2,7 @@
 #define L1_1_H
 
 #include <stdbool.h>
+
 #define BUFF_SIZE 100
 
 typedef enum {
@@ -19,6 +20,7 @@ typedef enum {
   F_MORE_THAN_LLMAX = -2
 } HANDLER;
 
+HANDLER my_func(int argc, char* argv[]);
 
 int flag_sw_case(const char* flag, long long number);
 
