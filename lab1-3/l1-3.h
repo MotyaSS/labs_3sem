@@ -7,7 +7,7 @@ typedef enum {
   FLAG_UNKNOWN,
   FLAG_TOO_LONG,
   ARGC_ERROR,
-  WRONG_NUMBER
+  INVALID_NUMBER
 } st_code;
 
 st_code q_fl_print(int argc, char* argv[]);
