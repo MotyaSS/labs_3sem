@@ -18,7 +18,7 @@ int main(int argc, char* argv[]) {
     case ARGC_ERROR:
       printf("Argument count error\n");
       break;
-    case WRONG_NUMBER:
+    case INVALID_NUMBER:
       printf("Number entered incorrectly\n");
       break;
     default:
