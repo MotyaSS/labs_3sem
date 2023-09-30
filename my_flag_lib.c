@@ -4,7 +4,6 @@
 #include "my_flag_lib.h"
 
 
-
 bool if_flag(const char arg[]) {
   if (arg == NULL) {
     return false;
