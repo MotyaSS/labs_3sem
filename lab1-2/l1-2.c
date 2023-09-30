@@ -6,6 +6,7 @@
 
 #define EPS_LOWER_BOUND 0.00000001
 
+
 st_code input_handle(int argc, char* argv[]) {
   if (argc != 2) {
     return INVALID_ARGC;
@@ -21,12 +22,12 @@ st_code input_handle(int argc, char* argv[]) {
   print_all_ln2(eps);
   print_all_sqrt2(eps);
   print_all_y(eps);
-  return 0;
+  return INPUT_OK;
 }
 
-st_code print_all_e(double eps) {
+calc_st_code print_all_e(double eps) {
   double lim_res, sum_res, equ_res;
-  st_code a = e_lim(eps, &lim_res);
+  calc_st_code a = e_lim(eps, &lim_res);
   e_sum(eps, &sum_res);
   e_equation(eps, &equ_res);
   if (a != OK) {
@@ -37,7 +38,7 @@ st_code print_all_e(double eps) {
   return OK;
 }
 
-st_code e_lim(double eps, double* result) {
+calc_st_code e_lim(double eps, double* result) {
   double cur = 0, prev;
   long n = 1;
   do {
@@ -53,7 +54,7 @@ st_code e_lim(double eps, double* result) {
   return OK;
 }
 
-st_code e_sum(double eps, double* result) {
+calc_st_code e_sum(double eps, double* result) {
   double cur = 0, prev;
   long n = 1;
   double n_fact = 1;
@@ -66,7 +67,7 @@ st_code e_sum(double eps, double* result) {
   return OK;
 }
 
-st_code e_equation(double eps, double* result) {
+calc_st_code e_equation(double eps, double* result) {
   double left = 2.0, right = 3.0, mid = 0;
   double cur, prev;
   do {
@@ -84,7 +85,7 @@ st_code e_equation(double eps, double* result) {
   return OK;
 }
 
-st_code print_all_pi(double eps) {
+calc_st_code print_all_pi(double eps) {
   double lim_res, sum_res, equ_res;
   pi_lim(eps, &lim_res);
   pi_sum(eps, &sum_res);
@@ -94,7 +95,7 @@ st_code print_all_pi(double eps) {
   return OK;
 }
 
-st_code pi_lim(double eps, double* result) {  // :-(
+calc_st_code pi_lim(double eps, double* result) {  // :-(
   double cur = pow(2, 4) / pow(2, 2), prev;
   long n = 1;
   do {
@@ -110,7 +111,7 @@ st_code pi_lim(double eps, double* result) {  // :-(
 }
 
 
-st_code pi_sum(double eps, double* result) {
+calc_st_code pi_sum(double eps, double* result) {
   double cur = 1;
   long n = 1;
   double sum = cur;
@@ -123,7 +124,7 @@ st_code pi_sum(double eps, double* result) {
   return OK;
 }
 
-st_code pi_equation(double eps, double* result) {
+calc_st_code pi_equation(double eps, double* result) {
   double left = 3, right = 3.5, mid;
   double cur;
   do {
@@ -139,9 +140,9 @@ st_code pi_equation(double eps, double* result) {
   return OK;
 }
 
-st_code print_all_ln2(double eps) {
+calc_st_code print_all_ln2(double eps) {
   double lim_res, sum_res, equ_res;
-  st_code a = ln2_lim(eps, &lim_res);
+  calc_st_code a = ln2_lim(eps, &lim_res);
   ln2_sum(eps, &sum_res);
   ln2_equation(eps, &equ_res);
   if (a != OK) {
@@ -152,7 +153,7 @@ st_code print_all_ln2(double eps) {
   return OK;
 }
 
-st_code ln2_lim(double eps, double* result) {
+calc_st_code ln2_lim(double eps, double* result) {
   double cur = 0, prev;
   long n = 1;
   do {
@@ -160,8 +161,7 @@ st_code ln2_lim(double eps, double* result) {
     cur = n * (pow(2, 1.0 / n) - 1);
     if (n < LONG_MAX / 2) {
       n *= 2;
-    }
-    else {
+    } else {
       return LIM_NOT_OK;
     }
   } while (fabs(cur - prev) > eps);
@@ -169,7 +169,7 @@ st_code ln2_lim(double eps, double* result) {
   return OK;
 }
 
-st_code ln2_sum(double eps, double* result) {
+calc_st_code ln2_sum(double eps, double* result) {
   double cur = 1;
   long n = 1;
   double sum = cur;
@@ -182,7 +182,7 @@ st_code ln2_sum(double eps, double* result) {
   return OK;
 }
 
-st_code ln2_equation(double eps, double* result) {
+calc_st_code ln2_equation(double eps, double* result) {
   double left = 0, right = 1, mid;
   double cur;
   do {
@@ -198,9 +198,9 @@ st_code ln2_equation(double eps, double* result) {
   return OK;
 }
 
-st_code print_all_sqrt2(double eps) {
+calc_st_code print_all_sqrt2(double eps) {
   double lim_res, sum_res, equ_res;
-  st_code a = sqrt2_lim(eps, &lim_res);
+  calc_st_code a = sqrt2_lim(eps, &lim_res);
   sqrt2_sum(eps, &sum_res);
   sqrt2_equation(eps, &equ_res);
   if (a != OK) {
@@ -211,7 +211,7 @@ st_code print_all_sqrt2(double eps) {
   return OK;
 }
 
-st_code sqrt2_lim(double eps, double* result) {
+calc_st_code sqrt2_lim(double eps, double* result) {
   double cur = 0.5, prev;
   do {
     prev = cur;
@@ -221,33 +221,33 @@ st_code sqrt2_lim(double eps, double* result) {
   return OK;
 }
 
-st_code sqrt2_sum(double eps, double* result) {
+calc_st_code sqrt2_sum(double eps, double* result) {
 
   return OK;
 }
 
-st_code sqrt2_equation(double eps, double* result) {
+calc_st_code sqrt2_equation(double eps, double* result) {
 
   return OK;
 }
 
 
-st_code print_all_y(double eps) {
+calc_st_code print_all_y(double eps) {
 
   return OK;
 }
 
-st_code y_lim(double eps, double* result) {
+calc_st_code y_lim(double eps, double* result) {
 
   return OK;
 }
 
-st_code y_sum(double eps, double* result) {
+calc_st_code y_sum(double eps, double* result) {
 
   return OK;
 }
 
-st_code y_equation(double eps, double* result) {
+calc_st_code y_equation(double eps, double* result) {
 
   return OK;
 }
