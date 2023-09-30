@@ -8,14 +8,17 @@
 #define BUFF_SIZE 100
 
 HANDLER my_func(int argc, char* argv[]) {
-  if (argc != 3)
+  if (argc != 3) {
     return ARGUMENTS_COUNT_IR;
-  if (!if_flag(argv[1]) || strlen(argv[1]) >= BUFF_SIZE)
+  }
+  if (!if_flag(argv[1]) || strlen(argv[1]) >= BUFF_SIZE) {
     return FLAG_ISSUE;
+  }
   char flag[BUFF_SIZE];
   strcpy_without_first(argv[1], flag);
-  if (!if_ll(argv[2]))
+  if (!if_ll(argv[2])) {
     return NOT_NUMBER;
+  }
   long long number = strtoll(argv[2], NULL, 10);
   int code = flag_sw_case(flag, number);
 
@@ -24,8 +27,10 @@ HANDLER my_func(int argc, char* argv[]) {
 
 int h_fl_handle(const long long number) {
   long long n_temp = number < 0 ? -number : number;
-  if (n_temp > 100)
+
+  if (n_temp > 100 || n_temp == 0) {
     return H_NO_SUCH_NUMBERS;
+  }
   int buff[BUFF_SIZE];
   int len = 0;
   multiples(buff, &len, n_temp);
@@ -38,10 +43,12 @@ int h_fl_handle(const long long number) {
 }
 
 int p_fl_handle(const long long number) {
-  if (is_prime(number))
+  if (is_prime(number)) {
     printf("Prime\n");
-  else
+  }
+  else {
     printf("Complex\n");
+  }
   return OK;
 }
 
@@ -55,10 +62,12 @@ int s_fl_handle(const long long number) {
 }
 
 int e_fl_handle(const long long number) {
-  if (number > 10)
+  if (number > 10) {
     return E_MORE_THAN_TEN;
-  if (number <= 0)
+  }
+  if (number <= 0) {
     return E_NON_POSITIVE;
+  }
   int arr[10][10];
   exp_table(arr, number);
   for (int i = 0; i < 10; i++) {
@@ -73,10 +82,12 @@ int e_fl_handle(const long long number) {
 
 int a_fl_handle(const long long number) {
   long long ans = sum_to_n(number);
-  if (number <= 0)
+  if (number <= 0) {
     return A_NEGATIVE;
-  if (ans == A_MORE_THAN_LLMAX)
+  }
+  if (ans == A_MORE_THAN_LLMAX) {
     return A_MORE_THAN_LLMAX;
+  }
   printf("%lld\n", ans);
   return OK;
 }
@@ -84,13 +95,33 @@ int a_fl_handle(const long long number) {
 
 int f_fl_handle(const long long number) {
   long long ans = factorial(number);
-  if (ans == F_MORE_THAN_LLMAX)
+  if (ans == F_MORE_THAN_LLMAX) {
     return F_MORE_THAN_LLMAX;
+  }
   printf("%lld\n", ans);
   return OK;
 }
 
 int flag_sw_case(const char* flag, const long long number) {
+  if(strlen(flag) != 1)
+    return FLAG_UNDEF;
+  switch(flag[0]){
+    case 'h':
+      return h_fl_handle(number);
+    case 'p':
+      return p_fl_handle(number);
+    case 's':
+      return s_fl_handle(number);
+    case 'e':
+      return e_fl_handle(number);
+    case 'a':
+      return a_fl_handle(number);
+    case 'f':
+      return f_fl_handle(number);
+    default:
+      return FLAG_UNDEF;
+  }
+  /*
   if (strcmp(flag, "h") == 0) {
     return h_fl_handle(number);
   } else if (strcmp(flag, "p") == 0) {
@@ -105,7 +136,7 @@ int flag_sw_case(const char* flag, const long long number) {
     return f_fl_handle(number);
   } else {
     return FLAG_UNDEF;
-  }
+  }*/
 }
 
 int multiples(int* arr, int* len, const long long number) {
