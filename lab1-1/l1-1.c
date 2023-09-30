@@ -145,7 +145,6 @@ int string_separate(char* buff, int* len, const int number) {
   do {
     if (ier == 1) {
       ier = 0;
-
       buff[(*len)++] = ' ';
     } else if (ier == 0) {
       ier = 1;
