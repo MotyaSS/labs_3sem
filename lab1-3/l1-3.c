@@ -143,8 +143,9 @@ st_code flags_handling(char* flag, int argc, char* argv[]) {
     return m_fl_print(argc, argv);
   } else if (strcmp(flag, "t") == 0) {
     return t_fl_print(argc, argv);
-  } else
+  } else {
     return FLAG_UNKNOWN;
+  }
 }
 
 st_code input(int argc, char* argv[]) {
