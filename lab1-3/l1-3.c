@@ -13,10 +13,12 @@ typedef enum {
 } quadr_st_codes;
 
 st_code q_fl_print(const int argc, char* argv[]) {
-  if (argc != 6)
+  if (argc != 6) {
     return ARGC_ERROR;
-  if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
+  }
+  if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5])) {
     return INVALID_NUMBER;
+  }
   double ans[6][2];
   quadr_st_codes ans_errs[6];
   double first, second, third, epsilon;
@@ -36,8 +38,9 @@ bool if_abc_unique(double a, double b, double c, const double unique[3]) {
 int quad_unique_add(double ans[6][2], int ans_errs[6], double a, double b, double c, double eps,
                     double comb_unique[6][3], int* len) {
   for (int i = 0; i < *len; i++) {
-    if (!if_abc_unique(a, b, c, comb_unique[i]))
+    if (!if_abc_unique(a, b, c, comb_unique[i])) {
       return -1;
+    }
   }
   ans_errs[*len] = solve_quadr_eq(ans[*len], a, b, c, eps);
   comb_unique[*len][0] = a, comb_unique[*len][1] = b, comb_unique[*len][2] = c;
@@ -69,11 +72,8 @@ int quadratic_eq_all_solves(double ans[6][2], int ans_errs[6], double first, dou
 int solve_quadr_eq(double ans[2], double a, double b, double c, double eps) {
   double discr = b * b - 4 * a * c;
   if (fabs(discr) < eps) {
-    ans[0] = (-b + sqrt(discr)) / (2 * a);
-    ans[1] = ans[0];
-    return DISCRIMINANT_OK;
-  }
-  if (discr < -eps) {
+    discr = 0;
+  } else if (discr < -eps) {
     return DISCRIMINANT_LESS_ZERO;
   }
   ans[0] = (-b + sqrt(discr)) / (2 * a);
@@ -82,15 +82,18 @@ int solve_quadr_eq(double ans[2], double a, double b, double c, double eps) {
 }
 
 st_code m_fl_print(int argc, char* argv[]) {
-  if (argc != 4)
+  if (argc != 4) {
     return ARGC_ERROR;
-  if (!if_ll(argv[2]) || !if_ll(argv[3]))
+  }
+  if (!if_ll(argv[2]) || !if_ll(argv[3])) {
     return INVALID_NUMBER;
+  }
   long long first = strtoll(argv[2], NULL, 10), second = strtoll(argv[3], NULL, 10);
-  if (multiplicity(first, second))
+  if (multiplicity(first, second)) {
     printf("OK, divisible\n");
-  else
+  } else {
     printf("Not OK, not divisible\n");
+  }
   return OK;
 }
 
@@ -99,19 +102,22 @@ bool multiplicity(long long first, long long second) {
 }
 
 st_code t_fl_print(const int argc, char* argv[]) {
-  if (argc != 6)
+  if (argc != 6) {
     return ARGC_ERROR;
-  if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5]))
+  }
+  if (!if_lf(argv[2]) || !if_lf(argv[3]) || !if_lf(argv[4]) || !if_lf(argv[5])) {
     return INVALID_NUMBER;
+  }
   double first, second, third, epsilon;
   epsilon = strtod(argv[2], NULL);
   first = strtod(argv[3], NULL);
   second = strtod(argv[4], NULL);
   third = strtod(argv[5], NULL);
-  if (triangle(first, second, third, epsilon))
+  if (triangle(first, second, third, epsilon)) {
     printf("Triangle - OK\n");
-  else
+  } else {
     printf("Triangle - not OK");
+  }
   return OK;
 }
 
@@ -131,25 +137,27 @@ bool triangle(double a, double b, double c, double eps) {
 }
 
 st_code flags_handling(char* flag, int argc, char* argv[]) {
-  if (strcmp(flag, "q") == 0)
+  if (strcmp(flag, "q") == 0) {
     return q_fl_print(argc, argv);
-  else if (strcmp(flag, "m") == 0)
+  } else if (strcmp(flag, "m") == 0) {
     return m_fl_print(argc, argv);
-  else if (strcmp(flag, "t") == 0)
+  } else if (strcmp(flag, "t") == 0) {
     return t_fl_print(argc, argv);
-  else
+  } else
     return FLAG_UNKNOWN;
 }
 
 st_code input(int argc, char* argv[]) {
-  if (argc < 2)
+  if (argc < 2) {
     return TOO_FEW_ARGS;
+  }
   if (!if_flag(argv[1])) {
     return FLAG_ERROR;
   }
   char flag[BUFF_SIZE];
-  if (strlen(argv[1]) >= BUFF_SIZE)
+  if (strlen(argv[1]) >= BUFF_SIZE) {
     return FLAG_TOO_LONG;
+  }
   strcpy_without_first(argv[1], flag);
   return flags_handling(flag, argc, argv);
 }
