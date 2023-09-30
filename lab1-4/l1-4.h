@@ -1,3 +1,5 @@
+#ifndef L1_4_H
+#define L1_4_H
 #include <stdbool.h>
 
 #define BUFF_SIZE 100
@@ -19,3 +21,4 @@ int digit_exclude(FILE* input, FILE* output);
 int alpha_count(FILE* input, FILE* output);
 int non_digit_non_space_non_alpha_count(FILE* input, FILE* output);
 int non_digit_ascii_replace(FILE* input, FILE* output);
+#endif

@@ -3,7 +3,26 @@
 #include <ctype.h>
 #include <stdio.h>
 #include "l1-4.h"
-#include "..\my_flag_lib.h"
+#include "../my_flag_lib.h"
+
+int make_out_name(char* out_name, char* in_name) {
+  size_t len = strlen(in_name);
+  for(int i = 0; i < len + 4 + 1; i++){
+    out_name[i] = 0;
+  }
+  char* a = in_name;
+  size_t i = 0;
+  while (true) {
+    if (a[0] != '.' || a[1] != '.' || (a[2] != '/' && a[2] != '\\'))
+      break;
+    a += 3;
+    i += 3;
+  }
+  strncpy(out_name, in_name, i);
+  strncat(out_name, "out_", 4);
+  strncat(out_name, a, len + 4 - i);
+  return 0;
+}
 
 st_code flags_handling(const char* flag, int argc, char* argv[], bool if_output) {
   int argc_targ = 3 + (if_output ? 1 : 0);
@@ -20,9 +39,12 @@ st_code flags_handling(const char* flag, int argc, char* argv[], bool if_output)
   if (if_output) {
     output = fopen(argv[3], "w");
   } else {
-    char out_name[BUFF_SIZE] = "out_";
-    strncat(out_name, argv[2], BUFF_SIZE - 4);
+    size_t len = strlen(argv[2]);
+    char* out_name = (char*) malloc(len + 4 + 1);
+
+    make_out_name(out_name, argv[2]);
     output = fopen(out_name, "w");
+    free(out_name);
   }
   int code;
   switch (*flag) {
