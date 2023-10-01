@@ -12,6 +12,9 @@ int main(int argc, char* argv[]) {
     case OK:
       printf("All ok\n");
       break;
+    case EPS_NON_POSITIVE:
+      printf("Epsilon must be positive\n");
+      break;
     default:
       printf("Status code unknown\n");
   }

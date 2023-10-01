@@ -5,14 +5,19 @@
 #include "..\my_flag_lib.h"
 
 fsc input(int argc, char* argv[]) {
-  if (argc != 3)
+  if (argc != 3) {
     return ARGC_ERROR;
-  if (!if_lf(argv[1]))
+  }
+  if (!if_lf(argv[1])) {
     return INCORRECT_ARG;
+  }
   double x = strtod(argv[1], NULL);
-  if (!if_lf(argv[2]))
+  if (!if_lf(argv[2])) {
     return INCORRECT_ARG;
+  }
   double eps = strtod(argv[2], NULL);
+  if(eps <= 0)
+    return INCORRECT_ARG;
   double res;
   sum_a(x, eps, &res);
   printf("a. %.10lf\n", res);
