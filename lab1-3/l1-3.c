@@ -58,10 +58,8 @@ int quadratic_eq_all_solves(double ans[6][2], int ans_errs[6], double first, dou
   quad_unique_add(ans, ans_errs, third, first, second, eps, comb_unique, &len);
   quad_unique_add(ans, ans_errs, third, second, first, eps, comb_unique, &len);
   for (int i = 0; i < len; i++) {
-    if (ans_errs[i] == DISCRIMINANT_LESS_ZERO) {
-      continue;
-    }
     if (ans_errs[i] == DISCRIMINANT_OK) {
+      printf("%lf %lf %lf : ", comb_unique[i][0], comb_unique[i][1], comb_unique[i][2]);
       printf("%lf %lf\n", ans[i][0], ans[i][1]);
     }
   }
