@@ -223,20 +223,31 @@ calc_st_code sqrt2_lim(double eps, double* result) {
 
 calc_st_code sqrt2_multiplication(double eps, double* result) {
   double power = pow(2, -2);
-  double cur = pow(2, power), prev;
+  double cur = pow(2, power), res_prev;
   double res = cur;
   do {
-    prev = cur;
+    res_prev = res;
     power /= 2;
     cur = pow(2, power);
     res *= cur;
-  } while (fabs(cur - prev) > eps);
+  } while (fabs(res - res_prev) > eps);
   *result = res;
   return OK;
 }
 
 calc_st_code sqrt2_equation(double eps, double* result) {
-
+  double left = 1, right = 2, mid;
+  double cur;
+  do {
+    mid = (right + left) / 2;
+    cur = pow(mid, 2);
+    if (cur > 2) {
+      right = mid;
+    } else {
+      left = mid;
+    }
+  } while (fabs(left - right) > eps);
+  *result = mid;
   return OK;
 }
 
