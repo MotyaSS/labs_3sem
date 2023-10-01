@@ -1,3 +1,6 @@
+#ifndef L1_3_H
+#define L1_3_H
+
 #include <stdbool.h>
 
 typedef enum {
@@ -22,3 +25,4 @@ int quadratic_eq_all_solves(double ans[6][2], int ans_errs[6], double first, dou
 int solve_quadr_eq(double ans[2], double a, double b, double c, double eps);
 
 bool triangle(double a, double b, double c, double eps);
+#endif
