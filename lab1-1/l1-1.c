@@ -45,8 +45,7 @@ int h_fl_handle(const long long number) {
 int p_fl_handle(const long long number) {
   if (is_prime(number)) {
     printf("Prime\n");
-  }
-  else {
+  } else {
     printf("Complex\n");
   }
   return OK;
@@ -54,8 +53,8 @@ int p_fl_handle(const long long number) {
 
 int s_fl_handle(const long long number) {
   char buff[BUFF_SIZE];
-  int len = 0;
-  string_separate(buff, &len, number);
+
+  string_separate(buff, number);
 
   printf("%s\n", buff);
   return OK;
@@ -103,9 +102,9 @@ int f_fl_handle(const long long number) {
 }
 
 int flag_sw_case(const char* flag, const long long number) {
-  if(strlen(flag) != 1)
+  if (strlen(flag) != 1)
     return FLAG_UNDEF;
-  switch(flag[0]){
+  switch (flag[0]) {
     case 'h':
       return h_fl_handle(number);
     case 'p':
@@ -151,22 +150,27 @@ int multiples(int* arr, int* len, const long long number) {
 int is_prime(const long long number) {
   long long temp_n = number < 0 ? -number : number;
   double limit = floor(sqrt(temp_n));
-  if (number == 1)
+  if (number == 1 || number == 0) {
     return P_NOT_COMPLEX_OR_PRIME;
-  if (number == 2)
+  }
+  if (number == 2) {
     return true;
-  if (number % 2 == 0)
+  }
+  if (number % 2 == 0) {
     return true;
+  }
 
   for (long long i = 3; i < limit; i += 2) {
-    if (temp_n % i == 0)
+    if (temp_n % i == 0) {
       return false;
+    }
   }
   return true;
 }
 
-int string_separate(char* buff, int* len, const int number) {
+int string_separate(char* buff, const int number) {
   bool flag = false;
+  int len = 0;
   int temp_n = number;
   if (number < 0) {
     temp_n *= -1;
@@ -176,18 +180,19 @@ int string_separate(char* buff, int* len, const int number) {
   do {
     if (ier == 1) {
       ier = 0;
-      buff[(*len)++] = ' ';
+      buff[len++] = ' ';
     } else if (ier == 0) {
       ier = 1;
 
-      buff[(*len)++] = temp_n % 10 + '0';
+      buff[len++] = temp_n % 10 + '0';
       temp_n /= 10;
     }
   } while (temp_n != 0);
 
   if (flag) {
-    buff[(*len)++] = ' ';
-    buff[(*len)++] = '-';
+    buff[len++] = ' ';
+    buff[len++] = '-';
+    buff[len++] = '\0';
   }
 
   strrev(buff);
@@ -207,20 +212,23 @@ int exp_table(int buff[10][10], const long long number) {
 }
 
 long long int sum_to_n(const long long number) {
-  if (number <= 0)
+  if (number <= 0) {
     return A_NEGATIVE;
+  }
   long long sum = 0;
   for (int i = number; i >= 1; i--) {
-    if (sum > LONG_LONG_MAX - i)
+    if (sum > LONG_LONG_MAX - i) {
       return A_MORE_THAN_LLMAX;
+    }
     sum += i;
   }
   return sum;
 }
 
 int factorial(const long long number) {
-  if (number <= 1)
+  if (number <= 1) {
     return 1;
+  }
 
   long long temp = factorial(number - 1);
   if (temp <= LONG_LONG_MAX / number) {

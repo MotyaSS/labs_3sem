@@ -34,7 +34,7 @@ int is_prime(long long number);
 
 HANDLER s_fl_handle(long long number);
 
-int string_separate(char* buff, int* len, int number);
+int string_separate(char* buff, int number);
 
 HANDLER e_fl_handle(long long number);
 
