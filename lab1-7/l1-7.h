@@ -11,6 +11,7 @@ typedef enum {
   UNKNOWN_FLAG
 } st_code;
 
+
 st_code input(int argc, char* argv[]);
 st_code flag_handling(char* flag, int argc, char** argv);
 
@@ -20,4 +21,5 @@ int put_rest_of_f1_to_f2(FILE* f1, FILE* f2);
 
 st_code a_fl(int argc, char* argv[]);
 st_code a_strange_cat(FILE* input, FILE* output);
+int ascii_base_4(char* res, int ch);
 #endif
