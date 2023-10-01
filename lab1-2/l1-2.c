@@ -201,8 +201,8 @@ calc_st_code ln2_equation(double eps, double* result) {
 calc_st_code print_all_sqrt2(double eps) {
   double lim_res, sum_res, equ_res;
   calc_st_code a = sqrt2_lim(eps, &lim_res);
-  sqrt2_sum(eps, &sum_res);
-  sqrt2_multiplication(eps, &equ_res);
+  sqrt2_multiplication(eps, &sum_res);
+  sqrt2_equation(eps, &equ_res);
   if (a != OK) {
     printf("lim is not ok\n");
     return a;
@@ -224,14 +224,14 @@ calc_st_code sqrt2_lim(double eps, double* result) {
 calc_st_code sqrt2_multiplication(double eps, double* result) {
   double power = pow(2, -2);
   double cur = pow(2, power), prev;
-  int k = 2;
+  double res = cur;
   do {
-    k++;
     prev = cur;
-    power = pow(2, -k);
+    power /= 2;
     cur = pow(2, power);
+    res *= cur;
   } while (fabs(cur - prev) > eps);
-  *result = cur;
+  *result = res;
   return OK;
 }
 
