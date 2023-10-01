@@ -3,4 +3,4 @@ project(lab1_7 C)
 
 set(CMAKE_C_STANDARD 11)
 
-add_executable(lab1_7 main.c)
+add_executable(lab1_7 main.c l1-7.c l1-7.h ../my_flag_lib.h ../my_flag_lib.c)
