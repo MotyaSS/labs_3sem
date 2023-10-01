@@ -5,8 +5,9 @@
 #include <ctype.h>
 
 st_code input(int argc, char* argv[]) {
-  if (argc < 2)
+  if (argc < 2) {
     return INVALID_ARGC;
+  }
   if (!if_flag(argv[1])) {
     return NOT_FLAG;
   }
@@ -83,13 +84,20 @@ st_code r_fl(int argc, char* argv[]) {
     return INVALID_ARGC;
   }
   FILE* input1 = fopen(argv[2], "r");
+  if (input1 == NULL) {
+    return FILE_IS_NULL;
+  }
   FILE* input2 = fopen(argv[3], "r");
-  if (input1 == NULL || input2 == NULL) {
+  if (input2 == NULL) {
+    fclose(input1);
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[4], "w");
-
-  return r_strange_cat(input1, input2, output);
+  st_code res = r_strange_cat(input1, input2, output);
+  fclose(input1);
+  fclose(input2);
+  fclose(output);
+  return res;
 }
 
 int ascii_base_4(char* res, int ch) {
@@ -146,5 +154,8 @@ st_code a_fl(int argc, char* argv[]) {
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[3], "w");
-  return a_strange_cat(input, output);
+  st_code res = a_strange_cat(input, output);
+  fclose(input);
+  fclose(output);
+  return res;
 }

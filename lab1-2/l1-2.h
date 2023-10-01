@@ -32,7 +32,7 @@ calc_st_code ln2_equation(double eps, double* result);
 calc_st_code print_all_sqrt2(double eps);
 calc_st_code sqrt2_lim(double eps, double* result);
 calc_st_code sqrt2_sum(double eps, double* result);
-calc_st_code sqrt2_equation(double eps, double* result);
+calc_st_code sqrt2_multiplication(double eps, double* result);
 
 calc_st_code print_all_y(double eps);
 calc_st_code y_lim(double eps, double* result);

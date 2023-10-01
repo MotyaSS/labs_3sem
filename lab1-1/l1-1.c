@@ -157,7 +157,7 @@ int is_prime(const long long number) {
     return true;
   }
   if (number % 2 == 0) {
-    return true;
+    return false;
   }
 
   for (long long i = 3; i < limit; i += 2) {
