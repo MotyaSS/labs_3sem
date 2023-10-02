@@ -96,6 +96,9 @@ st_code m_fl_print(int argc, char* argv[]) {
 }
 
 bool multiplicity(long long first, long long second) {
+  if(second == 0) {
+    return false;
+  }
   return first % second == 0;
 }
 
