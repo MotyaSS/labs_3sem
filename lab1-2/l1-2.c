@@ -96,6 +96,7 @@ calc_st_code print_all_pi(double eps) {
 }
 
 calc_st_code pi_lim(double eps, double* result) {  // :-(
+  const double magic_eps = eps / 10;
   double cur = pow(2, 4) / pow(2, 2), prev;
   long n = 1;
   do {
@@ -105,13 +106,14 @@ calc_st_code pi_lim(double eps, double* result) {  // :-(
     cur *= pow(2, 4) * pow(n + 1, 3);
     cur /= pow(2 * n + 2, 2);
     n++;
-  } while (fabs(cur - prev) > eps / 10);
+  } while (fabs(cur - prev) > magic_eps);
   *result = cur;
   return OK;
 }
 
 
 calc_st_code pi_sum(double eps, double* result) {
+  const double magic_eps = eps / 2;
   double cur = 1;
   long n = 1;
   double sum = cur;
@@ -119,7 +121,7 @@ calc_st_code pi_sum(double eps, double* result) {
     n++;
     cur = 1.0 * (n % 2 == 0 ? -1 : 1) / (2 * n - 1);
     sum += cur;
-  } while (fabs(cur) > eps / 2);
+  } while (fabs(cur) > magic_eps);
   *result = 4 * sum;
   return OK;
 }
@@ -279,6 +281,7 @@ calc_st_code gamma_lim(double eps, double* result) {
 }
 
 calc_st_code gamma_sum(double eps, double* result) {
+  const double magic_eps = eps / 100;
   const double PI = 3.14159265359;
   double cur = -pow(PI, 2) / 6 + 1.0 / pow(floor(sqrt(2)), 2) - 1.0 / 2;
   long k = 2;
@@ -291,7 +294,7 @@ calc_st_code gamma_sum(double eps, double* result) {
     sum_between_zeros += cur;
     if (cur == 0) {
       sum += sum_between_zeros;
-      if (fabs(sum_between_zeros + sum_between_zeros_prev) < eps / 100) {
+      if (fabs(sum_between_zeros + sum_between_zeros_prev) < magic_eps) {
         break;
       }
       sum_between_zeros_prev = sum_between_zeros;
