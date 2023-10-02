@@ -117,7 +117,7 @@ st_code t_fl_print(const int argc, char* argv[]) {
   if (triangle(first, second, third, epsilon)) {
     printf("Triangle - OK\n");
   } else {
-    printf("Triangle - not OK");
+    printf("Triangle - not OK\n");
   }
   return OK;
 }
@@ -131,6 +131,8 @@ double min(double a, double b) {
 }
 
 bool triangle(double a, double b, double c, double eps) {
+  if(a <= 0 || b <= 0 || c <= 0)
+    return false;
   double max_ = max(a, max(b, c));
   double min_ = min(a, min(b, c));
   double mid_ = a - max_ + b - min_ + c;

@@ -22,7 +22,7 @@ int main(int argc, char* argv[]) {
       printf("Number entered incorrectly\n");
       break;
     default:
-      printf("All went ok\n");
+      printf("All went OK\n");
   }
   return 0;
 }
