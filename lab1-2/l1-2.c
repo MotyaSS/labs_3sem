@@ -21,7 +21,7 @@ st_code input_handle(int argc, char* argv[]) {
   print_all_pi(eps);
   print_all_ln2(eps);
   print_all_sqrt2(eps);
-  print_all_y(eps);
+  print_all_gamma(eps);
   return INPUT_OK;
 }
 
@@ -105,7 +105,7 @@ calc_st_code pi_lim(double eps, double* result) {  // :-(
     cur *= pow(2, 4) * pow(n + 1, 3);
     cur /= pow(2 * n + 2, 2);
     n++;
-  } while (fabs(cur - prev) > eps);
+  } while (fabs(cur - prev) > eps / 10);
   *result = cur;
   return OK;
 }
@@ -119,7 +119,7 @@ calc_st_code pi_sum(double eps, double* result) {
     n++;
     cur = 1.0 * (n % 2 == 0 ? -1 : 1) / (2 * n - 1);
     sum += cur;
-  } while (fabs(cur) > eps);
+  } while (fabs(cur) > eps / 2);
   *result = 4 * sum;
   return OK;
 }
@@ -252,22 +252,57 @@ calc_st_code sqrt2_equation(double eps, double* result) {
 }
 
 
-calc_st_code print_all_y(double eps) {
-
+calc_st_code print_all_gamma(double eps) {
+  double lim_res, sum_res, equ_res;
+  gamma_lim(eps, &lim_res);
+  gamma_sum(eps, &sum_res);
+  gamma_equation(eps, &equ_res);
+  printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
   return OK;
 }
 
-calc_st_code y_lim(double eps, double* result) {
+calc_st_code gamma_lim(double eps, double* result) {
+  double cur = 1 - log(1), prev;
+  long n = 1;
+  do {
+    prev = cur;
+    n *= 2;
+    double sum = 1 - log(n);
+    for (int i = 2; i <= n; i++) {
+      sum += 1.0 / i;
+    }
+    cur = sum;
+  } while (fabs(cur - prev) > eps);
 
+  *result = cur;
   return OK;
 }
 
-calc_st_code y_sum(double eps, double* result) {
-
+calc_st_code gamma_sum(double eps, double* result) {
+  const double PI = 3.14159265359;
+  double cur = -pow(PI, 2) / 6 + 1.0 / pow(floor(sqrt(2)), 2) - 1.0 / 2;
+  long k = 2;
+  double sum = 0;
+  double sum_between_zeros = cur;
+  double sum_between_zeros_prev;
+  do {
+    k++;
+    cur = 1.0 / pow(floor(sqrt(k)), 2) - 1.0 / k;
+    sum_between_zeros += cur;
+    if (cur == 0) {
+      sum += sum_between_zeros;
+      if (fabs(sum_between_zeros + sum_between_zeros_prev) < eps / 100) {
+        break;
+      }
+      sum_between_zeros_prev = sum_between_zeros;
+      sum_between_zeros = 0;
+    }
+  } while (1);
+  *result = sum;
   return OK;
 }
 
-calc_st_code y_equation(double eps, double* result) {
+calc_st_code gamma_equation(double eps, double* result) {
 
   return OK;
 }

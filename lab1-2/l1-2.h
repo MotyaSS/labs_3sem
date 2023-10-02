@@ -34,8 +34,8 @@ calc_st_code sqrt2_lim(double eps, double* result);
 calc_st_code sqrt2_multiplication(double eps, double* result);
 calc_st_code sqrt2_equation(double eps, double* result);
 
-calc_st_code print_all_y(double eps);
-calc_st_code y_lim(double eps, double* result);
-calc_st_code y_sum(double eps, double* result);
-calc_st_code y_equation(double eps, double* result);
+calc_st_code print_all_gamma(double eps);
+calc_st_code gamma_lim(double eps, double* result);
+calc_st_code gamma_sum(double eps, double* result);
+calc_st_code gamma_equation(double eps, double* result);
 #endif
