@@ -100,7 +100,7 @@ int digit_exclude(FILE* input, FILE* output) {
     if (isdigit(a)) {
       continue;
     }
-    fprintf(output, "%c", a);
+    fputc(a, output);
   }
   return OK;
 }
@@ -131,7 +131,7 @@ int non_digit_non_space_non_alpha_count(FILE* input, FILE* output) {
     char a;
     int cntr = 0;
     while ((a = fgetc(input)) != '\n' && !feof(input)) {
-      if (!isalpha(a) || !isdigit(a) || a != ' ') {
+      if (!isalnum(a) || a != ' ') {
         cntr++;
       }
     }
