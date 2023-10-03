@@ -136,7 +136,7 @@ bool triangle(double a, double b, double c, double eps) {
   double max_ = max(a, max(b, c));
   double min_ = min(a, min(b, c));
   double mid_ = a - max_ + b - min_ + c;
-  return fabs(max_ * max_ - mid_ * mid_ - min_ * min_) < eps;
+  return fabs(max_ - min_ - mid_) < eps;
 }
 
 st_code flags_handling(char* flag, int argc, char* argv[]) {
