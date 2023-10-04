@@ -46,7 +46,7 @@ int get_token_or_eof(FILE* f, int* ch) {
 }
 
 int put_rest_of_f1_to_f2(FILE* f1, FILE* f2) {
-  char c;
+  int c;
   while (!feof(f1)) {
     get_token_or_eof(f1, &c);
     if (c == EOF) {
