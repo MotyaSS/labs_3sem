@@ -89,8 +89,9 @@ fsc sum_c(double x, double eps, double* res) {
 }
 
 fsc sum_d(double x, double eps, double* res) {
-  if (fabs(x) >= 1)
+  if (fabs(x) >= 1) {
     return INCORRECT_ARG;
+  }
   long n = 1;
   double cur = -1.0 * 1 * pow(x, 2) / 2;
   double sum = cur;
