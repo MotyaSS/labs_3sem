@@ -140,7 +140,7 @@ int flag_sw_case(const char* flag, const long long number) {
 
 int multiples(int* arr, int* len, const long long number) {
   long long n_temp = number;
-  for (long long i = n_temp; i < BUFF_SIZE; i += number) {
+  for (long long i = n_temp; i <= BUFF_SIZE; i += number) {
     arr[(*len)] = i;
     (*len)++;
   }

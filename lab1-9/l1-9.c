@@ -50,6 +50,7 @@ void start(int left, int right) {
   fill_array_with_rands(arr_A, size, -1000, 1000);
   fill_array_with_rands(arr_B, size, -1000, 1000);
   merge_arrays(arr_A, arr_B, arr_C, size);
+  print_array(arr_C, size);
   free(arr_A);
   free(arr_B);
   free(arr_C);

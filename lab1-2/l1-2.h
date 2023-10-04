@@ -38,4 +38,5 @@ calc_st_code print_all_gamma(double eps);
 calc_st_code gamma_lim(double eps, double* result);
 calc_st_code gamma_sum(double eps, double* result);
 calc_st_code gamma_equation(double eps, double* result);
+
 #endif

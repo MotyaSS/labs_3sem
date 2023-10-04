@@ -1,6 +1,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 #include "my_flag_lib.h"
 
 
@@ -23,7 +24,7 @@ bool if_l(const char arg[]) {
     return false;
   }
 
-  char* temp2;
+  char* temp2 = NULL;
   strcpy(temp1, arg);
   temp2 = temp1;
   size_t len = strlen(arg);
@@ -34,7 +35,7 @@ bool if_l(const char arg[]) {
 
   long long number = 0;
   for (int i = 0; i < len; i++) {
-    if (temp2[i] < '0' || temp2[i] > '9') {
+    if (!isdigit(temp2[i])) {
       return false;
     }
     if (number > LONG_MAX / 10) {

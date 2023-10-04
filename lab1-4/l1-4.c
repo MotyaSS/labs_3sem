@@ -97,10 +97,9 @@ int digit_exclude(FILE* input, FILE* output) {
   char a = '\0';
   while (!feof(input)) {
     fscanf(input, "%c", &a);
-    if (isdigit(a)) {
-      continue;
+    if (!isdigit(a)) {
+      fputc(a, output);
     }
-    fputc(a, output);
   }
   return OK;
 }

@@ -74,6 +74,10 @@ myf_sc find_max_from_input(char** string, int* cap, long* result) {
 }
 
 void show_number_with_base(long num, const int base) {
+  if(num == 0){
+    printf("0\n");
+    return;
+  }
   char buff[66];
   buff[65] = 0;
   char* ptr = buff + 64;
