@@ -14,7 +14,7 @@ void get_string_safely_realloc(char** string, int* str_capacity, FILE* stream) {
       *str_capacity = *str_capacity * 2;
       *string = (char*) realloc(*string, *str_capacity);
       if (string == NULL) {
-        perror("PIZDEC VASYAN PRIPLILI\n");
+        perror("PIZDEC VASYAN U NAS PROBLEMS\n");
         return;
       }
     }
