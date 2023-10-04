@@ -12,7 +12,7 @@ typedef enum {
 } st_code;
 
 
-st_code i nput(int argc, char* argv[]);
+st_code input(int argc, char* argv[]);
 st_code flag_handling(char* flag, int argc, char** argv);
 
 st_code r_fl(int argc, char* argv[]);
