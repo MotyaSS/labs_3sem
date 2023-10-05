@@ -1,5 +1,6 @@
 #include "l1-9.h"
 #include <stdio.h>
+
 #define SIZE 10
 
 void example() {
