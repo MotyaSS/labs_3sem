@@ -71,10 +71,10 @@ void swap_max_and_min(int arr[], int size) {
   swap(&arr[index_min], &arr[index_max]);
 }
 
-int find_closest_to_elem(const int arr[], const int size, const int elem){
+int find_closest_to_elem(const int arr[], const int size, const int elem) {
   int closest = arr[0];
   for (int i = 1; i < size; i++) {
-    if(abs(arr[i] - elem) < abs(closest - arr[i])){
+    if (abs(arr[i] - elem) < abs(closest - arr[i])) {
       closest = arr[i];
     }
   }
