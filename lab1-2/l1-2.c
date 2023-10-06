@@ -325,7 +325,7 @@ calc_st_code gamma_equation(double eps, double* result) {
   double product = 0.5;
   int SIZE = 1000;
   int* a = (int*) malloc(sizeof(int) * (SIZE));
-  if(a == NULL) {
+  if (a == NULL) {
     return EQUATION_NOT_OK;
   }
   find_primes(a, SIZE);
@@ -335,7 +335,7 @@ calc_st_code gamma_equation(double eps, double* result) {
       SIZE *= 2;
       free(a);
       a = (int*) malloc(sizeof(int) * (SIZE));
-      if(a == NULL) {
+      if (a == NULL) {
         return EQUATION_NOT_OK;
       }
       find_primes(a, SIZE);
