@@ -281,7 +281,7 @@ calc_st_code gamma_lim(double eps, double* result) {
 }
 
 calc_st_code gamma_sum(double eps, double* result) {
-  const double magic_eps = eps / 100;
+  const double magic_eps = eps / 1000;
   const double PI = 3.14159265359;
   double cur = -pow(PI, 2) / 6 + 1.0 / pow(floor(sqrt(2)), 2) - 1.0 / 2;
   long k = 2;
@@ -305,7 +305,50 @@ calc_st_code gamma_sum(double eps, double* result) {
   return OK;
 }
 
-calc_st_code gamma_equation(double eps, double* result) {
+void find_primes(int* arr, long long arr_size) {
+  for (long long i = 0; i < arr_size; i++) {
+    arr[i] = i;
+  }
+  for (long long p = 2; p < arr_size; p++) {
+    if (arr[p] != 0) {
+      for (long long j = p * p; j < arr_size; j += p)
+        arr[j] = 0;
+    }
+  }
+}
 
+calc_st_code gamma_equation(double eps, double* result) {
+  double magic_eps = eps / 10000;
+  int t = 3;
+  double current = log(2) * 0.5;
+  double prev = 0;
+  double product = 0.5;
+  int SIZE = 1000;
+  int* a = (int*) malloc(sizeof(int) * (SIZE));
+  if(a == NULL) {
+    return EQUATION_NOT_OK;
+  }
+  find_primes(a, SIZE);
+
+  do {
+    if (t >= SIZE) { //кончились простые
+      SIZE *= 2;
+      free(a);
+      a = (int*) malloc(sizeof(int) * (SIZE));
+      if(a == NULL) {
+        return EQUATION_NOT_OK;
+      }
+      find_primes(a, SIZE);
+    }
+
+    if (a[t] != 0) { //простое число
+      prev = current;
+      product *= (t - 1.0) / t;
+      current = log(t) * product;
+    }
+    t++;
+  } while (fabs(prev - current) > magic_eps);
+  free(a);
+  *result = -log(current);
   return OK;
 }

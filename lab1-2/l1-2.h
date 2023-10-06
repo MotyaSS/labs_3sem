@@ -10,6 +10,7 @@ typedef enum {
 typedef enum {
   OK,
   LIM_NOT_OK,
+  EQUATION_NOT_OK
 } calc_st_code;
 
 st_code input_handle(int argc, char* argv[]);
@@ -38,5 +39,7 @@ calc_st_code print_all_gamma(double eps);
 calc_st_code gamma_lim(double eps, double* result);
 calc_st_code gamma_sum(double eps, double* result);
 calc_st_code gamma_equation(double eps, double* result);
+
+void find_primes(int* arr, long long arr_size);
 
 #endif

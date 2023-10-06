@@ -3,6 +3,7 @@
 
 
 int main(int argc, char* argv[]) {
+
   switch (input_handle(argc, argv)) {
     case INVALID_ARGC:
       printf("Invalid arg count\n");
