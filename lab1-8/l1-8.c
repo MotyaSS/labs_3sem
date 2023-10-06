@@ -34,6 +34,11 @@ st_code file_handle(FILE* input, FILE* output) {
 }
 
 bool is_str_ok_to_convert(char* str) {
+  if(*str == '-'){
+    str++;
+    if(*str == '\0')
+      return false;
+  }
   while (*str != '\0') {
     if (!isalnum(*str)) {
       return false;
@@ -73,7 +78,10 @@ get_str_num_st_code get_str_between_spaces(FILE* stream, char* str, int size) {
 
 int find_min_base(const char* str) {
   int base = 0;
+  if(*str == '-'){
+    str++;
 
+  }
   for (int i = 0; str[i] != '\0'; i++) {
     if (!isalnum(str[i])) {
       return 0;
@@ -82,13 +90,16 @@ int find_min_base(const char* str) {
     a = 1 + (isdigit(a) ? (a - '0') : (a + 10 - 'a'));
     base = a > base ? a : base;
   }
-  if (base == 1) { // строка только из нулей == ИНВАЛИД
+  if (base == 1 || base == 0) { // строка только из нулей == ИНВАЛИД || строка = "-"
     return 0;
   }
   return base;
 }
 
 int print_num_to_file(char* num, int base, FILE* output) {
+  if(*num == '-') {
+    num++;
+  }
   while ((*num) == '0') {
     num++;
   }
