@@ -102,8 +102,10 @@ int f_fl_handle(const long long number) {
 }
 
 int flag_sw_case(const char* flag, const long long number) {
-  if (strlen(flag) != 1)
+  if (strlen(flag) != 1) {
     return FLAG_UNDEF;
+  }
+
   switch (flag[0]) {
     case 'h':
       return h_fl_handle(number);
