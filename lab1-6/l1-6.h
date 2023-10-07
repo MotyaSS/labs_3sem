@@ -1,5 +1,6 @@
 #ifndef L1_6_H
 #define L1_6_H
+
 typedef enum {
   OK,
   ARGC_INVALID,

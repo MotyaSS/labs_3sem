@@ -4,6 +4,7 @@
 #include "l1-6.h"
 #include "../my_flag_lib.h"
 
+
 fsc input(int argc, char* argv[]) {
   if (argc != 2) {
     return ARGC_INVALID;
