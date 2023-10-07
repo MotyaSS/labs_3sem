@@ -13,6 +13,9 @@ fsc input(int argc, char* argv[]) {
     return EPS_INVALID;
   }
   double eps = strtod(argv[1], NULL);
+  if(eps >= 1 || eps <= 0) {
+    return EPS_INVALID;
+  }
   print_all_integrals(eps);
   return OK;
 }
