@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
+#include <limits.h>
 #include "my_flag_lib.h"
 
 
@@ -41,7 +42,7 @@ bool if_l(const char arg[]) {
     if (number > LONG_MAX / 10) {
       return false;
     }
-    if (number == (LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10)) {
+    if (number == (LONG_MAX / 10) && (temp2[i] - '0') > (LONG_MAX % 10)) {
       return false;
     }
     number *= 10;
@@ -108,10 +109,10 @@ bool if_ll(const char arg[]) {
     if (temp2[i] < '0' || temp2[i] > '9') {
       return false;
     }
-    if (number > LONG_LONG_MAX / 10) {
+    if (number > LLONG_MAX / 10) {
       return false;
     }
-    if (number == (LONG_LONG_MAX / 10) && (temp2[i] - '0') > (LONG_LONG_MAX % 10)) {
+    if (number == (LLONG_MAX / 10) && (temp2[i] - '0') > (LLONG_MAX % 10)) {
       return false;
     }
     number *= 10;
