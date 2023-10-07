@@ -105,7 +105,7 @@ int integral_c(double eps, double* res) {
     double right_lim = right;
     double rectangle;
     prev = cur;
-    while (right_lim - point >= m_eps) {
+    while (fabs(right_lim - point) >= m_eps) {
       rectangle = step * (log(1.0 / (1 - point)));
       sum += rectangle;
       point += step;
