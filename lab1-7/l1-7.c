@@ -57,7 +57,7 @@ int put_rest_of_f1_to_f2(FILE* f1, FILE* f2) {
   return 0;
 }
 
-st_code r_strange_cat(FILE* input1, FILE* input2, FILE* output) {
+st_code r_strange_transform(FILE* input1, FILE* input2, FILE* output) {
   if (!input1 || !input2 || !output) {
     return FILE_IS_NULL;
   }
@@ -93,7 +93,7 @@ st_code r_fl(int argc, char* argv[]) {
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[4], "w");
-  st_code res = r_strange_cat(input1, input2, output);
+  st_code res = r_strange_transform(input1, input2, output);
   fclose(input1);
   fclose(input2);
   fclose(output);
