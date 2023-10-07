@@ -23,19 +23,19 @@ void print_all_integrals(double eps) {
   integral_b(eps, &b);
   integral_c(eps, &c);
   integral_d(eps, &d);
-  printf("A: %lf\nB: %lf\nC: %lf\nD: %lf\n", a, b, c, d);
+  printf("A: %.10lf\nB: %.10lf\nC: %.10lf\nD: %.10lf\n", a, b, c, d);
 }
 
 double machine_eps() {
   int i = 0;
-  double epsilon_f = 1.0;
+  double epsilon = 1.0;
 
 
-  while (1.0f + epsilon_f > 1.0f) {
-    epsilon_f = epsilon_f / 2.0f;
+  while (1.0f + epsilon > 1.0f) {
+    epsilon = epsilon / 2.0f;
     i++;
   }
-  return epsilon_f;
+  return epsilon;
 }
 
 int integral_a(double eps, double* res) {
