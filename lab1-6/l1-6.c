@@ -1,6 +1,7 @@
-#include "l1-6.h"
 #include <stdlib.h>
 #include <stdio.h>
+#include <math.h>
+#include "l1-6.h"
 #include "../my_flag_lib.h"
 
 fsc input(int argc, char* argv[]) {
@@ -16,7 +17,7 @@ fsc input(int argc, char* argv[]) {
 }
 
 void print_all_integrals(double eps) {
-  double a,b,c,d;
+  double a, b, c, d;
   integral_a(eps, &a);
   integral_b(eps, &b);
   integral_c(eps, &c);
@@ -24,18 +25,115 @@ void print_all_integrals(double eps) {
   printf("A: %lf\nB: %lf\nC: %lf\nD: %lf\n", a, b, c, d);
 }
 
-int integral_a(double eps, double* res) {
+double machine_eps() {
+  int i = 0;
+  double epsilon_f = 1.0;
 
+
+  while (1.0f + epsilon_f > 1.0f) {
+    epsilon_f = epsilon_f / 2.0f;
+    i++;
+  }
+  return epsilon_f;
+}
+
+int integral_a(double eps, double* res) {
+  double left = 0;
+  double right = 1;
+  double step = 1;
+  double cur = 0;
+  double prev = 0;
+
+  do {
+    step /= 2;
+    double sum = 0;
+    double point = left + step;
+    double rectangle;
+    prev = cur;
+    double m_eps = machine_eps();
+
+    while (fabs(point - right) >= m_eps) {
+      rectangle = step * (log(1 + point) / point);
+      sum += rectangle;
+      point += step;
+    }
+    cur = sum;
+  } while (fabs(cur - prev) > eps);
+  *res = cur;
+  return 0;
 }
 
 int integral_b(double eps, double* res) {
-
+  double left = 0;
+  double right = 1;
+  double step = 1;
+  double cur = 0;
+  double prev = 0;
+  double m_eps = machine_eps();
+  do {
+    step /= 2;
+    double sum = 0;
+    double point = left + step;
+    double rectangle;
+    prev = cur;
+    while (fabs(point - right) >= m_eps) {
+      rectangle = step * (exp(-point * point / 2));
+      sum += rectangle;
+      point += step;
+    }
+    cur = sum;
+  } while (fabs(cur - prev) > eps);
+  *res = cur;
+  return 0;
 }
 
 int integral_c(double eps, double* res) {
+  double left = 0;
+  double right = 1;
+  double step = 1;
+  double cur = 0;
+  double prev = 0;
+  double m_eps = machine_eps();
+  do {
+    step /= 2;
+    double sum = 0;
+    double point = left;
+    double right_lim = right;
+    double rectangle;
+    prev = cur;
+    while (right_lim - point >= m_eps) {
+      rectangle = step * (log(1.0 / (1 - point)));
+      sum += rectangle;
+      point += step;
+    }
+    cur = sum;
+  } while (fabs(cur - prev) > eps);
 
+  *res = cur;
+  return 0;
 }
 
 int integral_d(double eps, double* res) {
+  double left = 0;
+  double right = 1;
+  double step = 1;
+  double cur = 0;
+  double prev = 0;
+  double m_eps = machine_eps();
 
+  do {
+    step /= 2;
+    double sum = 0;
+    double point = left;
+    double rectangle;
+    prev = cur;
+    while (fabs(point - right) >= m_eps) {
+      rectangle = step * (pow(point, point));
+      sum += rectangle;
+      point += step;
+    }
+    cur = sum;
+  } while (fabs(cur - prev) > eps);
+  *res = cur;
+  return 0;
 }
