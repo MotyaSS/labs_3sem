@@ -16,10 +16,12 @@ st_code input(int argc, char* argv[]);
 st_code flag_handling(char* flag, int argc, char** argv);
 
 st_code r_fl(int argc, char* argv[]);
-st_code r_strange_transform(FILE* input1, FILE* input2, FILE* output);
+st_code r_strange_cat(FILE* input1, FILE* input2, FILE* output);
 int put_rest_of_f1_to_f2(FILE* f1, FILE* f2);
 
+int alloc_and_get_lexema(char** str, FILE* stream);
+
 st_code a_fl(int argc, char* argv[]);
-st_code a_strange_cat(FILE* input, FILE* output);
+st_code a_strange_transform(FILE* input, FILE* output);
 int ascii_base_4(char* res, int ch);
 #endif

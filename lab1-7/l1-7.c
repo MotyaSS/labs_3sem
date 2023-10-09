@@ -32,47 +32,62 @@ st_code flag_handling(char* flag, int argc, char** argv) {
   }
 }
 
+#include <stdlib.h>
 
-int get_token_or_eof(FILE* f, int* ch) {
+int alloc_and_get_lexema(char** str, FILE* stream) {
   int a;
-  while ((a = fgetc(f)) != EOF) {
-    if (!isblank(a) && a != '\n') {
-      *ch = a;
-      return 0;
+  while (isspace(a = fgetc(stream)));
+  if (a == EOF) {
+    return -1;
+  }
+  int count = 0;
+  size_t size = 8;
+  *str = (char*) malloc(sizeof(char) * size);
+  (*str)[count++] = a;
+  if (*str == NULL) {
+    return -1;
+  }
+  while (!isspace(a = fgetc(stream)) && a != EOF) {
+    (*str)[count++] = a;
+
+    if (count >= size) {
+      size *= 2;
+      *str = (char*) realloc(*str, size);
+      if (*str == NULL) {
+        return -1;
+      }
     }
   }
-  *ch = a;
-  return -1;
+  (*str)[count] = 0;
+  return 0;
 }
 
 int put_rest_of_f1_to_f2(FILE* f1, FILE* f2) {
-  int c;
-  while (!feof(f1)) {
-    get_token_or_eof(f1, &c);
-    if (c == EOF) {
-      break;
-    }
-    fprintf(f2, "%c ", c);
+  char* str = NULL;
+  while (alloc_and_get_lexema(&str, f1) != -1) {
+    fprintf(f2, "%s ", str);
+    free(str);
+    str = NULL;
   }
   return 0;
 }
 
-st_code r_strange_transform(FILE* input1, FILE* input2, FILE* output) {
+st_code r_strange_cat(FILE* input1, FILE* input2, FILE* output) {
   if (!input1 || !input2 || !output) {
     return FILE_IS_NULL;
   }
   while (!feof(input1) && !feof(input2)) {
-    int c;
-    get_token_or_eof(input1, &c);
-    if (c == EOF) {
-      break;
+    char* str = NULL;
+    if (alloc_and_get_lexema(&str, input1) != -1) {
+      fprintf(output, "%s ", str);
+      free(str);
+      str = NULL;
     }
-    fprintf(output, "%c ", c);
-    get_token_or_eof(input2, &c);
-    if (c == EOF) {
-      break;
+    if (alloc_and_get_lexema(&str, input2) != -1) {
+      fprintf(output, "%s ", str);
+      free(str);
+      str = NULL;
     }
-    fprintf(output, "%c ", c);
   }
   put_rest_of_f1_to_f2(input1, output);
   put_rest_of_f1_to_f2(input2, output);
@@ -93,7 +108,7 @@ st_code r_fl(int argc, char* argv[]) {
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[4], "w");
-  st_code res = r_strange_transform(input1, input2, output);
+  st_code res = r_strange_cat(input1, input2, output);
   fclose(input1);
   fclose(input2);
   fclose(output);
@@ -106,8 +121,8 @@ int ascii_base_4(char* res, int ch) {
   int index = 0;
 
   while (quotient != 0) {
-    remainder = quotient % 4;
-    quotient = quotient / 4;
+    remainder = quotient & 3;
+    quotient = quotient >> 2;
 
     res[index++] = remainder + '0';
   }
@@ -117,30 +132,40 @@ int ascii_base_4(char* res, int ch) {
   return 0;
 }
 
-st_code a_strange_cat(FILE* input, FILE* output) {
+int print_formated_str(size_t count, FILE* output, char* str) {
+  if (count % 10 == 0) {
+    char buff[5];
+    for (int i = 0; str[i] != '\0'; i++) {
+      ascii_base_4(buff, tolower(str[i]));
+      fprintf(output, "%s|", buff);
+    }
+  } else if (count % 2 == 0) {
+    for (int i = 0; str[i] != '\0'; i++) {
+      fprintf(output, "%c", tolower(str[i]));
+    }
+  } else if (count % 5 == 0) {
+    for (int i = 0; str[i] != '\0'; i++) {
+      fprintf(output, "%o|", str[i]);
+    }
+  } else {
+    fprintf(output, "%s", str);
+  }
+  fprintf(output, " ");
+  return 0;
+}
+
+st_code a_strange_transform(FILE* input, FILE* output) {
   if (!input || !output) {
     return FILE_IS_NULL;
   }
-  int a;
   size_t count = 0;
   while (!feof(input)) {
     count++;
-    get_token_or_eof(input, &a);
-    if (a == EOF) {
-      break;
+    char* str;
+    if (alloc_and_get_lexema(&str, input) != -1) {
+      print_formated_str(count, output, str);
+      free(str);
     }
-    if (count % 10 == 0) {
-      char buff[5];
-      ascii_base_4(buff, tolower(a));
-      fprintf(output, "%s", buff);
-    } else if (count % 2 == 0) {
-      fprintf(output, "%c", tolower(a));
-    } else if (count % 5 == 0) {
-      fprintf(output, "%o", a);
-    } else {
-      fprintf(output, "%c", a);
-    }
-    fprintf(output, " ");
   }
   return OK;
 }
@@ -154,7 +179,7 @@ st_code a_fl(int argc, char* argv[]) {
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[3], "w");
-  st_code res = a_strange_cat(input, output);
+  st_code res = a_strange_transform(input, output);
   fclose(input);
   fclose(output);
   return res;

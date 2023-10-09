@@ -258,7 +258,7 @@ calc_st_code print_all_gamma(double eps) {
   double lim_res, sum_res, equ_res;
   gamma_lim(eps, &lim_res);
   gamma_sum(eps, &sum_res);
-  gamma_equation(eps, &equ_res);
+  gamma_equation_ver2(eps, &equ_res);
   printf("%.10lf %.10lf %.10lf\n", lim_res, sum_res, equ_res);
   return OK;
 }
@@ -349,6 +349,50 @@ calc_st_code gamma_equation(double eps, double* result) {
     t++;
   } while (fabs(prev - current) > magic_eps);
   free(a);
+  *result = -log(current);
+  return OK;
+}
+
+#include <stdbool.h>
+
+int is_prime(const long long number) {
+  long long temp_n = number < 0 ? -number : number;
+  double limit = floor(sqrt(temp_n));
+  if (number == 1 || number == 0) {
+    return false;
+  }
+  if (number == 2) {
+    return true;
+  }
+  if (number % 2 == 0) {
+    return false;
+  }
+
+  for (long long i = 3; i <= limit; i += 2) {
+    if (temp_n % i == 0) {
+      return false;
+    }
+  }
+  return true;
+}
+
+calc_st_code gamma_equation_ver2(double eps, double* result) {
+  double magic_eps = eps / 100000;
+  double current = log(2) * 0.5;
+  double prev = 0;
+  double product = 0.5;
+
+  int t = 1;
+  do {
+    prev = current;
+    do {
+      t += 2;
+    } while (!is_prime(t));
+
+    product *= (t - 1.0) / t;
+    current = log(t) * product;
+  } while (fabs(prev - current) > magic_eps);
+
   *result = -log(current);
   return OK;
 }

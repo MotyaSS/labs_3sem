@@ -21,4 +21,5 @@ int main(int argc, char* argv[]) {
     default:
       printf("Unknown status code\n");
   }
+  return 0;
 }
