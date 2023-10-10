@@ -353,27 +353,25 @@ calc_st_code gamma_equation(double eps, double* result) {
   return OK;
 }
 
-#include <stdbool.h>
-
 int is_prime(const long long number) {
   long long temp_n = number < 0 ? -number : number;
   double limit = floor(sqrt(temp_n));
   if (number == 1 || number == 0) {
-    return false;
+    return 0;
   }
   if (number == 2) {
-    return true;
+    return 1;
   }
   if (number % 2 == 0) {
-    return false;
+    return 0;
   }
 
   for (long long i = 3; i <= limit; i += 2) {
     if (temp_n % i == 0) {
-      return false;
+      return 0;
     }
   }
-  return true;
+  return 1;
 }
 
 calc_st_code gamma_equation_ver2(double eps, double* result) {

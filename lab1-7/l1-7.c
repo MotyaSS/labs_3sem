@@ -37,7 +37,7 @@ st_code flag_handling(char* flag, int argc, char** argv) {
 int alloc_and_get_lexema(char** str, FILE* stream) {
   int a;
   while (isspace(a = fgetc(stream)));
-  if (a == EOF) {
+  if (feof(stream)) {
     return -1;
   }
   int count = 0;
@@ -52,10 +52,11 @@ int alloc_and_get_lexema(char** str, FILE* stream) {
 
     if (count >= size) {
       size *= 2;
-      *str = (char*) realloc(*str, size);
-      if (*str == NULL) {
+      char* new_str = (char*) realloc(*str, sizeof(char) * size);
+      if (new_str == NULL) {
         return -1;
       }
+      *str = new_str;
     }
   }
   (*str)[count] = 0;
@@ -108,6 +109,12 @@ st_code r_fl(int argc, char* argv[]) {
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[4], "w");
+  if (output == NULL) {
+    fclose(input1);
+    fclose(input2);
+    return FILE_IS_NULL;
+  }
+
   st_code res = r_strange_cat(input1, input2, output);
   fclose(input1);
   fclose(input2);
