@@ -26,7 +26,7 @@ int print_n_bytes_from_file(FILE* stream, int n) {
   }
   fread(buff, sizeof(char), n, stream);
   buff[n] = 0;
-  printf("Buff after shifting for %d bytes: ", n);
+  printf("%d bytes after shifting: ", n);
   for(int i = 0; i < n; i++){
     printf("%d ", buff[i]);
   }
@@ -48,8 +48,7 @@ st_code execute(char* filename) {
   }
   print_all_file(stream);
   fclose(stream);
-  stream = fopen(filename, "rb");
-  fclose(stream);
+
   stream = fopen(filename, "rb");
   if (stream == NULL) {
     return cant_open_file;
