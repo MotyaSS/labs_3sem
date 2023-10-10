@@ -10,7 +10,7 @@ int print_all_file(FILE* stream) {
   char buff[1];
   do {
     fread(buff, sizeof(char), 1, stream);
-    printf("%c: _ptr: %p, _base: %p, _bufsiz: %d, _charbuf: %d, _cnt: %d, _file: %d, _flag: %d\n", buff[0],
+    printf("%d: _ptr: %p, _base: %p, _bufsiz: %d, _charbuf: %d, _cnt: %d, _file: %d, _flag: %d\n", buff[0],
            stream->_ptr,
            stream->_base,
            stream->_bufsiz, stream->_charbuf,
@@ -20,40 +20,37 @@ int print_all_file(FILE* stream) {
 }
 
 int print_n_bytes_from_file(FILE* stream, int n) {
-  char* buff = (char*)malloc(sizeof(char) * (n + 1));
-  if(buff == NULL) {
+  char* buff = (char*) malloc(sizeof(char) * (n));
+  if (buff == NULL) {
     return -1;
   }
   fread(buff, sizeof(char), n, stream);
   buff[n] = 0;
-  printf("Buff after shifting for %d bytes: %s\n", n,buff);
-  return 0;
-}
-#include <string.h>
-int fill_file(char* buf, FILE* stream) {
-  fwrite(buf, sizeof(char), strlen(buf), stream);
+  printf("Buff after shifting for %d bytes: ", n);
+  for(int i = 0; i < n; i++){
+    printf("%d ", buff[i]);
+  }
   return 0;
 }
 
 st_code execute(char* filename) {
-
-  FILE* stream = fopen(filename, "w");
+  FILE* stream = fopen(filename, "wb");
   if (stream == NULL) {
     return cant_open_file;
   }
-  char buff[11] = "3141592653";
-  fill_file(buff, stream);
+  char buff[11] = {3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5};
+  fwrite(buff, sizeof(char), 11, stream);
   fclose(stream);
 
-  stream = fopen(filename, "r");
+  stream = fopen(filename, "rb");
   if (stream == NULL) {
     return cant_open_file;
   }
   print_all_file(stream);
   fclose(stream);
-  stream = fopen(filename, "r");
+  stream = fopen(filename, "rb");
   fclose(stream);
-  stream = fopen(filename, "r");
+  stream = fopen(filename, "rb");
   if (stream == NULL) {
     return cant_open_file;
   }
