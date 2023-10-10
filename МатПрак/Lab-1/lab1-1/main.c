@@ -1,7 +1,4 @@
-#include <string.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include "..\my_flag_lib.h"
 #include "l1-1.h"
 
 int main(int argc, char* argv[]) {

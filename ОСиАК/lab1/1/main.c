@@ -13,4 +13,5 @@ int main(int argc, char* argv[]) {
     default:
       printf("stc unknown\n");
   }
+  return 0;
 }
