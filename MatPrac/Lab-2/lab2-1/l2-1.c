@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
 #include "l2-1.h"
 #include "../../../my_flag_lib.h"
 
@@ -78,7 +79,7 @@ st_code n_fl(int argc, char* argv[]) {
     return inv_argc;
   }
   char* string = (char*) malloc(sizeof(char) * (str_length(argv[2]) + 1));
-  new_str__num_al_other__order(argv[2], string);
+  str__num_alph_other__order(argv[2], string);
   printf("formatted string: %s\n", string);
   free(string);
   return ok;
@@ -89,16 +90,16 @@ st_code c_fl(int argc, char* argv[]) {
     return inv_argc;
   }
 
-  if (!if_i(argv[1])) {
+  if (!if_i(argv[2])) {
     return inv_num;
   }
-  int seed = strtol(argv[1], NULL, 10);
+  int seed = strtol(argv[2], NULL, 10);
   ull size = 0;
   for (int i = 3; i < argc; i++) {
     size += str_length(argv[i]);
   }
   char* string = (char*) malloc(sizeof(char) * (size + 1));
-  cat_string_rand_order(seed, argv + 3, argc - 4, string);
+  cat_string_rand_order(seed, argv + 3, argc - 3, string);
   printf("random ordered string: %s\n", string);
   free(string);
   return ok;
@@ -119,21 +120,82 @@ int str_reverse(const char* src, char* dest) {
   }
 
   ull len = str_length(src);
-  dest[len] = '\0';
   for (int i = 0; i <= len / 2; i++) {
     dest[i] = src[len - 1 - i];
+    dest[len - 1 - i] = src[i];
   }
+  dest[len] = '\0';
   return 0;
 }
 
 int str_odd_element_toupper(const char* src, char* dest) {
-
+  if (src == NULL || dest == NULL) {
+    return -1;
+  }
+  ull i = 0;
+  for (; src[i] != '\0'; i++) {
+    if (i & 1) {
+      dest[i] = toupper(src[i]);
+    } else {
+      dest[i] = src[i];
+    }
+  }
+  dest[i] = '\0';
+  return 0;
 }
 
-int new_str__num_al_other__order(const char* src, char* dest) {
+int str__num_alph_other__order(const char* src, char* dest) {
+  if (src == NULL || dest == NULL) {
+    return -1;
+  }
+  int ind = 0;
+  for (int i = 0; src[i] != '\0'; i++) {
+    if (isdigit(src[i])) {
+      dest[ind++] = src[i];
+    }
+  }
+  for (int i = 0; src[i] != '\0'; i++) {
+    if (isalpha(src[i])) {
+      dest[ind++] = src[i];
+    }
+  }
+  for (int i = 0; src[i] != '\0'; i++) {
+    if (!isalnum(src[i])) {
+      dest[ind++] = src[i];
+    }
+  }
+  dest[ind] = '\0';
+  return 0;
+}
 
+char* str_cpy(const char* src, char* dest) {
+  int i = 0;
+  for (; src[i] != '\0'; i++) {
+    dest[i] = src[i];
+  }
+  dest[i] = '\0';
+  return dest + i;
 }
 
 int cat_string_rand_order(int seed, char* strings_arr[], int str_cnt, char* dest) {
+  int* arr = (int*) malloc(sizeof(int) * str_cnt);
+  for (int i = 0; i < str_cnt; i++) {
+    arr[i] = i;
+  }
 
+  srand(seed);
+  for (int i = str_cnt - 1; i >= 0; i--) {
+    int j = rand() % (i + 1);
+    int temp = arr[i];
+    arr[i] = arr[j];
+    arr[j] = temp;
+  }
+  *dest = '\0';
+  char* ptr = dest;
+  for (int i = 0; i < str_cnt; i++) {
+    ptr = str_cpy(strings_arr[arr[i]], ptr);
+  }
+  srand(0);
+  free(arr);
+  return 0;
 }

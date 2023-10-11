@@ -2,10 +2,6 @@
 #include "l2-1.h"
 
 int main(int argc, char* argv[]) {
-  char* str = "rat";
-  char res[4];
-  str_reverse(str, res);
-  printf("%s\n", res);
   switch (input(argc, argv)) {
     case ok:
       printf("all ok\n");
