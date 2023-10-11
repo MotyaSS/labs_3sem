@@ -21,9 +21,11 @@ st_code input(int argc, char* argv[]) {
 }
 
 int copy_file(FILE* src, FILE* dest) {
-  char buff[1];
-  while (fread(buff, sizeof(char), 1, src) == 1) {
-    fwrite(buff, sizeof(char), 1, dest);
+  char buff[BUFSIZ];
+  size_t a = fread(buff, sizeof(char), BUFSIZ, src);
+  while (a > 0) {
+    fwrite(buff, sizeof(char), a, dest);
+    a = fread(buff, sizeof(char), 1, src);
   }
   return 0;
 }
