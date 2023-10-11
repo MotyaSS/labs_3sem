@@ -16,5 +16,6 @@ int main(int argc, char* argv[]) {
       printf("can't open output file");
       break;
   }
+
   return 0;
 }
