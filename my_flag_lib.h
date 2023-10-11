@@ -10,4 +10,6 @@ bool if_ll(const char arg[]);
 bool if_i(const char arg[]);
 bool if_l(const char arg[]);
 bool if_lf(const char arg[]);
+
+int close_files(int count, ...);
 #endif

@@ -3,8 +3,8 @@
 #include <string.h>
 #include <ctype.h>
 #include <limits.h>
+#include <stdarg.h>
 #include "my_flag_lib.h"
-
 
 bool if_flag(const char arg[]) {
   if (arg == NULL) {
@@ -138,4 +138,18 @@ void strcpy_without_first(const char cpy[], char var[]) {
     return;
   }
   strcpy(var, (cpy + 1));
+}
+
+#include "stdio.h"
+
+int close_files(int count, ...) {
+  va_list ap;
+  va_start(ap, count);
+  for (int i = 0; i < count; i++) {
+    FILE* file = va_arg(ap, FILE *);
+    if (file) {
+      fclose(file);
+    }
+  }
+  va_end(ap);
 }
