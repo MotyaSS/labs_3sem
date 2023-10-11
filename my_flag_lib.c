@@ -143,6 +143,9 @@ void strcpy_without_first(const char cpy[], char var[]) {
 #include "stdio.h"
 
 int close_files(int count, ...) {
+  if(count <= 0) {
+    return -1;
+  }
   va_list ap;
   va_start(ap, count);
   for (int i = 0; i < count; i++) {
@@ -152,4 +155,5 @@ int close_files(int count, ...) {
     }
   }
   va_end(ap);
+  return 0;
 }
