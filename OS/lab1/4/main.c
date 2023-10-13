@@ -11,6 +11,9 @@ int main(int argc, char* argv[]) {
     case unknown_file:
       printf("unknown file\n");
       break;
+    case mask_not_ok:
+      printf("mask is unsuitable\n");
+      break;
     default:
       printf("unknown status code\n");
   }

@@ -1,9 +1,36 @@
+#include <stdlib.h>
 #include <string.h>
 #include "l1-4.h"
-#include "../../../my_flag_lib.h"
+
+st_code find_func_and_print_result(int argc, char* argv[], FILE* stream) {
+
+  const char* flag = argv[2];
+
+  if (strcmp(flag, "xor8") == 0) {
+    if (argc != 3) {
+      return inv_argc;
+    }
+    printf("%d\n", xor8(stream));
+  } else if (strcmp(flag, "xor32") == 0) {
+    if (argc != 3) {
+      return inv_argc;
+    }
+    printf("%d\n", xor32(stream));
+  } else if (strcmp(flag, "mask") == 0) {
+    if (argc != 4) {
+      return inv_argc;
+    }
+    ull res;
+    if (search_for_mask(stream, &res, argv[3]) == 1) {
+      return mask_not_ok;
+    }
+    printf("%llu\n", res);
+  }
+  return ok;
+}
 
 st_code input(int argc, char* argv[]) {
-  if (argc < 3) {
+  if (argc < 3 || argc > 4) {
     return inv_argc;
   }
 
@@ -12,28 +39,9 @@ st_code input(int argc, char* argv[]) {
   if (stream == NULL) {
     return unknown_file;
   }
-
-  const char* flag = argv[2] + 1;
-
-  if (strcmp(flag, "xor8") == 0) {
-    if (argc != 3) {
-      return inv_argc;
-    }
-    printf("%d", xor8(stream));
-  } else if (strcmp(flag, "xor32") == 0) {
-    if (argc != 3) {
-      return inv_argc;
-    }
-    printf("%d", xor32(stream));
-  } else if (strcmp(flag, "mask") == 0) {
-    if (argc != 4 ||) {
-      return inv_argc;
-    }
-
-  }
-
+  st_code res = find_func_and_print_result(argc, argv, stream);
   fclose(stream);
-  return ok;
+  return res;
 }
 
 byte xor8(FILE* stream) {
@@ -70,18 +78,15 @@ byte4 xor32(FILE* stream) {
   return res;
 }
 
-#include <stdlib.h>
-#include <math.h>
-
-ull search_for_mask(FILE* stream, const char* mask) {
+int search_for_mask(FILE* stream, ull* res, const char* mask) {
 
   char* t_ptr = NULL;
   byte4 mask_bin = strtoul(mask, &t_ptr, 16);
   if (t_ptr != mask + strlen(mask)) {
-    return -1;
+    return 1;
   }
 
-  byte4 cur_mask;
+  byte4 cur_mask = 0;
   byte byte_from_file;
   ull count = 0;
   while (fread(&byte_from_file, sizeof(byte), 1, stream) == 1) {
@@ -92,5 +97,6 @@ ull search_for_mask(FILE* stream, const char* mask) {
       count++;
     }
   }
-  return count;
+  *res = count;
+  return 0;
 }
