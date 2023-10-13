@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "l1-5.h"
-#include "..\my_flag_lib.h"
+#include "..\..\..\my_flag_lib.h"
 
 fsc input(int argc, char* argv[]) {
   if (argc != 3) {

@@ -2,7 +2,7 @@
 #include <time.h>
 #include <stdlib.h>
 #include "l1-9.h"
-#include "../my_flag_lib.h"
+#include "../../../my_flag_lib.h"
 
 #define ARR_SIZE 10
 

@@ -7,7 +7,8 @@ typedef enum {
   inv_argc,
   inv_flag,
   unknown_flag,
-  inv_num
+  inv_num,
+  not_enough_space
 } st_code;
 
 st_code input(int argc, char* argv[]);

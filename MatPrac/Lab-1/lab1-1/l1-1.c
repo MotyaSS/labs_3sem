@@ -3,7 +3,7 @@
 #include <string.h>
 #include <math.h>
 #include "l1-1.h"
-#include "..\my_flag_lib.h"
+#include "../../../my_flag_lib.h"
 
 #define BUFF_SIZE 100
 
@@ -227,15 +227,17 @@ long long int sum_to_n(const long long number) {
   return sum;
 }
 
-int factorial(const long long number) {
+long long factorial(const long long number) {
   if (number <= 1) {
     return 1;
   }
 
   long long temp = factorial(number - 1);
+  if(temp == F_MORE_THAN_LLMAX) {
+    return F_MORE_THAN_LLMAX;
+  }
   if (temp <= LONG_LONG_MAX / number) {
     return temp * number;
   }
   return F_MORE_THAN_LLMAX;
 }
-

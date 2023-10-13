@@ -3,7 +3,7 @@
 #include <string.h>
 #include <stdio.h>
 #include "l1-3.h"
-#include "../my_flag_lib.h"
+#include "../../../my_flag_lib.h"
 
 #define BUFF_SIZE 100
 

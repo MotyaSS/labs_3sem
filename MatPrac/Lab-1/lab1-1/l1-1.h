@@ -46,6 +46,6 @@ long long int sum_to_n(long long number);
 
 HANDLER f_fl_handle(long long number);
 
-int factorial(long long number);
+long long factorial(long long number);
 
 #endif

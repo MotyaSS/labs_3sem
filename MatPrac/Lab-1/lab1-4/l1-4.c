@@ -3,7 +3,7 @@
 #include <ctype.h>
 #include <stdio.h>
 #include "l1-4.h"
-#include "../my_flag_lib.h"
+#include "../../../my_flag_lib.h"
 
 int make_out_name(char* out_name, char* in_name) {
   size_t len = strlen(in_name);

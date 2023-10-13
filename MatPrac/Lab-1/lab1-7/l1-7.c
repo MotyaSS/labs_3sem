@@ -1,4 +1,4 @@
-#include "..\my_flag_lib.h"
+#include "..\..\..\my_flag_lib.h"
 #include "l1-7.h"
 #include <stdio.h>
 #include <string.h>
@@ -43,10 +43,12 @@ int alloc_and_get_lexema(char** str, FILE* stream) {
   int count = 0;
   size_t size = 8;
   *str = (char*) malloc(sizeof(char) * size);
-  (*str)[count++] = a;
+
   if (*str == NULL) {
     return -1;
   }
+  (*str)[count++] = a;
+
   while (!isspace(a = fgetc(stream)) && a != EOF) {
     (*str)[count++] = a;
 
@@ -105,20 +107,17 @@ st_code r_fl(int argc, char* argv[]) {
   }
   FILE* input2 = fopen(argv[3], "r");
   if (input2 == NULL) {
-    fclose(input1);
+    close_files(1, input1);
     return FILE_IS_NULL;
   }
   FILE* output = fopen(argv[4], "w");
   if (output == NULL) {
-    fclose(input1);
-    fclose(input2);
+    close_files(2, input1, input2);
     return FILE_IS_NULL;
   }
 
   st_code res = r_strange_cat(input1, input2, output);
-  fclose(input1);
-  fclose(input2);
-  fclose(output);
+  close_files(3, input1, input2, output);
   return res;
 }
 

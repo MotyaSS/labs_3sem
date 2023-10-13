@@ -57,6 +57,9 @@ st_code r_fl(int argc, char* argv[]) {
     return inv_argc;
   }
   char* string = (char*) malloc(sizeof(char) * (str_length(argv[2]) + 1));
+  if (string == NULL) {
+    return not_enough_space;
+  }
   str_reverse(argv[2], string);
   printf("reversed string: %s\n", string);
   free(string);
@@ -68,6 +71,9 @@ st_code u_fl(int argc, char* argv[]) {
     return inv_argc;
   }
   char* string = (char*) malloc(sizeof(char) * (str_length(argv[2]) + 1));
+  if (string == NULL) {
+    return not_enough_space;
+  }
   str_odd_element_toupper(argv[2], string);
   printf("formatted string: %s\n", string);
   free(string);
@@ -79,6 +85,9 @@ st_code n_fl(int argc, char* argv[]) {
     return inv_argc;
   }
   char* string = (char*) malloc(sizeof(char) * (str_length(argv[2]) + 1));
+  if (string == NULL) {
+    return not_enough_space;
+  }
   str__num_alph_other__order(argv[2], string);
   printf("formatted string: %s\n", string);
   free(string);
@@ -99,8 +108,14 @@ st_code c_fl(int argc, char* argv[]) {
     size += str_length(argv[i]);
   }
   char* string = (char*) malloc(sizeof(char) * (size + 1));
-  cat_string_rand_order(seed, argv + 3, argc - 3, string);
-  printf("random ordered string: %s\n", string);
+  if (string == NULL) {
+    return not_enough_space;
+  }
+
+  if(cat_string_rand_order(seed, argv + 3, argc - 3, string) == 0) {
+    printf("random ordered string: %s\n", string);
+  }
+
   free(string);
   return ok;
 }
@@ -177,25 +192,26 @@ char* str_cpy(const char* src, char* dest) {
   return dest + i;
 }
 
+int rand_comp(const void* i, const void* j) {
+  return rand() % 2 ? 1 : -1;
+}
+
 int cat_string_rand_order(int seed, char* strings_arr[], int str_cnt, char* dest) {
-  int* arr = (int*) malloc(sizeof(int) * str_cnt);
+  srand(seed);
+  char** arr = (char**) malloc(sizeof(char*) * str_cnt);
+  if (arr == NULL) {
+    return -1;
+  }
   for (int i = 0; i < str_cnt; i++) {
-    arr[i] = i;
+    arr[i] = strings_arr[i];
   }
 
-  srand(seed);
-  for (int i = str_cnt - 1; i >= 0; i--) {
-    int j = rand() % (i + 1);
-    int temp = arr[i];
-    arr[i] = arr[j];
-    arr[j] = temp;
-  }
+  qsort(arr, str_cnt, sizeof(char*), rand_comp);
   *dest = '\0';
   char* ptr = dest;
   for (int i = 0; i < str_cnt; i++) {
-    ptr = str_cpy(strings_arr[arr[i]], ptr);
+    ptr = str_cpy(arr[i], ptr);
   }
-  srand(0);
   free(arr);
   return 0;
 }

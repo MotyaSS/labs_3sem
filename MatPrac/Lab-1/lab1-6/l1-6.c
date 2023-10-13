@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <math.h>
 #include "l1-6.h"
-#include "../my_flag_lib.h"
+#include "../../../my_flag_lib.h"
 
 
 fsc input(int argc, char* argv[]) {
