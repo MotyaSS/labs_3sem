@@ -1,8 +1,10 @@
-#include <stdio.h>
-#include <time.h>
 #include "l1-2.h"
-
+#include <stdio.h>
 
 int main() {
-  user_login();
+  struct tm t;
+  int a = parse_date(&t);
+//  start_app();
+  printf("%d", a);
+  return 0;
 }
