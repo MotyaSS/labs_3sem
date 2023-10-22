@@ -42,7 +42,7 @@ request get_request() {
     return get_time;
   if (compare(buff, "date"))
     return get_date;
-  if(compare(buff, "logout"))
+  if (compare(buff, "logout"))
     return logout;
   else
     return undefined;
@@ -106,7 +106,7 @@ int request_switch_case(user_db* db, const request rq, user** cur_user) {
       print_time(*cur_user);
       break;
     case logout:
-      switch(user_logout(cur_user)){
+      switch (user_logout(cur_user)) {
         case logout_success:
           printf("logout success\n");
           break;

@@ -2,9 +2,6 @@
 #include <stdio.h>
 
 int main() {
-  struct tm t;
-  int a = parse_date(&t);
-//  start_app();
-  printf("%d", a);
+  start_app();
   return 0;
 }

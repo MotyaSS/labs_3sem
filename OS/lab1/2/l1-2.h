@@ -3,6 +3,7 @@
 
 #include <stdlib.h>
 #include <stdbool.h>
+#include <time.h>
 
 #define LOGIN_LEN 6
 
@@ -85,7 +86,6 @@ int print_date(user* cur_user);
 int print_time(user* cur_user);
 int time_since(user* cur_user);
 
-#include <time.h>
 int parse_date(struct tm* time_);
 
 #endif

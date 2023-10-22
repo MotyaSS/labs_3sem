@@ -44,7 +44,7 @@ int user_login(user_db* db, user** cur_user) {
 }
 
 int user_logout(user** cur_user) {
-  if (cur_user == NULL) {
+  if (*cur_user == NULL) {
     return not_logged;
   }
   *cur_user = NULL;
@@ -127,7 +127,7 @@ int time_since(user* cur_user) {
   struct tm t;
   t.tm_sec = 0;
   t.tm_min = 0;
-  t.tm_hour = 0;  
+  t.tm_hour = 0;
   printf("enter date in format DD-MM-YYYY\n");
   if (parse_date(&t) != 0) {
 

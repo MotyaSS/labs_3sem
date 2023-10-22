@@ -42,7 +42,7 @@ int db_add_user(user_db* db, user user_) {
   }
 
   db->users[db->cur_size].password = user_.password;
-  strcpy(db->users[db->cur_size].login, user_.login);
+  strncpy(db->users[db->cur_size].login, user_.login, LOGIN_LEN);
   db->users[db->cur_size].sanctions = -1;
   db->cur_size++;
 

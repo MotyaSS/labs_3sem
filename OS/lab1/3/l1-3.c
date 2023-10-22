@@ -11,6 +11,7 @@ st_code input(int argc, char* argv[]) {
   }
   FILE* out = fopen(argv[2], "wb");
   if (out == NULL) {
+    fclose(in);
     return cant_open_outfile;
   }
 
@@ -25,7 +26,7 @@ int copy_file(FILE* src, FILE* dest) {
   size_t a = fread(buff, sizeof(char), BUFSIZ, src);
   while (a > 0) {
     fwrite(buff, sizeof(char), a, dest);
-    a = fread(buff, sizeof(char), 1, src);
+    a = fread(buff, sizeof(char), BUFSIZ, src);
   }
   return 0;
 }
