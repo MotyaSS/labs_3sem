@@ -25,6 +25,8 @@ st_code find_func_and_print_result(int argc, char* argv[], FILE* stream) {
       return mask_not_ok;
     }
     printf("%llu\n", res);
+  } else {
+    return unknown_flag;
   }
   return ok;
 }
@@ -51,7 +53,7 @@ byte xor8(FILE* stream) {
   byte res = 0;
   int a;
   while ((a = fgetc(stream)) != EOF) {
-    res = a ^ res;
+    res ^= a;
   }
 
   return res;

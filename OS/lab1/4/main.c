@@ -14,6 +14,9 @@ int main(int argc, char* argv[]) {
     case mask_not_ok:
       printf("mask is unsuitable\n");
       break;
+    case unknown_flag:
+      printf("unknown flag\n");
+      break;
     default:
       printf("unknown status code\n");
   }

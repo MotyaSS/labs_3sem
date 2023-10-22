@@ -11,6 +11,7 @@ typedef enum {
   ok,
   inv_argc,
   unknown_file,
+  unknown_flag,
   mask_not_ok
 } st_code;
 
