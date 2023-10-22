@@ -2,5 +2,6 @@
 #include "l2-3.h"
 
 int main() {
-  find_all_substr_in_multiple_files(1, "\nvv", "test.txt");
+  find_all_substr_in_multiple_files(1, "\nvv\nvv", "test.txt");
+  return 0;
 }
