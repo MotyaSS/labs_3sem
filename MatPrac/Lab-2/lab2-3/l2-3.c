@@ -90,6 +90,7 @@ int find_substr_in_file(char_info* info, const char* str, FILE* stream, char_inf
   strbuf[len] = '\0';
   size_t cnt;
   while ((cnt = fread(strbuf, sizeof(char), len, stream)) == len) {
+    fseek(stream, 1 - len, SEEK_CUR);
     ptr_pos->index++;
     if (is_equal_s(str, strbuf)) {
       info->index = ptr_pos->index;
@@ -104,7 +105,6 @@ int find_substr_in_file(char_info* info, const char* str, FILE* stream, char_inf
       ptr_pos->line++;
       ptr_pos->index = -1;
     }
-    fseek(stream, 1 - len, SEEK_CUR);
   }
   return find_eof;
 }
