@@ -1,9 +1,10 @@
 #ifndef L2_8_H
 #define L2_8_H
+
 #include <stdlib.h>
 #include <stdbool.h>
 
-typedef enum{
+typedef enum {
   sum_ok,
   sum_base_inv,
   sum_bad_alloc,
