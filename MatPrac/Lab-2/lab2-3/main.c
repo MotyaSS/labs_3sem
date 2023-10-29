@@ -35,11 +35,11 @@ void print_erase(char_info** info, size_t cnt) {
 
 int main() {
   char_info** indexes_arr;
-  if (find_all_substr_in_multiple_files(&indexes_arr, 3, "sv", "test.txt", "../test.txt", "test2.txt") != find_ok) {
-    printf("something went wrong\n");
-  } else {
+  if (find_all_substr_in_multiple_files(&indexes_arr, 3, "sv", "test.txt", "../test.txt", "test2.txt") == find_ok) {
     print_erase(indexes_arr, 3);
     indexes_arr = NULL;
+  } else {
+    printf("something went wrong\n");
   }
   return 0;
 }
