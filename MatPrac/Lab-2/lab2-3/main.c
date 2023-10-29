@@ -12,7 +12,7 @@ void erase(char_info** info, size_t cnt) {
 }
 
 void print(char_info* const* info, size_t cnt) {
-  const char_info* const* info_p = info;
+  char_info* const* info_p = info;
   for (int i = 0; i < cnt; i++) {
     char_info const* ptr = *info_p;
     if (ptr == NULL) {
