@@ -11,12 +11,13 @@ int main() {
 
 
   point2 a, b, c, d;
-  a.x = 0;
-  a.y = 0;
+  a.x = 1;
+  a.y = 1;
   b.x = 1;
   b.y = 0;
-  c.x = 1;
-  c.y = 1;
+  c.x = 0;
+  c.y = 0;
+
   d.x = 0;
   d.y = 1;
 

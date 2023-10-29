@@ -4,10 +4,10 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-int find_all_substr_in_multiple_files(int count, const char* substr, ...) {
+find_substr_st find_all_substr_in_multiple_files(int count, const char* substr, ...) {
   va_list a;
   if (count == 0) {
-    return 1;
+    return find_cnt_inv;
   }
 
   va_start(a, substr);
@@ -32,7 +32,7 @@ int find_all_substr_in_multiple_files(int count, const char* substr, ...) {
   return 0;
 }
 
-int find_all_substr(const char* str, const char* filename, char_info** substr_indexes) {
+find_substr_st find_all_substr(const char* str, const char* filename, char_info** substr_indexes) {
   FILE* stream = fopen(filename, "r");
   if (stream == NULL) {
     return -1;

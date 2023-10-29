@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdarg.h>
 #include <math.h>
+#include <malloc.h>
 #include "l2-9.h"
 
 double m_eps() {
@@ -14,15 +15,18 @@ double m_eps() {
   return eps;
 }
 
-int check_base_multiple_nums(int count, unsigned int base, ...) {
+int check_base_multiple_nums(int** result, int count, unsigned int base, ...) {
+  *result = (int*) malloc(sizeof(int) * count);
+  if(*result == NULL){
+    return -1;
+  }
   va_list a;
   va_start(a, base);
   double eps = m_eps();
   for (int i = 0; i < count; i++) {
     double temp = va_arg(a, double);
-    printf("%.10lf - %s, ", temp, check_base(temp, base, eps) ? "yes" : "no");
+    (*result)[i] = check_base(temp, base, eps);
   }
-  putchar('\n');
   va_end(a);
   return 0;
 }

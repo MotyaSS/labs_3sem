@@ -2,7 +2,7 @@
 #include <math.h>
 
 int dichotomy(double* res, double left_bound, double right_bound, double eps, double (*func)(double)) {
-  if (left_bound * right_bound > 0) {
+  if (func(left_bound) * func(right_bound) > 0) {
     *res = 0;
     return 1;
   }
