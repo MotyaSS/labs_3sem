@@ -4,28 +4,25 @@
 #include <stdlib.h>
 #include <stdbool.h>
 
-find_substr_st find_all_substr_in_multiple_files(int count, const char* substr, ...) {
+find_substr_st find_all_substr_in_multiple_files(char_info*** indexes_arr, int count, const char* substr, ...) {
+  if(substr[0] == 0) {
+    return find_str_inv;
+  }
   va_list a;
   if (count == 0) {
     return find_cnt_inv;
   }
+  *indexes_arr = (char_info**) malloc(sizeof(char_info*) * count);
 
   va_start(a, substr);
   for (int i = 0; i < count; i++) {
     char* filename = va_arg(a, char*);
     char_info* indexes;
     int rv = find_all_substr(substr, filename, &indexes);
-    if (rv != 0) {
-      printf("went wrong with %s file\n", filename);
-    } else {
-      char_info* ptr = indexes;
-      printf("for file %s and \'%s\' string:\n", filename, substr);
-      while (ptr->line != -1) {
-        printf("  substr on %ld line, %ld index\n", ptr->line, ptr->index);
-        ptr++;
-      }
-
-      free(indexes);
+    if (rv == find_ok) {
+      (*indexes_arr)[i] = indexes;
+    } else{
+      (*indexes_arr)[i] = NULL;
     }
   }
   va_end(a);
@@ -35,11 +32,11 @@ find_substr_st find_all_substr_in_multiple_files(int count, const char* substr, 
 find_substr_st find_all_substr(const char* str, const char* filename, char_info** substr_indexes) {
   FILE* stream = fopen(filename, "r");
   if (stream == NULL) {
-    return -1;
+    return find_stream_null;
   }
   *substr_indexes = (char_info*) malloc(sizeof(char_info));
   if (*substr_indexes == NULL) {
-    return -2;
+    return find_bad_alloc;
   }
 
   size_t size = 1;
@@ -52,18 +49,18 @@ find_substr_st find_all_substr(const char* str, const char* filename, char_info*
     if (temp == NULL) {
       free(*substr_indexes);
       substr_indexes = NULL;
-      return -2;
+      return find_bad_alloc;
     }
     *substr_indexes = temp;
   }
   if (rv == find_not_ok) {
     free(*substr_indexes);
     *substr_indexes = NULL;
-    return -2;
+    return find_bad_alloc;
   }
   (*substr_indexes)[size - 1].line = -1;
   fclose(stream);
-  return 0;
+  return find_ok;
 }
 
 bool is_equal_s(const char* s1, const char* s2) {
@@ -80,16 +77,14 @@ bool is_equal_s(const char* s1, const char* s2) {
   return true;
 }
 
-int find_substr_in_file(char_info* info, const char* str, FILE* stream, char_info* ptr_pos) {
-
+find_substr_st find_substr_in_file(char_info* info, const char* str, FILE* stream, char_info* ptr_pos) {
   size_t len = strlen(str);
   char* strbuf = (char*) malloc(sizeof(char) * (len + 1));
   if (strbuf == NULL) {
     return find_not_ok;
   }
   strbuf[len] = '\0';
-  size_t cnt;
-  while ((cnt = fread(strbuf, sizeof(char), len, stream)) == len) {
+  while (fread(strbuf, sizeof(char), len, stream) == len) {
     fseek(stream, 1 - len, SEEK_CUR);
     ptr_pos->index++;
     if (is_equal_s(str, strbuf)) {
