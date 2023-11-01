@@ -208,11 +208,12 @@ int my_fgets(FILE* stream, char* buff, unsigned int cap) {
     buff[cnt++] = ch;
   }
   buff[cnt] = '\0';
-
-  //skip rest letters of current lexema
-  while ((ch = fgetc(stream)) != EOF && !isspace(ch));
-  if(ch != EOF){
-    fseek(stream, -1, SEEK_CUR);
+  if(cnt == cap - 1) {
+      //skip rest letters of current lexema
+      while ((ch = fgetc(stream)) != EOF && !isspace(ch));
+      if (ch != EOF) {
+          fseek(stream, -1, SEEK_CUR);
+      }
   }
   return 0;
 }

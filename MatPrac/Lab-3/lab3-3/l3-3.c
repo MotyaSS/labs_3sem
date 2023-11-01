@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include "l3-3.h"
-#include "../../../my_flag_lib.h"
+
 
 void show_employee(Employee const* emp) {
   printf("%d: %s %s %lf", emp->id, emp->name, emp->surname, emp->salary);
