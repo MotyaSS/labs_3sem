@@ -8,8 +8,8 @@ void show_employee(Employee const* emp) {
 }
 
 int comp_asc(void const* emp1, void const* emp2) {
-  Employee* e1 = *(Employee**) emp1;
-  Employee* e2 = *(Employee**) emp2;
+  Employee* e1 = (Employee*) emp1;
+  Employee* e2 = (Employee*) emp2;
 
   if (e1->salary != e2->salary) {
     return e1->salary > e2->salary;

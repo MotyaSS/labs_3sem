@@ -12,6 +12,7 @@ enum get_employee_st {
   get_emp_ok,
   get_emp_inv_inp,
   get_emp_bad_alloc,
+  get_emp_eof
 };
 
 typedef enum {

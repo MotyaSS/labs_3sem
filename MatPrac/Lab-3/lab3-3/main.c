@@ -1,5 +1,4 @@
 #include <stdio.h>
-#include <search.h>
 #include "l3-3.h"
 #include "../../../my_flag_lib.h"
 
@@ -47,6 +46,10 @@ int handle(int argc, char* argv[]) {
   }
 
   emp_sort(&empv, fl);
+  for(int i = 0; i < empv.size; i++){
+    show_employee(empv.empv[i]);
+    putchar('\n');
+  }
   empv_destr(&empv);
 
 }
@@ -56,13 +59,7 @@ int test(FILE* stream) {
 }
 
 int main(int argc, char* argv[]) {
-  FILE* stream = fopen("test.txt", "r");
-  Employee* t;
-  printf("%d\n", get_employee(stream, &t));
-  printf("%d", feof(stream));
-
-
-  /*switch (handle(argc, argv)) {
+  switch (handle(argc, argv)) {
     case ok:
       printf("all ok\n");
       break;
@@ -78,5 +75,5 @@ int main(int argc, char* argv[]) {
     default:
       printf("unknown st code\n");
   }
-  return 0;*/
+  return 0;
 }
