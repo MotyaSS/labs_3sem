@@ -8,8 +8,8 @@ void show_employee(Employee const* emp) {
 }
 
 int comp_asc(void const* emp1, void const* emp2) {
-  Employee* e1 = (Employee*) emp1;
-  Employee* e2 = (Employee*) emp2;
+  Employee* e1 = *(Employee**) emp1;
+  Employee* e2 = *(Employee**) emp2;
 
   if (e1->salary != e2->salary) {
     return e1->salary > e2->salary;
@@ -29,10 +29,10 @@ int comp_desc(void const* emp1, void const* emp2) {
 
 void emp_sort(Employee_vec* db, enum sort_flag flag) {
   if (flag == ASCEND) {
-    qsort(*db->empv, db->size, sizeof(Employee), comp_asc);
+    qsort(db->empv, db->size, sizeof(Employee*), comp_asc);
   }
 
   if (flag == DESCEND) {
-    qsort(*db->empv, db->size, sizeof(Employee), comp_desc);
+    qsort(db->empv, db->size, sizeof(Employee*), comp_desc);
   }
 }
