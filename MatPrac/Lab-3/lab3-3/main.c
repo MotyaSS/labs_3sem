@@ -46,7 +46,7 @@ int handle(int argc, char* argv[]) {
   }
 
   emp_sort(&empv, fl);
-  for(int i = 0; i < empv.size; i++){
+  for (int i = 0; i < empv.size; i++) {
     show_employee(empv.empv[i]);
     putchar('\n');
   }
