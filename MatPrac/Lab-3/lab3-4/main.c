@@ -28,7 +28,7 @@ void test_string() {
 int main() {
   test_string();
   String str;
-  string_init(&str, -1);
+  string_init(&str, 1);
   get_string(&str, stdin);
   show_string(&str);
 }
