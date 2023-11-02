@@ -38,8 +38,33 @@ void test_bst() {
   bst_destr(&bst);
 }
 
+void echo_help() {
+  printf("Welcome!\n"
+         "type add to add");
+}
+
+typedef enum {
+  help_msg
+} commands;
+
+void execute() {
+  MailBST bst;
+  bst_constr(&bst, comp);
+  String temp_str;
+  string_init(&temp_str, 0);
+
+
+//  get_string();
+  bst_destr(&bst);
+}
+
 int main() {
-  test_bst();
+  String s;
+  string_init(&s, 0);
+  get_string(&s, stdin);
+  show_string(&s);
+  get_string(&s, stdin);
+  show_string(&s);
   /*
   String str;
   string_init(&str, 1);

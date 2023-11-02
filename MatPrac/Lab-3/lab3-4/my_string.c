@@ -100,10 +100,16 @@ int string_copy(String const* src, String* dest) {
 
 int get_string(String* str, FILE* stream) {
   str->_size = 0;
-  size_t i = 0;
   int ch;
+  while ((ch = fgetc(stream)) == ' ' || ch == '\t');
+  if (ch == '\n' || ch == EOF) {
+    str->_buf[0] = 0;
+    return get_str_empty;
+  }
+  str->_buf[0] = ch;
+  size_t i = 1;
   while ((ch = fgetc(stream)) != EOF && !isspace(ch)) {
-    if (i >= str->_size) {
+    if (i > str->_cap) {
       if (str->_cap == 0) {
         if (string_resize(str, 1) != 0) {
           return get_str_bad_alloc;
@@ -117,6 +123,7 @@ int get_string(String* str, FILE* stream) {
     i++;
   }
   str->_buf[i] = 0;
+  str->_size = i;
   if (i == 0) {
     return get_str_empty;
   }
@@ -148,6 +155,6 @@ void show_string(String const* str) {
   printf("%s\n", str->_buf);
 }
 
-void str_fprint(String const* str, FILE* stream){
+void str_fprint(String const* str, FILE* stream) {
   fprintf(stream, "%s", str->_buf);
 }
