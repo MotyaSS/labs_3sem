@@ -1,5 +1,6 @@
 #include "my_string.h"
 #include <string.h>
+#include <stdio.h>
 
 // Construction and destruction
 
@@ -108,4 +109,14 @@ int string_resize(String* str, size_t n) {
   str->_buf = temp;
   str->_cap = n;
   return 0;
+}
+
+int string_clear(String* str) {
+  str->_buf[0] = 0;
+  str->_size = 0;
+  return 0;
+}
+
+void show_string(String const* str) {
+  printf("%s\n", str->_buf);
 }

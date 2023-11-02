@@ -1,11 +1,30 @@
 #include <stdio.h>
 #include "my_string.h"
 
-int main() {
+void test_string(){
   String s1, s2;
-  string_constr("I love Makima", &s1);
-  string_constr("", &s2);
-  printf("%d\n", string_is_equal(&s1, &s2));
+  string_constr("Plainy plains", &s1);
+  string_init(&s2, 13);
+
+  printf("%d\n", str1_cmp_str2(&s1,&s2));
   string_copy(&s1, &s2);
-  printf("%s", s2._buf);
+
+  show_string(&s1);
+  show_string(&s2);
+
+  printf("%d\n", string_is_equal(&s1, &s2));
+
+  string_clear(&s1);
+  printf("1 :");
+  show_string(&s1);
+
+  printf("2 :");
+  show_string(&s2);
+
+  string_destr(&s1);
+  string_destr(&s2);
+}
+
+int main() {
+  test_string();
 }
