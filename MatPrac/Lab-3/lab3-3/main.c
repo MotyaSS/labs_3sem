@@ -45,17 +45,12 @@ int handle(int argc, char* argv[]) {
     return inv_input;
   }
 
-  emp_sort(&empv, fl);
-  for (int i = 0; i < empv.size; i++) {
-    show_employee(empv.empv[i]);
-    putchar('\n');
-  }
+  empv_sort(&empv, fl);
+  print_empv_to_file(out, &empv);
+
+  close_files(2, in, out);
   empv_destr(&empv);
-
-}
-
-int test(FILE* stream) {
-
+  return ok;
 }
 
 int main(int argc, char* argv[]) {
