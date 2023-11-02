@@ -1,6 +1,7 @@
 #include "my_string.h"
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 // Construction and destruction
 
@@ -96,6 +97,32 @@ int string_copy(String const* src, String* dest) {
 }
 
 // single string
+
+int get_string(String* str, FILE* stream) {
+  str->_size = 0;
+  size_t i = 0;
+  int ch;
+  while ((ch = fgetc(stream)) != EOF && !isspace(ch)) {
+    if (i >= str->_size) {
+      if (str->_cap == 0) {
+        if (string_resize(str, 1) != 0) {
+          return get_str_bad_alloc;
+        }
+      }
+      if (string_resize(str, str->_cap * 2) != 0) {
+        return get_str_bad_alloc;
+      }
+    }
+    str->_buf[i] = ch;
+    i++;
+  }
+  str->_buf[i] = 0;
+  if (i == 0) {
+    return get_str_empty;
+  }
+
+  return get_str_ok;
+}
 
 int string_resize(String* str, size_t n) {
   if (n <= str->_cap) {
