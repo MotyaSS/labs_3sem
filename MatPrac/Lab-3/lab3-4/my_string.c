@@ -98,7 +98,7 @@ int string_copy(String const* src, String* dest) {
 
 // single string
 
-int get_string(String* str, FILE* stream) {
+get_str_st get_string(String* str, FILE* stream) {
   str->_size = 0;
   int ch;
   while ((ch = fgetc(stream)) == ' ' || ch == '\t');
@@ -121,6 +121,9 @@ int get_string(String* str, FILE* stream) {
     }
     str->_buf[i] = ch;
     i++;
+  }
+  if (ch == EOF) {
+    printf("asd\n");
   }
   str->_buf[i] = 0;
   str->_size = i;
@@ -157,4 +160,8 @@ void show_string(String const* str) {
 
 void str_fprint(String const* str, FILE* stream) {
   fprintf(stream, "%s", str->_buf);
+}
+
+int string_is_empty(String const* str) {
+  return str->_size == 0;
 }

@@ -39,20 +39,22 @@ void test_bst() {
 }
 
 void echo_help() {
-  printf("Welcome!\n"
-         "type add to add");
+  printf(""
+         "Welcome!\n"
+         "type add to add mail\n"
+         "type 'show' to print sorted mail list");
 }
 
 typedef enum {
   help_msg
-} commands;
+} command;
 
 void execute() {
   MailBST bst;
   bst_constr(&bst, comp);
   String temp_str;
   string_init(&temp_str, 0);
-
+  command cmd = help_msg;
 
 //  get_string();
   bst_destr(&bst);
@@ -60,7 +62,7 @@ void execute() {
 
 int main() {
   String s;
-  string_init(&s, 0);
+  string_init(&s, 10);
   get_string(&s, stdin);
   show_string(&s);
   get_string(&s, stdin);
