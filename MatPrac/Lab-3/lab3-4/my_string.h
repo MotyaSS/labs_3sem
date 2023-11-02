@@ -24,6 +24,7 @@ int string_destr(String* str);
 
 int string_clear(String* str);
 void show_string(String const* str);
+void str_fprint(String const* str, FILE* stream);
 int get_string(String* str, FILE* stream);
 
 int string_is_equal(String const* str1, String const* str2);

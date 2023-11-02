@@ -147,3 +147,7 @@ int string_clear(String* str) {
 void show_string(String const* str) {
   printf("%s\n", str->_buf);
 }
+
+void str_fprint(String const* str, FILE* stream){
+  fprintf(stream, "%s", str->_buf);
+}

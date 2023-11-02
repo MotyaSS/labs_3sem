@@ -1,5 +1,5 @@
 #include <stdio.h>
-#include "my_string.h"
+#include "mail.h"
 
 void test_string() {
   String s1, s2;
@@ -25,10 +25,24 @@ void test_string() {
   string_destr(&s2);
 }
 
+int comp(Mail* m1, Mail* m2) {
+  int cmp = str1_cmp_str2(&m1->recieve_addr.index, &m2->recieve_addr.index);
+  return cmp != 0 ? cmp : str1_cmp_str2(&m1->mail_id, &m2->mail_id);
+}
+
+void test_bst() {
+  MailBST bst;
+  bst_constr(&bst, comp);
+
+  bst_show(&bst, stdout);
+  bst_destr(&bst);
+}
+
 int main() {
-  test_string();
+  test_bst();
+  /*
   String str;
   string_init(&str, 1);
   get_string(&str, stdin);
-  show_string(&str);
+  show_string(&str);*/
 }
