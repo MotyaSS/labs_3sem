@@ -58,6 +58,16 @@ int string_is_equal(String const* str1, String const* str2) {
   return 0;
 }
 
+int str_is_equal_charp(String const *str1, char const *str2) {
+  while (*(str1->_buf) != 0 && *str2 != 0) {
+    if (*(str1->_buf) != *str2)
+      return 0;
+  }
+  if (*(str1->_buf) != *str2)
+    return 0;
+  return 1;
+}
+
 int str1_cmp_str2(String const* str1, String const* str2) {
   int first_not_equal = 0;
   char* p1 = str1->_buf;
@@ -104,6 +114,9 @@ get_str_st get_string(String* str, FILE* stream) {
   while ((ch = fgetc(stream)) == ' ' || ch == '\t');
   if (ch == '\n' || ch == EOF) {
     str->_buf[0] = 0;
+    if(ch == EOF) {
+      return get_str_eof;
+    }
     return get_str_empty;
   }
   str->_buf[0] = ch;
@@ -122,11 +135,11 @@ get_str_st get_string(String* str, FILE* stream) {
     str->_buf[i] = ch;
     i++;
   }
-  if (ch == EOF) {
-    printf("asd\n");
-  }
   str->_buf[i] = 0;
   str->_size = i;
+  if (ch == EOF) {
+    return get_str_eof;
+  }
   if (i == 0) {
     return get_str_empty;
   }

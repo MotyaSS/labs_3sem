@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "mail.h"
+#include "l3-4.h"
+
 
 void test_string() {
   String s1, s2;
@@ -25,11 +27,6 @@ void test_string() {
   string_destr(&s2);
 }
 
-int comp(Mail* m1, Mail* m2) {
-  int cmp = str1_cmp_str2(&m1->recieve_addr.index, &m2->recieve_addr.index);
-  return cmp != 0 ? cmp : str1_cmp_str2(&m1->mail_id, &m2->mail_id);
-}
-
 void test_bst() {
   MailBST bst;
   bst_constr(&bst, comp);
@@ -38,35 +35,45 @@ void test_bst() {
   bst_destr(&bst);
 }
 
-void echo_help() {
-  printf(""
-         "Welcome!\n"
-         "type add to add mail\n"
-         "type 'show' to print sorted mail list");
-}
+int execute(FILE *in) {
+  Post post;
+  Address *post_address = (Address *) malloc(sizeof(Address));
+  MailBST *bst = (MailBST *) malloc(sizeof(MailBST));
+  post_constr(&post, post_address, bst);
+  if (!post_address || !bst) {
+    post_destruct(&post);
+    return -1;
+  }
+  bst_constr(bst, comp);
 
-typedef enum {
-  help_msg
-} command;
+  printf("Lets get address of the Post\n");
+  if (get_address(post_address, in) != get_rv_ok) {
+    free(post_address);
+    return -1;
+  }
 
-void execute() {
-  MailBST bst;
-  bst_constr(&bst, comp);
   String temp_str;
-  string_init(&temp_str, 0);
-  command cmd = help_msg;
+  string_init(&temp_str, 16);
 
-//  get_string();
-  bst_destr(&bst);
+  echo_help();
+  command cmd = cm_help_msg;
+  while (cmd != cm_exit && cmd != cm_eof) {
+    if (get_string(&temp_str, in) != get_str_ok) {
+      post_destruct(&post);
+      return -1;
+    }
+    cmd = get_command(&temp_str);
+    cmd = command_execute(cmd, &post, in);
+  }
+
+  post_destruct(&post);
+  return 0;
 }
 
 int main() {
-  String s;
-  string_init(&s, 10);
-  get_string(&s, stdin);
-  show_string(&s);
-  get_string(&s, stdin);
-  show_string(&s);
+  if (execute(stdin) != 0) {
+    printf("something went wrong\n");
+  }
   /*
   String str;
   string_init(&str, 1);

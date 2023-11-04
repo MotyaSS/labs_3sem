@@ -26,7 +26,7 @@ int bst_destr(MailBST* bst) {
   return 0;
 }
 
-int mail_bst_node_constr(mail_bst_node* node, Mail const* data) {
+int mail_bst_node_constr(mail_bst_node* node, Mail * data) {
   node->data = data;
   node->left = NULL;
   node->right = NULL;
@@ -59,7 +59,7 @@ int _add(mail_bst_node* root, mail_bst_node* new_node, int (* cmp)(Mail*, Mail*)
   return -1;
 }
 
-int bst_add(MailBST* bst, Mail const* data) {
+int bst_add(MailBST* bst, Mail * data) {
   mail_bst_node* node = (mail_bst_node*) malloc(sizeof(mail_bst_node));
   if (!node) {
     return -1;
