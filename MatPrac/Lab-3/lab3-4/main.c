@@ -35,10 +35,11 @@ void test_bst() {
   bst_destr(&bst);
 }
 
-int execute(FILE *in) {
+int execute(FILE* in) {
+  printf("It all starts here\n");
   Post post;
-  Address *post_address = (Address *) malloc(sizeof(Address));
-  MailBST *bst = (MailBST *) malloc(sizeof(MailBST));
+  Address* post_address = (Address*) malloc(sizeof(Address));
+  MailBST* bst = (MailBST*) malloc(sizeof(MailBST));
   post_constr(&post, post_address, bst);
   if (!post_address || !bst) {
     post_destruct(&post);
@@ -55,6 +56,7 @@ int execute(FILE *in) {
   String temp_str;
   string_init(&temp_str, 16);
 
+  system("cls");
   echo_help();
   command cmd = cm_help_msg;
   while (cmd != cm_exit && cmd != cm_eof) {
@@ -63,6 +65,7 @@ int execute(FILE *in) {
       return -1;
     }
     cmd = get_command(&temp_str);
+    system("cls");
     cmd = command_execute(cmd, &post, in);
   }
 
@@ -78,5 +81,6 @@ int main() {
   String str;
   string_init(&str, 1);
   get_string(&str, stdin);
-  show_string(&str);*/
+  show_string(&str);
+   */
 }

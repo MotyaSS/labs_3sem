@@ -2,6 +2,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include <stdarg.h>
 
 // Construction and destruction
 
@@ -40,6 +41,47 @@ int string_destr(String* str) {
   return 0;
 }
 
+// Multiple strings construction and destruction
+
+int destr_strings(int cnt, ...) {
+  va_list ap;
+  va_start(ap, cnt);
+  for (int i = 0; i < cnt; i++) {
+    String* s = va_arg(ap, String*);
+    string_destr(s);
+  }
+  va_end(ap);
+  return 0;
+}
+
+int init_strings(int cnt, int n, ...) {
+  va_list ap;
+  va_start(ap, n);
+  int rv = 0;
+  for (int i = 0; i < cnt; i++) {
+    String* s = va_arg(ap, String*);
+    if (string_init(s, n) != 0) {
+      va_end(ap);
+      rv = -1;
+    }
+  }
+  va_end(ap);
+  return rv;
+}
+
+int free_strings(int cnt, ...) {
+  va_list ap;
+  va_start(ap, cnt);
+  for (int i = 0; i < cnt; i++) {
+    String* s;
+    if (!(s = va_arg(ap, String*))) {
+      free(s);
+    }
+  }
+  va_end(ap);
+  return 0;
+}
+
 // two strings
 
 int string_is_equal(String const* str1, String const* str2) {
@@ -58,13 +100,18 @@ int string_is_equal(String const* str1, String const* str2) {
   return 0;
 }
 
-int str_is_equal_charp(String const *str1, char const *str2) {
-  while (*(str1->_buf) != 0 && *str2 != 0) {
-    if (*(str1->_buf) != *str2)
+int str_is_equal_charp(String const* str1, char const* str2) {
+  char* p1 = str1->_buf;
+  char* p2 = str2;
+  while (*p1 != 0 && *p2 != 0) {
+    if (*p1 != *p2)
       return 0;
+    p1++;
+    p2++;
   }
-  if (*(str1->_buf) != *str2)
+  if (*p1 != *p2) {
     return 0;
+  }
   return 1;
 }
 
@@ -114,7 +161,7 @@ get_str_st get_string(String* str, FILE* stream) {
   while ((ch = fgetc(stream)) == ' ' || ch == '\t');
   if (ch == '\n' || ch == EOF) {
     str->_buf[0] = 0;
-    if(ch == EOF) {
+    if (ch == EOF) {
       return get_str_eof;
     }
     return get_str_empty;

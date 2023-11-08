@@ -16,12 +16,22 @@ typedef enum {
   cm_eof
 } command;
 
-int comp(Mail *m1, Mail *m2);
-command command_execute(command cmd, Post *post, FILE *in);
-command get_command(String const *str);
+int comp(Mail* m1, Mail* m2);
+command command_execute(command cmd, Post* post, FILE* in);
+command get_command(String const* str);
+
+typedef enum {
+  mail_rv_ok,
+  mail_rv_eof,
+  mail_rv_fail,
+} mail_rv;
+
+int get_cur_time(String* time);
+int compare_time(String const* time1, String const* time2);
+int is_time_valid(String* str);
 
 void echo_help();
-command add_mail(Post *post, FILE *stream);
+mail_rv add_mail(Post* post, FILE* stream);
 command find_delivered();
 command find_expired();
 command show();
