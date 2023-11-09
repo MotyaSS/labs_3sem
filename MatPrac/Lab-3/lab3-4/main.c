@@ -78,11 +78,19 @@ int main() {
   FILE* in = fopen("in", "r");
   if (execute(in) != 0) {
     printf("something went wrong\n");
+    return -1;
   }
+
+  /*String s;
+  string_init(&s, 30);
+  get_cur_time(&s);
+  str_fprint(&s,stdout);*/
+
   /*
   String str;
   string_init(&str, 1);
   get_string(&str, stdin);
   show_string(&str);
-   */
+  */
+  return 0;
 }

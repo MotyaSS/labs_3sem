@@ -1,4 +1,3 @@
-#include <time.h>
 #include "l3-4.h"
 #include "../../../my_flag_lib.h"
 
@@ -20,7 +19,11 @@ void echo_help() {
 }
 
 command command_execute(command cmd, Post* post, FILE* in) {
-//  system("cls");
+#ifdef CLEAR_CONSOLE
+#if CLEAR_CONSOLE == true
+  system("cls");
+#endif
+#endif
   switch (cmd) {
     case cm_add_mail: {
       int code;
@@ -45,6 +48,7 @@ command command_execute(command cmd, Post* post, FILE* in) {
       echo_help();
       return cmd;
     case cm_exit:
+      return cmd;
     default:
       printf("command unknown\n");
       return cmd;
@@ -76,7 +80,7 @@ command get_command(String const* str) {
 int get_cur_time(String* str) {
   time_t t = time(0);
   struct tm* time = gmtime(&t);
-  strftime(str->_buf, str->_size, "%d-%m-%Y %H:%M:%S", time);
+  strftime(str->_buf, str->_cap, "%d-%m-%Y %H:%M:%S", time);
   return 0;
 }
 
@@ -222,11 +226,39 @@ mail_rv add_mail(Post* post, FILE* stream) {
   return mail_rv_ok;
 }
 
-command find_delivered(Post const* post) {
-  return cm_find_delivered;
+int time_cmp(Mail* m1, Mail* m2) {
+  return compare_time(&m1->recieve_time, &m2->recieve_time) == 1 ? 1 : -1;
 }
 
-command find_expired(Post const* post) {
+int _assemble_bst(MailBST* bst1, mail_bst_node const* node) {
+  if (node == NULL) {
+    return 0;
+  }
+  if (!string_is_empty(&node->data->recieve_time) &&
+      bst_add(bst1, node->data) != 0) {
+    return -1;
+  }
+  if (_assemble_bst(bst1, node->left) != 0) {
+    return -1;
+  }
+  if (_assemble_bst(bst1, node->right) != 0) {
+    return -1;
+  }
+  return 0;
+}
+
+int find_delivered(Post const* post) {
+  MailBST tempBST;
+  bst_constr(&tempBST, time_cmp);
+  if(_assemble_bst(&tempBST, post->mails->root) != 0){
+    return -1;
+  }
+  bst_show(&tempBST, stdout);
+  bst_destr(&tempBST);
+  return 0;
+}
+
+int find_expired(Post const* post) {
 
 }
 

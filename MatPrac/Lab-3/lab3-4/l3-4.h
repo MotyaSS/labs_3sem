@@ -1,9 +1,11 @@
 #ifndef L3_4_H
 #define L3_4_H
+#define CLEAR_CONSOLE false
 
 #include <stdio.h>
 #include "mail.h"
 #include <stdbool.h>
+#include <time.h>
 
 
 typedef enum {
@@ -34,8 +36,10 @@ bool is_time_valid(String const* str);
 
 void echo_help();
 mail_rv add_mail(Post* post, FILE* stream);
-command find_delivered(Post const* post);
-command find_expired(Post const* post);
+
+int time_cmp(Mail* m1, Mail* m2);
+int find_delivered(Post const* post);
+int find_expired(Post const* post);
 void show(Post const* post);
 
 #endif

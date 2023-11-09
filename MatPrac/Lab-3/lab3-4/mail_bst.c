@@ -26,7 +26,7 @@ int bst_destr(MailBST* bst) {
   return 0;
 }
 
-int mail_bst_node_constr(mail_bst_node* node, Mail * data) {
+int mail_bst_node_constr(mail_bst_node* node, Mail* data) {
   node->data = data;
   node->left = NULL;
   node->right = NULL;
@@ -59,7 +59,7 @@ int _add(mail_bst_node* root, mail_bst_node* new_node, int (* cmp)(Mail*, Mail*)
   return -1;
 }
 
-int bst_add(MailBST* bst, Mail * data) {
+int bst_add(MailBST* bst, Mail* data) {
   mail_bst_node* node = (mail_bst_node*) malloc(sizeof(mail_bst_node));
   if (!node) {
     return -1;
@@ -79,6 +79,13 @@ int bst_add(MailBST* bst, Mail * data) {
 //  Showing
 
 void print_mail(Mail* mail, FILE* stream) {
+  fprintf(stream, "cr. time: ");
+  str_fprint(&mail->creation_time, stream);
+  fputc('\n', stream);
+  fprintf(stream, "re. time: ");
+  str_fprint(&mail->recieve_time, stream);
+  fputc('\n', stream);
+  fprintf(stream, "index:mail id");
   str_fprint(&mail->recieve_addr.index, stream);
   fputc(':', stream);
   str_fprint(&mail->mail_id, stream);

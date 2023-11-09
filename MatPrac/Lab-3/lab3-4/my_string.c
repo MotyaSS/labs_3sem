@@ -101,7 +101,7 @@ int string_is_equal(String const* str1, String const* str2) {
 }
 
 int str_is_equal_charp(String const* str1, char const* str2) {
-  char * p1 = str1->_buf;
+  char* p1 = str1->_buf;
   char const* p2 = str2;
   while (*p1 != 0 && *p2 != 0) {
     if (*p1 != *p2)

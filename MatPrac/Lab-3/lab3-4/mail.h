@@ -23,7 +23,7 @@ typedef enum {
 } get_rv;
 
 int address_constr(Address* _address, String* _city, String* _street, unsigned int _house_n, String* _building,
-                   unsigned int apt_n,String* index);
+                   unsigned int apt_n, String* index);
 get_rv get_address(Address* addr, FILE* in);
 int address_destr(Address* _address);
 
@@ -36,6 +36,7 @@ typedef struct _mail {
 } Mail;
 
 int mail_constr(Mail* mail, Address* addr, double weight, String* mail_id, String* cr_time, String* rec_time);
+get_rv get_mail(Mail* mail, FILE* in);
 int mail_destr(Mail* mail);
 
 typedef struct node {
