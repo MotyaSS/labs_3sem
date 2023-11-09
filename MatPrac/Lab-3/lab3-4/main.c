@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include "mail.h"
 #include "l3-4.h"
-
+#define INPUT_CONSOLE true
 
 void test_string() {
   String s1, s2;
@@ -56,7 +56,6 @@ int execute(FILE* in) {
   String temp_str;
   string_init(&temp_str, 16);
 
-  system("cls");
   command cmd = cm_help_msg;
   cmd = command_execute(cmd, &post, in);
   while (cmd != cm_exit && cmd != cm_eof) {
@@ -75,11 +74,23 @@ int execute(FILE* in) {
 }
 
 int main() {
-  FILE* in = fopen("in", "r");
+  FILE* in;
+#ifdef INPUT_CONSOLE
+#if INPUT_CONSOLE == true
+  in = stdin;
+#else
+  in = fopen("in", "r");
+#endif
+#endif
   if (execute(in) != 0) {
     printf("something went wrong\n");
     return -1;
   }
+#ifdef INPUT_CONSOLE
+#if INPUT_CONSOLE == false
+  fclose(in);
+#endif
+#endif
 
   /*String s;
   string_init(&s, 30);

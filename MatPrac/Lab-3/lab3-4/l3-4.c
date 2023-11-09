@@ -228,7 +228,11 @@ mail_rv add_mail(Post* post, FILE* stream) {
   }
   get_cur_time(&c_time);
   mail_constr(mail, &addr, weight, &mail_id, &c_time, &r_time);
+
   if (bst_add(post->mails, mail) != 0) {
+    address_destr(&addr);
+    destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
+    mail_destr(mail);
     return mail_rv_fail;
   }
   return mail_rv_ok;
