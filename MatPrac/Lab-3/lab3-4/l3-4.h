@@ -15,6 +15,7 @@ typedef enum {
   cm_find_delivered,
   cm_find_expired,
   cm_show,
+  cm_find_mail,
   cm_unknown,
   cm_eof
 } command;
@@ -39,6 +40,7 @@ mail_rv add_mail(Post* post, FILE* stream);
 
 int time_cmp(Mail* m1, Mail* m2);
 int find_delivered(Post const* post);
+int find_mail(Post const* post, FILE* in);
 int find_expired(Post const* post);
 void show(Post const* post);
 

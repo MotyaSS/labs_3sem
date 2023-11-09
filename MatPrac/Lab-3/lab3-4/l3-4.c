@@ -47,6 +47,11 @@ command command_execute(command cmd, Post* post, FILE* in) {
     case cm_help_msg:
       echo_help();
       return cmd;
+    case cm_find_mail:
+      switch (find_mail(post, in))
+        case -1:
+          return cm_eof;
+      return cmd;
     case cm_exit:
       return cmd;
     default:
@@ -74,13 +79,16 @@ command get_command(String const* str) {
   if (str_is_equal_charp(str, "fe")) {
     return cm_find_expired;
   }
+  if (str_is_equal_charp(str, "fm")) {
+    return cm_find_mail;
+  }
   return cm_unknown;
 }
 
 int get_cur_time(String* str) {
   time_t t = time(0);
   struct tm* time = gmtime(&t);
-  strftime(str->_buf, str->_cap, "%d-%m-%Y %H:%M:%S", time);
+  strftime(str->_buf, str->_cap, "%d:%m:%Y %H:%M:%S", time);
   return 0;
 }
 
@@ -183,7 +191,7 @@ mail_rv add_mail(Post* post, FILE* stream) {
     address_destr(&addr);
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
-    if (code == get_rv_eof) {
+    if (code == get_str_eof) {
       return mail_rv_eof;
     }
     return mail_rv_fail;
@@ -201,19 +209,19 @@ mail_rv add_mail(Post* post, FILE* stream) {
     address_destr(&addr);
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
-    if (code == get_rv_eof) {
+    if (code == get_str_eof) {
       return mail_rv_eof;
     }
     return mail_rv_fail;
   }
 
-  printf("If mail is received print receipt time in Greenwich (DD:MM:YYYY hh:mm:ss), else - hit \\n\n");
+  printf("Print receive time in Greenwich (DD:MM:YYYY hh:mm:ss)\n");
   code = getline(&r_time, stream);
-  if (code != get_str_empty && (code != get_str_ok || !is_time_valid(&r_time))) {
+  if (code != get_str_ok || !is_time_valid(&r_time)) {
     address_destr(&addr);
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
-    if (code == get_rv_eof) {
+    if (code == get_str_eof) {
       return mail_rv_eof;
     }
     return mail_rv_fail;
@@ -230,38 +238,104 @@ int time_cmp(Mail* m1, Mail* m2) {
   return compare_time(&m1->recieve_time, &m2->recieve_time) == 1 ? 1 : -1;
 }
 
-int _assemble_bst(MailBST* bst1, mail_bst_node const* node) {
+int _bst_delivered(MailBST* bst, mail_bst_node const* node, String const* cur_time) {
   if (node == NULL) {
     return 0;
   }
-  if (!string_is_empty(&node->data->recieve_time) &&
-      bst_add(bst1, node->data) != 0) {
+
+  int cmp = compare_time(cur_time, &node->data->recieve_time);
+
+  if (cmp >= 0) {
+    if (bst_add(bst, node->data) != 0) {
+      return -1;
+    }
+  }
+  if (_bst_delivered(bst, node->left, cur_time) != 0) {
     return -1;
   }
-  if (_assemble_bst(bst1, node->left) != 0) {
+  if (_bst_delivered(bst, node->right, cur_time) != 0) {
     return -1;
   }
-  if (_assemble_bst(bst1, node->right) != 0) {
+  return 0;
+}
+
+int _bst_expired(MailBST* bst, mail_bst_node const* node, String const* cur_time) {
+  if (node == NULL) {
+    return 0;
+  }
+
+  int cmp = compare_time(cur_time, &node->data->recieve_time);
+
+  if (cmp <= 0) {
+    if (bst_add(bst, node->data) != 0) {
+      return -1;
+    }
+  }
+  if (_bst_expired(bst, node->left, cur_time) != 0) {
+    return -1;
+  }
+  if (_bst_expired(bst, node->right, cur_time) != 0) {
     return -1;
   }
   return 0;
 }
 
 int find_delivered(Post const* post) {
+  String cur_time;
+  string_init(&cur_time, 20);
+  get_cur_time(&cur_time);
   MailBST tempBST;
   bst_constr(&tempBST, time_cmp);
-  if(_assemble_bst(&tempBST, post->mails->root) != 0){
+  if (_bst_delivered(&tempBST, post->mails->root, &cur_time) != 0) {
+    printf("Failed finding delivered");
     return -1;
   }
+  printf("%20s\n", "Delivered mails:");
   bst_show(&tempBST, stdout);
-  bst_destr(&tempBST);
+  bst_free_nodes(&tempBST);
   return 0;
 }
 
 int find_expired(Post const* post) {
+  String cur_time;
+  string_init(&cur_time, 20);
+  get_cur_time(&cur_time);
+  MailBST tempBST;
+  bst_constr(&tempBST, time_cmp);
+  if (_bst_expired(&tempBST, post->mails->root, &cur_time) != 0) {
+    printf("Failed finding expired");
+    return -1;
+  }
+  printf("%20s\n", "Expired mails:");
+  bst_show(&tempBST, stdout);
+  bst_free_nodes(&tempBST);
+  return 0;
+}
 
+int find_mail(Post const* post, FILE* in) {
+  String id;
+  string_init(&id, 10);
+  printf("Enter id to find\n");
+  int code = getline(&id, in);
+  if (code == get_str_eof) {
+    return -1;
+  }
+  if (code == get_str_bad_alloc) {
+    return 1;
+  }
+  Mail* mail = bst_find_id(post->mails, &id);
+  if (mail == NULL) {
+    printf("%20s", "Mail not found\n");
+    return -1;
+  }
+  printf("%18s", "Mail with id ");
+  str_fprint(&id, stdout);
+  putchar('\n');
+  print_mail(mail, stdout);
+  return 0;
 }
 
 void show(Post const* post) {
+  printf("%20s\n", "All mails");
   bst_show(post->mails, stdout);
 }

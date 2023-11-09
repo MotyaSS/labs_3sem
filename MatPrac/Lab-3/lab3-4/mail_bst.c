@@ -19,6 +19,23 @@ int _destr(mail_bst_node* node) {
   return 0;
 }
 
+int _only_free_destr(mail_bst_node* node) {
+  if (node == NULL) {
+    return 0;
+  }
+  _only_free_destr(node->left);
+  _only_free_destr(node->right);
+  free(node);
+  return 0;
+}
+
+int bst_free_nodes(MailBST* bst) {
+  _only_free_destr(bst->root);
+  bst->root = NULL;
+  bst->comp = NULL;
+  return 0;
+}
+
 int bst_destr(MailBST* bst) {
   _destr(bst->root);
   bst->root = NULL;
@@ -76,6 +93,24 @@ int bst_add(MailBST* bst, Mail* data) {
   return 0;
 }
 
+Mail* _find_by_id(mail_bst_node* node, String const* id) {
+  if (node == NULL) {
+    return NULL;
+  }
+  if (string_is_equal(&node->data->mail_id, id)) {
+    return node->data;
+  }
+  Mail* res;
+  if ((res = _find_by_id(node->right, id)) || (res = _find_by_id(node->left, id))) {
+    return res;
+  }
+  return NULL;
+}
+
+Mail* bst_find_id(MailBST* bst, String const* id) {
+  return _find_by_id(bst->root, id);
+}
+
 //  Showing
 
 void print_mail(Mail* mail, FILE* stream) {
@@ -85,9 +120,10 @@ void print_mail(Mail* mail, FILE* stream) {
   fprintf(stream, "re. time: ");
   str_fprint(&mail->recieve_time, stream);
   fputc('\n', stream);
-  fprintf(stream, "index:mail id");
+  fprintf(stream, "index: ");
   str_fprint(&mail->recieve_addr.index, stream);
-  fputc(':', stream);
+  fputc('\n', stream);
+  fprintf(stream, "mail id: ");
   str_fprint(&mail->mail_id, stream);
   fputc('\n', stream);
 }

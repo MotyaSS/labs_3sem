@@ -37,6 +37,7 @@ typedef struct _mail {
 
 int mail_constr(Mail* mail, Address* addr, double weight, String* mail_id, String* cr_time, String* rec_time);
 get_rv get_mail(Mail* mail, FILE* in);
+void print_mail(Mail* mail, FILE* stream);
 int mail_destr(Mail* mail);
 
 typedef struct node {
@@ -54,7 +55,9 @@ typedef struct {
 } MailBST;
 
 int bst_constr(MailBST* bst, int (* comp)(Mail*, Mail*));
+int bst_free_nodes(MailBST* bst);
 int bst_destr(MailBST* bst);
+Mail* bst_find_id(MailBST* bst, String const* id);
 int bst_add(MailBST* bst, Mail* data);
 int bst_show(MailBST const* bst, FILE* stream);
 
