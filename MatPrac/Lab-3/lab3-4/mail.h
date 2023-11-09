@@ -36,7 +36,6 @@ typedef struct _mail {
 } Mail;
 
 int mail_constr(Mail* mail, Address* addr, double weight, String* mail_id, String* cr_time, String* rec_time);
-get_rv get_mail(Mail* mail, FILE* in);
 int mail_destr(Mail* mail);
 
 typedef struct node {
