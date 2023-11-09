@@ -13,9 +13,6 @@ typedef struct _address {
   String index; // 6 chars
 } Address;
 
-int address_constr(Address* _address, String* _city, String* _street, unsigned int _house_n, String* _building,
-                   unsigned int apt_n);
-
 typedef enum {
   get_rv_ok,
   get_rv_bad_alloc,
@@ -25,6 +22,8 @@ typedef enum {
   get_rv_strlen_incorrect
 } get_rv;
 
+int address_constr(Address* _address, String* _city, String* _street, unsigned int _house_n, String* _building,
+                   unsigned int apt_n,String* index);
 get_rv get_address(Address* addr, FILE* in);
 int address_destr(Address* _address);
 

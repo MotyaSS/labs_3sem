@@ -101,8 +101,8 @@ int string_is_equal(String const* str1, String const* str2) {
 }
 
 int str_is_equal_charp(String const* str1, char const* str2) {
-  char* p1 = str1->_buf;
-  char* p2 = str2;
+  char * p1 = str1->_buf;
+  char const* p2 = str2;
   while (*p1 != 0 && *p2 != 0) {
     if (*p1 != *p2)
       return 0;
@@ -155,7 +155,7 @@ int string_copy(String const* src, String* dest) {
 
 // single string
 
-get_str_st get_string(String* str, FILE* stream) {
+get_str_st get_lexema_or_empty(String* str, FILE* stream) {
   str->_size = 0;
   int ch;
   while ((ch = fgetc(stream)) == ' ' || ch == '\t');
@@ -187,10 +187,38 @@ get_str_st get_string(String* str, FILE* stream) {
   if (ch == EOF) {
     return get_str_eof;
   }
-  if (i == 0) {
+  return get_str_ok;
+}
+
+get_str_st getline(String* str, FILE* stream) {
+  str->_size = 0;
+  int ch;
+  while ((ch = fgetc(stream)) == ' ' || ch == '\t');
+  if (ch == '\n' || ch == EOF) {
+    str->_buf[0] = 0;
+    if (ch == EOF) {
+      return get_str_eof;
+    }
     return get_str_empty;
   }
-
+  str->_buf[0] = ch;
+  size_t i = 1;
+  while ((ch = fgetc(stream)) != EOF && ch != '\n') {
+    if (i > str->_cap) {
+      if (str->_cap == 0) {
+        if (string_resize(str, 1) != 0) {
+          return get_str_bad_alloc;
+        }
+      }
+      if (string_resize(str, str->_cap * 2) != 0) {
+        return get_str_bad_alloc;
+      }
+    }
+    str->_buf[i] = ch;
+    i++;
+  }
+  str->_buf[i] = 0;
+  str->_size = i;
   return get_str_ok;
 }
 

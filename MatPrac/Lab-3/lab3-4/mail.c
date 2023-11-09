@@ -1,14 +1,16 @@
+#include <ctype.h>
 #include "mail.h"
 #include "../../../my_flag_lib.h"
 
 
 int address_constr(Address* _address, String* _city, String* _street, unsigned int _house_n, String* _building,
-                   unsigned int apt_n) {
+                   unsigned int apt_n, String* index) {
   _address->city = *_city;
   _address->street = *_street;
   _address->house_n = _house_n;
   _address->building = *_building;
   _address->apt_n = apt_n;
+  _address->index = *index;
   return 0;
 }
 
@@ -50,16 +52,16 @@ get_rv get_address(Address* addr, FILE* in) {
   }
 
   unsigned int house_n, apt_n;
-  if ((a = get_string(&city, in)) != get_str_ok) {
+  if ((a = getline(&city, in)) != get_str_ok) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_str_st_to_get_rv(a);
   }
-  if ((a = get_string(&street, in)) != get_str_ok) {
+  if ((a = getline(&street, in)) != get_str_ok) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_str_st_to_get_rv(a);
   }
 
-  if ((a = get_string(&temp, in)) != get_str_ok) {
+  if ((a = getline(&temp, in)) != get_str_ok) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_str_st_to_get_rv(a);
   }
@@ -69,11 +71,11 @@ get_rv get_address(Address* addr, FILE* in) {
   }
   house_n = strtoul(temp._buf, NULL, 10);
 
-  if ((a = get_string(&building, in)) != get_str_empty && a != get_str_ok) {
+  if ((a = getline(&building, in)) != get_str_empty && a != get_str_ok) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_str_st_to_get_rv(a);
   }
-  if ((a = get_string(&temp, in)) != get_str_ok) {
+  if ((a = getline(&temp, in)) != get_str_ok) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_str_st_to_get_rv(a);
   }
@@ -82,7 +84,7 @@ get_rv get_address(Address* addr, FILE* in) {
   }
   apt_n = strtoul(temp._buf, NULL, 10);
 
-  if (get_string(&index, in) != get_str_ok) {
+  if (getline(&index, in) != get_str_ok) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_str_st_to_get_rv(a);
   }
@@ -90,7 +92,13 @@ get_rv get_address(Address* addr, FILE* in) {
     destr_strings(5, &city, &street, &building, &index, &temp);
     return get_rv_strlen_incorrect;
   }
-  address_constr(addr, &city, &street, house_n, &building, apt_n);
+  for (int i = 0; i < 6; i++) {
+    if (!isdigit(index._buf[i])) {
+      destr_strings(5, &city, &street, &building, &index, &temp);
+      return get_rv_str_inv;
+    }
+  }
+  address_constr(addr, &city, &street, house_n, &building, apt_n, &index);
   string_destr(&temp);
   return 0;
 }

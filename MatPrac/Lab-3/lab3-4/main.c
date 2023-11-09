@@ -57,16 +57,17 @@ int execute(FILE* in) {
   string_init(&temp_str, 16);
 
   system("cls");
-  echo_help();
   command cmd = cm_help_msg;
+  cmd = command_execute(cmd, &post, in);
   while (cmd != cm_exit && cmd != cm_eof) {
-    if (get_string(&temp_str, in) != get_str_ok) {
+    int code = getline(&temp_str, in);
+    if (code == get_str_ok) {
+      cmd = get_command(&temp_str);
+      cmd = command_execute(cmd, &post, in);
+    } else if (code != get_str_empty) {
       post_destruct(&post);
       return -1;
     }
-    cmd = get_command(&temp_str);
-    system("cls");
-    cmd = command_execute(cmd, &post, in);
   }
 
   post_destruct(&post);
@@ -74,7 +75,8 @@ int execute(FILE* in) {
 }
 
 int main() {
-  if (execute(stdin) != 0) {
+  FILE* in = fopen("in", "r");
+  if (execute(in) != 0) {
     printf("something went wrong\n");
   }
   /*

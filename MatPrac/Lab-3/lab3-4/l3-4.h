@@ -3,6 +3,7 @@
 
 #include <stdio.h>
 #include "mail.h"
+#include <stdbool.h>
 
 
 typedef enum {
@@ -28,12 +29,13 @@ typedef enum {
 
 int get_cur_time(String* time);
 int compare_time(String const* time1, String const* time2);
-int is_time_valid(String* str);
+int cast_string_to_time(String const* str, struct tm* time);
+bool is_time_valid(String const* str);
 
 void echo_help();
 mail_rv add_mail(Post* post, FILE* stream);
-command find_delivered();
-command find_expired();
-command show();
+command find_delivered(Post const* post);
+command find_expired(Post const* post);
+void show(Post const* post);
 
 #endif

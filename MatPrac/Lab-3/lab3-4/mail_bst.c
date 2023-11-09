@@ -69,7 +69,7 @@ int bst_add(MailBST* bst, Mail * data) {
     bst->root = node;
     return 0;
   }
-  if (_add(bst->root, node, bst->comp) == -1) {
+  if (_add(bst->root, node, bst->comp) != 0) {
     free(node);
     return 1;
   }
@@ -85,17 +85,19 @@ void print_mail(Mail* mail, FILE* stream) {
   fputc('\n', stream);
 }
 
-int _show(mail_bst_node* node, FILE* stream) {
+int _show(mail_bst_node* node, FILE* stream, int* cnt) {
   if (node == NULL) {
     return -1;
   }
-  _show(node->left, stream);
+  _show(node->left, stream, cnt);
+  printf("Mail %d:\n", ++(*cnt));
   print_mail(node->data, stream);
-  _show(node->right, stream);
+  _show(node->right, stream, cnt);
   return 0;
 }
 
 int bst_show(MailBST const* bst, FILE* stream) {
-  _show(bst->root, stream);
+  int i = 0;
+  _show(bst->root, stream, &i);
   return 0;
 }

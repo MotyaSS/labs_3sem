@@ -31,7 +31,8 @@ int free_strings(int cnt, ...);
 int string_clear(String* str);
 void show_string(String const* str);
 void str_fprint(String const* str, FILE* stream);
-get_str_st get_string(String* str, FILE* stream);
+get_str_st getline(String* str, FILE* stream);
+get_str_st get_lexema_or_empty(String* str, FILE* stream);
 
 int string_is_equal(String const* str1, String const* str2);
 int str_is_equal_charp(String const* str1, char const* str2);

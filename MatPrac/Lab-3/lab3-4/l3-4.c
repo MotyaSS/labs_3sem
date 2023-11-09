@@ -20,6 +20,7 @@ void echo_help() {
 }
 
 command command_execute(command cmd, Post* post, FILE* in) {
+//  system("cls");
   switch (cmd) {
     case cm_add_mail: {
       int code;
@@ -29,18 +30,23 @@ command command_execute(command cmd, Post* post, FILE* in) {
         }
         printf("adding failed\n");
       }
-      return cm_add_mail;
+      return cmd;
     }
     case cm_find_delivered:
-      return find_delivered();
+      find_delivered(post);
+      return cmd;
     case cm_find_expired:
-      return find_expired();
+      find_expired(post);
+      return cmd;
     case cm_show:
-      return show();
+      show(post);
+      return cmd;
     case cm_help_msg:
       echo_help();
+      return cmd;
     case cm_exit:
     default:
+      printf("command unknown\n");
       return cmd;
   }
 }
@@ -75,34 +81,76 @@ int get_cur_time(String* str) {
 }
 
 int compare_time(String const* time1, String const* time2) {
-
+  struct tm t1, t2;
+  cast_string_to_time(time1, &t1);
+  cast_string_to_time(time2, &t2);
+  if (t1.tm_year != t2.tm_year) {
+    return t1.tm_year > t2.tm_year ? 1 : -1;
+  }
+  if (t1.tm_mon != t2.tm_mon) {
+    return t1.tm_mon > t2.tm_mon ? 1 : -1;
+  }
+  if (t1.tm_mday != t2.tm_mday) {
+    return t1.tm_mday > t2.tm_mday ? 1 : -1;
+  }
+  if (t1.tm_hour != t2.tm_hour) {
+    return t1.tm_hour > t2.tm_hour ? 1 : -1;
+  }
+  if (t1.tm_min != t2.tm_min) {
+    return t1.tm_min > t2.tm_min ? 1 : -1;
+  }
+  if (t1.tm_sec != t2.tm_sec) {
+    return t1.tm_sec > t2.tm_sec ? 1 : -1;
+  }
+  return 0;
 }
 
-int is_time_valid(String* str) {
-  struct tm timeInfo;
-  int result = strptime(str->_buf, "dd:MM:yyyy hh:mm:ss", &timeInfo);
-
-  // Check if the entire input string was consumed
-  if (result == str->_size) {
-    return 0;
-  } else {
+int cast_string_to_time(String const* str, struct tm* time) {
+  if (sscanf(str->_buf, "%u:%u:%u%u:%u:%u", &time->tm_mday, &time->tm_mon, &time->tm_year, &time->tm_hour,
+             &time->tm_min, &time->tm_sec) != 6) {
     return -1;
   }
+  return 0;
+}
+
+bool is_time_valid(String const* str) {
+  struct tm time;
+  if (cast_string_to_time(str, &time) == -1) {
+    return false;
+  }
+  if (time.tm_mon > 12) {
+    return false;
+  }
+
+  int target_day;
+  switch (time.tm_mon) {
+    case 2:
+      if (time.tm_year % 400 == 0 || (time.tm_year % 100 != 0 && time.tm_year % 4 == 0)) {
+        target_day = 29;
+      } else {
+        target_day = 28;
+      }
+      break;
+    case 4:
+    case 6:
+    case 9:
+    case 11:
+      target_day = 30;
+      break;
+    default:
+      target_day = 31;
+  }
+  if (time.tm_mday > target_day) {
+    return false;
+  }
+  if (time.tm_hour >= 24 || time.tm_min >= 60 || time.tm_sec >= 60) {
+    return false;
+  }
+
+  return true;
 }
 
 mail_rv add_mail(Post* post, FILE* stream) {
-  /*
-  адрес получателя
-   город
-   улица
-   номер дома
-   корпус
-   квартира
-   индекс(6 симолов)
-  вес посылки
-  идентиффикатор (14 символов)
-  время создания
-  */
   Mail* mail = (Mail*) malloc(sizeof(Mail));
   if (mail == NULL) {
     return mail_rv_fail;
@@ -117,7 +165,7 @@ mail_rv add_mail(Post* post, FILE* stream) {
   }
   printf("Enter mail receive address:\n");
   int code;
-  if ((code = get_address(&mail->recieve_addr, stream)) != get_rv_ok) {
+  if ((code = get_address(&addr, stream)) != get_rv_ok) {
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
     if (code == get_rv_eof) {
@@ -127,7 +175,8 @@ mail_rv add_mail(Post* post, FILE* stream) {
   }
 
   printf("Enter mail weight\n");
-  if ((code = get_string(&weight_t, stream)) != get_str_ok) {
+  if ((code = getline(&weight_t, stream)) != get_str_ok) {
+    address_destr(&addr);
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
     if (code == get_rv_eof) {
@@ -136,6 +185,7 @@ mail_rv add_mail(Post* post, FILE* stream) {
     return mail_rv_fail;
   }
   if (weight_t._buf[0] == '-' || !if_lf(weight_t._buf)) {
+    address_destr(&addr);
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
     return mail_rv_fail;
@@ -143,16 +193,8 @@ mail_rv add_mail(Post* post, FILE* stream) {
   weight = strtod(weight_t._buf, NULL);
 
   printf("Enter mail id\n");
-  if ((code = get_string(&mail_id, stream)) != get_str_ok) {
-    destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
-    free(mail);
-    if (code == get_rv_eof) {
-      return mail_rv_eof;
-    }
-    return mail_rv_fail;
-  }
-  printf("If mail is received print receive time, else - hit \\n\n");
-  if ((code = get_string(&mail_id, stream)) != get_str_ok && code != get_str_empty) {
+  if ((code = getline(&mail_id, stream)) != get_str_ok || mail_id._size != 14) {
+    address_destr(&addr);
     destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
     free(mail);
     if (code == get_rv_eof) {
@@ -161,19 +203,33 @@ mail_rv add_mail(Post* post, FILE* stream) {
     return mail_rv_fail;
   }
 
+  printf("If mail is received print receipt time in Greenwich (DD:MM:YYYY hh:mm:ss), else - hit \\n\n");
+  code = getline(&r_time, stream);
+  if (code != get_str_empty && (code != get_str_ok || !is_time_valid(&r_time))) {
+    address_destr(&addr);
+    destr_strings(4, &mail_id, &r_time, &c_time, &weight_t);
+    free(mail);
+    if (code == get_rv_eof) {
+      return mail_rv_eof;
+    }
+    return mail_rv_fail;
+  }
+  get_cur_time(&c_time);
   mail_constr(mail, &addr, weight, &mail_id, &c_time, &r_time);
-
+  if (bst_add(post->mails, mail) != 0) {
+    return mail_rv_fail;
+  }
   return mail_rv_ok;
 }
 
-command find_delivered() {
+command find_delivered(Post const* post) {
   return cm_find_delivered;
 }
 
-command find_expired() {
+command find_expired(Post const* post) {
 
 }
 
-command show() {
-
+void show(Post const* post) {
+  bst_show(post->mails, stdout);
 }
