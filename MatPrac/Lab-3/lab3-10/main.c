@@ -32,13 +32,16 @@ st_code execute(int argc, char* argv[]) {
   }
   Tree tree;
   while (!feof(in)) {
-    if (getline(&str, in) != get_str_ok) {
-      tree_destroy(&tree);
+    int code = getline(&str, in);
+    if (code != get_str_ok) {
       fclose(in);
       fclose(out);
-      return bad_alloc;
+      if (code == get_str_bad_alloc) {
+        return bad_alloc;
+      }
+      return input_invalid;
     }
-    int code = tree_create(&tree, &str);
+    code = tree_create(&tree, &str);
     if (code != 0) {
       tree_destroy(&tree);
       fclose(in);
@@ -49,7 +52,7 @@ st_code execute(int argc, char* argv[]) {
       return input_invalid;
     }
     str_fprint(&str, out);
-    fputc('\n',out);
+    fputc('\n', out);
     print_tree(&tree, out);
     tree_destroy(&tree);
   }

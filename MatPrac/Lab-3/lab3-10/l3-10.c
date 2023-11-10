@@ -80,9 +80,15 @@ int tree_create(Tree* _tree, String* _string) {
       case ',':
         break;
       case '(':
+        if (if_next_child) {
+          return -6;
+        }
         if_next_child = true;
         break;
       case ')':
+        if(cur_node->parent == NULL){
+          return -7;
+        }
         cur_node = cur_node->parent;
         break;
       default: {
