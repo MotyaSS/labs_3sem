@@ -1,7 +1,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include "l3-5.h"
-#include "../lab3-4/my_string.h"
 
 
 int student_dest(Student* st) {
@@ -12,7 +11,7 @@ int student_dest(Student* st) {
   return 0;
 }
 
-get_rv get_student(Student* st, FILE* in) {
+get_rv read_student(Student* st, FILE* in) {
   if (fscanf(in, "%u %32[^ ] %32[^ ] %16[^ ] %hhu %hhu %hhu %hhu %hhu\n", &st->id, st->name, st->surname,
              st->group, &st->grades[0], &st->grades[1], &st->grades[2], &st->grades[3], &st->grades[4]) != 9) {
     return get_inv_input;
@@ -26,12 +25,12 @@ get_rv st_vec_get_from_file(StudentVec* vec, FILE* in) {
     if (!st) {
       return get_bad_alloc;
     }
-    if (!(st->grades = (unsigned char*) malloc(sizeof(unsigned char) * 5))) {
+    if (!(st->grades = (unsigned char*) malloc(sizeof(unsigned char) * GRADE_CNT))) {
       free(st);
       return get_bad_alloc;
     }
 
-    if (get_student(st, in) != get_ok) {
+    if (read_student(st, in) != get_ok) {
       return get_inv_input;
     }
 
@@ -42,15 +41,12 @@ get_rv st_vec_get_from_file(StudentVec* vec, FILE* in) {
   return get_ok;
 }
 
-int print_st_to_file(Student* st, FILE* out) {
+int print_st_to_file(const Student* st, FILE* out) {
   if (st == NULL || out == NULL) {
     return -1;
   }
-  fprintf(out, "[%20u]: %32s %32s %32s", st->id, st->name, st->surname, st->group);
-  for (int i = 0; i < 5; i++) {
-    fprintf(out, " %hhu", st->grades[i]);
-  }
-  fputc('\n', out);
+  double grades_avg = get_average_grade(st);
+  fprintf(out, "%s %s %s %lf\n", st->name, st->surname, st->group, grades_avg);
   return 0;
 }
 
@@ -66,11 +62,6 @@ int st_vec_init(StudentVec* vec, size_t cap) {
   vec->size = 0;
   return 0;
 }
-
-Student* st_find(StudentVec const* vec, sf_flag f_flag, union st_data) {
-
-}
-
 
 int name_cmp(const void* s1, const void* s2) {
   Student* st1 = (Student*) s1;
@@ -96,17 +87,35 @@ int group_cmp(const void* s1, const void* s2) {
   return strcmp(st1->group, st2->group);
 }
 
-int st_vec_add(StudentVec* vec, Student* st) {
-  if (vec->size == vec->cap) {
-    Student* temp = realloc(vec->arr, (vec->cap * 2) * sizeof(Student));
-    if (temp == NULL) {
-      return -1;
-    }
-    vec->arr = temp;
-    vec->cap = vec->cap * 2;
+Student* st_find(StudentVec const* vec, sf_flag f_flag, union st_data data) {
+  int (* cmp)(const void*, const void*);
+  Student a;
+  switch (f_flag) {
+    case sf_name:
+      strcpy(a.name, data.string);
+      cmp = name_cmp;
+      break;
+    case sf_surname:
+      strcpy(a.surname, data.string);
+      cmp = surname_cmp;
+      break;
+    case sf_group:
+      strcpy(a.group, data.string);
+      cmp = group_cmp;
+      break;
+    case sf_id:
+      a.id = data.id;
+      cmp = id_cmp;
+      break;
+    default:
+      return NULL;
   }
-  vec->arr[vec->size++] = *st;
-  return 0;
+  for (int i = 0; i < vec->size; i++) {
+    if (cmp(&a, &vec->arr[i]) == 0) {
+      return &vec->arr[i];
+    }
+  }
+  return NULL;
 }
 
 int st_sort(StudentVec* vec, sf_flag s_flag) {
@@ -131,8 +140,50 @@ int st_sort(StudentVec* vec, sf_flag s_flag) {
   return 0;
 }
 
+double get_average_grade(const Student* st) {
+  double sum = 0;
+  for (int i = 0; i < GRADE_CNT; i++) {
+    sum += st->grades[i];
+  }
+  return sum / GRADE_CNT;
+}
+
+int st_vec_add(StudentVec* vec, Student* st) {
+  if (vec->size == vec->cap) {
+    Student* temp = realloc(vec->arr, (vec->cap * 2) * sizeof(Student));
+    if (temp == NULL) {
+      return -1;
+    }
+    vec->arr = temp;
+    vec->cap = vec->cap * 2;
+  }
+  vec->arr[vec->size++] = *st;
+  return 0;
+}
+
 int st_vec_dest(StudentVec* vec) {
+  for (int i = 0; i < vec->size; i++) {
+    student_dest(&vec->arr[i]);
+  }
   free(vec->arr);
   vec->size = 0;
   vec->cap = 0;
+  return 0;
+}
+
+int fprint_avg_higher_students(StudentVec const* vec, FILE* out) {
+  size_t size = vec->size;
+  double avg = 0;
+  for (int i = 0; i < size; i++) {
+    avg += get_average_grade(&vec->arr[i]);
+  }
+  avg = avg / size;
+  fprintf(out, "Found by avg:\n");
+  for (int i = 0; i < size; i++) {
+    if (get_average_grade(&vec->arr[i]) > avg) {
+      print_st_to_file(&vec->arr[i], out);
+    }
+  }
+  fprintf(out, "__________________________________\n");
+  return 0;
 }

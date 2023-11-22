@@ -5,6 +5,7 @@
 
 
 #define BUFFSIZE 32
+#define GRADE_CNT 5
 // Шаблон входных данных
 /*
  * [id] [name] [surname] [group] [grade1] [grade2] ... \n
@@ -29,7 +30,7 @@ typedef enum {
 
 union st_data {
   unsigned int id;
-  char* string;
+  char string[BUFFSIZE + 1];
 };
 
 typedef enum {
@@ -38,9 +39,10 @@ typedef enum {
   get_inv_input
 } get_rv;
 
-get_rv get_student(Student* st, FILE* in);
+get_rv read_student(Student* st, FILE* in);
+double get_average_grade(const Student* st);
 int student_dest(Student* st);
-int print_st_to_file(Student* st, FILE* out);
+int print_st_to_file(const Student* st, FILE* out);
 
 typedef struct {
   Student* arr;
@@ -51,8 +53,10 @@ typedef struct {
 int st_vec_init(StudentVec* vec, size_t cap);
 get_rv st_vec_get_from_file(StudentVec* vec, FILE* in);
 int st_vec_add(StudentVec* vec, Student* st);
-Student* st_find(StudentVec const* vec, sf_flag f_flag,
-                 union st_data); //third parameter is value itself, cant find - return NULL
+Student* st_find(StudentVec const* vec, sf_flag f_flag, union st_data data); /*
+ * third parameter is value itself,
+ * cant find - return NULL*/
+int fprint_avg_higher_students(StudentVec const* vec, FILE* out);
 
 int name_cmp(const void* s1, const void* s2);
 int id_cmp(const void* s1, const void* s2);
