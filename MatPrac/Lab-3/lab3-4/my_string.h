@@ -37,6 +37,7 @@ int string_is_empty(String const* str);
 
 int string_is_equal(String const* str1, String const* str2);
 int str_is_equal_charp(String const* str1, char const* str2);
+int str_is_equal_charp(String const* str1, char const* str2);
 int str1_cmp_str2(String const* str1, String const* str2); // 1 if first greater, -1 if second greater, 0 if equal
 int string_copy(String const* src, String* dest);
 
