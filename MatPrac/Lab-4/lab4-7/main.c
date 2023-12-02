@@ -2,10 +2,23 @@
 #include "l4-7.h"
 
 
-int main() {
-  FILE* in = fopen("in.txt", "r");
-  FILE* out = fopen("out.txt", "w");
-  switch(parse_file(in, out)){
+int main(int argc, char** argv) {
+  if (argc < 0) {
+    printf("Invalid argc\n");
+    return -1;
+  }
+  FILE* in = fopen(argv[0], "r");
+  if (!in) {
+    printf("Invalid input file\n");
+    return -1;
+  }
+  FILE* out = fopen(argv[1], "w");
+  if (!out) {
+    fclose(in);
+    printf("Invalid output file\n");
+    return -1;
+  }
+  switch (parse_file(in, out)) {
     case parse_rv_ok:
       printf("all ok\n");
       break;
@@ -20,4 +33,5 @@ int main() {
   }
   fclose(in);
   fclose(out);
+  return 0;
 }
