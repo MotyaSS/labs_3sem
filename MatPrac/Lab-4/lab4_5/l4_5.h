@@ -34,7 +34,7 @@ typedef enum {
   EQ_UNCOMPUTABLE
 } eq_st_code;
 int print_eq_err(FILE* stream, const char* expression, eq_st_code code, int cnt);
-int print_eq_ok(FILE* stream, const char* expression, char** rev_exp, int value);
+int print_eq_ok(FILE* stream, const char* expression, char** rev_exp, long long value);
 
 st_code execute(int argc, char* argv[]);
 st_code compute_file(const char* filepath);

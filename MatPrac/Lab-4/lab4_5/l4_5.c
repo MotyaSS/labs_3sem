@@ -246,13 +246,15 @@ eq_st_code convert_to_reversed(const char* src, char*** res) {
     return EQ_OK;
 }
 
-int print_eq_ok(FILE* stream, const char* expression, char** rev_exp, int value) {
+int print_eq_ok(FILE* stream, const char* expression, char** rev_exp, long long value) {
     fprintf(stream, "%s:\n", expression);
     while (*rev_exp != NULL) {
         fprintf(stream, "%s ", *rev_exp);
         rev_exp++;
     }
     fprintf(stream, "\n%d\n", value);
+    fputc('\n', stream);
+    return 0;
 }
 
 int print_eq_err(FILE* stream, const char* expression, eq_st_code code, int cnt) {
@@ -298,7 +300,7 @@ int print_st_code(FILE* stream, st_code code) {
 char* compute_op(const char* val1, const char* val2, const char* op) {
     char* result = NULL;
     
-    long long v1 = strtoll(val1, NULL, 10), v2 = strtoll(val2, NULL, 10), res;
+    long v1 = strtoll(val1, NULL, 10), v2 = strtoll(val2, NULL, 10), res;
     switch (*op) {
         case '+':
             res = v1 + v2;
@@ -330,16 +332,24 @@ char* compute_op(const char* val1, const char* val2, const char* op) {
         cnt++;
     }
     result = (char*) malloc(sizeof(char) * cnt);
-    sprintf(result, "%lld", res);
+    sprintf(result, "%ld", res);
     return result;
+}
+
+int clear_stack(stack* st) {
+    stack_node* node = st->top;
+    while (node != NULL) {
+        free(node->value);
+        node = node->next;
+    }
+    stack_destr(st);
+    return 0;
 }
 
 eq_st_code compute_exp(char** rev_exp, long long* result) {
     stack st = {0};
     char** ptr = rev_exp;
-    char** tofree = (char**) malloc(sizeof(char*));
-    tofree[0] = NULL;
-    int size = 1;
+    stack tofree = {0};
     while (*ptr != NULL) {
         int priority = operation_priority(*ptr);
         if (priority == -1) {
@@ -354,34 +364,25 @@ eq_st_code compute_exp(char** rev_exp, long long* result) {
             }
             char* res = compute_op(val1, val2, *ptr);
             stack_push(&st, res);
-            char** temp = realloc(*tofree, sizeof(char*) * (++size));
-            if (!temp) {
-                clear_str_arr(&tofree);
-                stack_destr(&st);
-                return EQ_BAD_ALLOC;
-            }
-            tofree = temp;
-            tofree[size - 2] = res;
-            tofree[size - 1] = NULL;
+            stack_push(&tofree, res);
         }
         ptr++;
     }
     char* res = stack_pop(&st);
     if (res == NULL) {
-        clear_str_arr(&tofree);
         return EQ_UNCOMPUTABLE;
     }
     if (stack_top(&st) != NULL) {
-        clear_str_arr(&tofree);
+        clear_stack(&tofree);
         stack_destr(&st);
         return EQ_UNCOMPUTABLE;
     }
     if (!if_ll(res)) {
-        clear_str_arr(&tofree);
+        clear_stack(&tofree);
         return EQ_UNCOMPUTABLE;
     }
     *result = strtoll(res, NULL, 10);
-    clear_str_arr(&tofree);
+    clear_stack(&tofree);
     return EQ_OK;
 }
 
@@ -420,10 +421,24 @@ st_code compute_file(const char* filepath) {
                         print_eq_err(errfile, a._buf, code, i);
                     }
                 }
+                else {
+                    long long value;
+                    code = compute_exp(exp, &value);
+                    if (code != EQ_OK) {
+                        if (!errfile) {
+                            char buf[BUFSIZ] = "";
+                            snprintf(buf, sizeof(buf), "err_%s", filepath);
+                            errfile = fopen(buf, "w");
+                        }
+                        if (errfile) {
+                            print_eq_err(errfile, a._buf, code, i);
+                        }
+                    }
+                    else {
+                        print_eq_ok(stdout, a._buf, exp, value);
+                    }
+                }
                 
-                int value;
-                compute_exp(exp, &value);
-                print_eq_ok(stdout, a._buf, exp, value);
                 break;
             }
             case get_str_bad_alloc:
