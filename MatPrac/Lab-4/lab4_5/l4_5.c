@@ -1,6 +1,7 @@
 #define STR_INIT_SIZE 10
 
 #include <ctype.h>
+#include <math.h>
 #include "l4_5.h"
 #include "../../Lab-3/lab3-4/my_string.h"
 #include "../../../my_flag_lib.h"
@@ -294,13 +295,94 @@ int print_st_code(FILE* stream, st_code code) {
     return 0;
 }
 
-eq_st_code compute_exp(char** rev_exp, int* result) {
+char* compute_op(const char* val1, const char* val2, const char* op) {
+    char* result = NULL;
+    
+    long long v1 = strtoll(val1, NULL, 10), v2 = strtoll(val2, NULL, 10), res;
+    switch (*op) {
+        case '+':
+            res = v1 + v2;
+            break;
+        case '-':
+            res = v1 - v2;
+            break;
+        case '*':
+            res = v1 * v2;
+            break;
+        case '/':
+            res = v1 / v2;
+            break;
+        case '%':
+            res = v1 % v2;
+            break;
+        case '^':
+            res = pow(v1, v2);
+            break;
+    }
+    long long tres = res;
+    int cnt = 1;
+    if (tres < 0) {
+        tres = -tres;
+        cnt++;
+    }
+    while (tres != 0) {
+        tres /= 10;
+        cnt++;
+    }
+    result = (char*) malloc(sizeof(char) * cnt);
+    sprintf(result, "%lld", res);
+    return result;
+}
+
+eq_st_code compute_exp(char** rev_exp, long long* result) {
     stack st = {0};
     char** ptr = rev_exp;
+    char** tofree = (char**) malloc(sizeof(char*));
+    tofree[0] = NULL;
+    int size = 1;
     while (*ptr != NULL) {
-        
+        int priority = operation_priority(*ptr);
+        if (priority == -1) {
+            stack_push(&st, *ptr);
+        }
+        else {
+            char* val2 = stack_pop(&st);
+            char* val1 = stack_pop(&st);
+            if (!val1 || !val2) {
+                stack_destr(&st);
+                return EQ_UNCOMPUTABLE;
+            }
+            char* res = compute_op(val1, val2, *ptr);
+            stack_push(&st, res);
+            char** temp = realloc(*tofree, sizeof(char*) * (++size));
+            if (!temp) {
+                clear_str_arr(&tofree);
+                stack_destr(&st);
+                return EQ_BAD_ALLOC;
+            }
+            tofree = temp;
+            tofree[size - 2] = res;
+            tofree[size - 1] = NULL;
+        }
         ptr++;
     }
+    char* res = stack_pop(&st);
+    if (res == NULL) {
+        clear_str_arr(&tofree);
+        return EQ_UNCOMPUTABLE;
+    }
+    if (stack_top(&st) != NULL) {
+        clear_str_arr(&tofree);
+        stack_destr(&st);
+        return EQ_UNCOMPUTABLE;
+    }
+    if (!if_ll(res)) {
+        clear_str_arr(&tofree);
+        return EQ_UNCOMPUTABLE;
+    }
+    *result = strtoll(res, NULL, 10);
+    clear_str_arr(&tofree);
+    return EQ_OK;
 }
 
 st_code compute_file(const char* filepath) {

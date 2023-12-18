@@ -40,6 +40,6 @@ st_code execute(int argc, char* argv[]);
 st_code compute_file(const char* filepath);
 eq_st_code split_expr(const char* src, char*** res);
 eq_st_code convert_to_reversed(const char* src, char*** res);
-eq_st_code compute_exp(char** rev_exp, int* result);
+eq_st_code compute_exp(char** rev_exp, long long* result);
 
 #endif
