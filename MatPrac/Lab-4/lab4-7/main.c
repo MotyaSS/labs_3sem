@@ -1,18 +1,25 @@
 #include <stdio.h>
+#include <string.h>
 #include "l4-7.h"
 
 
 int main(int argc, char** argv) {
-  if (argc < 0) {
+  if (argc < 3) {
     printf("Invalid argc\n");
     return -1;
   }
-  FILE* in = fopen(argv[0], "r");
+
+  if (strcmp(argv[1], argv[2]) == 0) {
+    printf("Invalid files");
+    return -1;
+  }
+
+  FILE* in = fopen(argv[1], "r");
   if (!in) {
     printf("Invalid input file\n");
     return -1;
   }
-  FILE* out = fopen(argv[1], "w");
+  FILE* out = fopen(argv[2], "w");
   if (!out) {
     fclose(in);
     printf("Invalid output file\n");

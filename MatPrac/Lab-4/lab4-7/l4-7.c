@@ -239,7 +239,7 @@ parse_rv parse_file(FILE* in, FILE* out) {
         str_vec_dest(&parsed_vec);
         return parse_rv_bad_alloc;
       }
-
+      case get_str_eof:
       case get_str_empty:
         break;
 
