@@ -1,6 +1,9 @@
 #ifndef L4_6_H
 #define L4_6_H
 
+#include <stdio.h>
+
+
 typedef enum {
     OK,
     BAD_ALLOC,
@@ -21,7 +24,6 @@ typedef struct {
 } VarList; // Здесь хранятся все переменнные, после построения дерева происходит перебор значений
 
 LNode* find_in_list(VarList* list, char* name);
-
 
 typedef struct TNode {
     char* value; //if value is "0" or "1" - its constant
@@ -57,7 +59,9 @@ int read_num(const char* str); //returns count of keys read from str
 
 int create_value_table(Tree* tree);
 int build_tree(const char* expr, Tree* tree);
+int print_table(FILE* stream, Tree* tree);
+int evaluate_expression(Tree* tree);
 
-int get_rand_name(char** name);
+int get_rand_name(char* name, int count);
 
 #endif

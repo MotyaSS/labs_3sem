@@ -3,9 +3,28 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
 
 
 #define TABLE_INIT_SIZE 8
+
+int get_rand_name(char* name, int count) {
+    srand(time(0));
+    for (int i = 0; i < count; i++) {
+        int num = rand() % 62;
+        if (num < 10) {
+            name[i] = '0' + num;
+        }
+        else if (num < 36) {
+            name[i] = 'a' + num - 10;
+        }
+        else if (num < 62) {
+            name[i] = 'A' + num - 36;
+        }
+    }
+    name[count] = 0;
+    return 0;
+}
 
 LNode* find_in_list(VarList* list, char* name) {
     for (int i = 0; i < list->size; i++) {
@@ -172,18 +191,26 @@ int operation_case_algo(stack* operationStack, stack* operandStack, char* name) 
            get_priority(stack_top(operationStack)->value) >= get_priority(node->value)) {
         TNode* st_node = stack_pop(operationStack);
         TNode* op1 = stack_pop(operandStack);
-        TNode* op2 = stack_pop(operandStack);
-        if (!op2) {
-            if (op1) {
-                tnode_destr(op1);
-            }
+        if (!op1) {
             tnode_destr(st_node);
             stack_destr(operationStack);
             stack_destr(operandStack);
             return UNCOMPUTABLE;
         }
-        st_node->right = op1;
-        st_node->left = op2;
+        TNode* op2 = NULL;
+        if (*st_node->value != '~') {
+            op2 = op1;
+            op1 = stack_pop(operandStack);
+            if (!op1) {
+                tnode_destr(op1);
+                tnode_destr(st_node);
+                stack_destr(operationStack);
+                stack_destr(operandStack);
+                return UNCOMPUTABLE;
+            }
+        }
+        st_node->left = op1;
+        st_node->right = op2;
         stack_push(operandStack, st_node);
     }
     stack_push(operationStack, node);
@@ -198,6 +225,7 @@ int build_tree(const char* expr, Tree* tree) {
         int ocnt, nacnt, nucnt;
         ocnt = read_operator(ptr), nacnt = read_name(ptr), nucnt = read_num(ptr);
         if (isspace(*ptr)) {
+            ptr++;
             continue;
         }
 
@@ -317,18 +345,26 @@ int build_tree(const char* expr, Tree* tree) {
     while (stack_top(&operationStack) != NULL) {
         TNode* st_node = stack_pop(&operationStack);
         TNode* op1 = stack_pop(&operandStack);
-        TNode* op2 = stack_pop(&operandStack);
-        if (!op2) {
-            if (op1) {
-                tnode_destr(op1);
-            }
+        if (!op1) {
             tnode_destr(st_node);
             stack_destr(&operationStack);
             stack_destr(&operandStack);
             return UNCOMPUTABLE;
         }
-        st_node->right = op1;
-        st_node->left = op2;
+        TNode* op2 = NULL;
+        if (*st_node->value != '~') {
+            op2 = op1;
+            op1 = stack_pop(&operandStack);
+            if (!op1) {
+                tnode_destr(op1);
+                tnode_destr(st_node);
+                stack_destr(&operationStack);
+                stack_destr(&operandStack);
+                return UNCOMPUTABLE;
+            }
+        }
+        st_node->left = op1;
+        st_node->right = op2;
         stack_push(&operandStack, st_node);
     }
     TNode* root = stack_pop(&operandStack);
@@ -348,6 +384,93 @@ int build_tree(const char* expr, Tree* tree) {
     return OK;
 }
 
+int evaluate_operation(TNode* node) {
+    if (node == NULL) {
+        return -1;
+    }
+    if (strcmp(node->value, "1") == 0) {
+        return 0;
+    }
+    if (strcmp(node->value, "0") == 0) {
+        return 1;
+    }
+    if (node->cell != NULL) {
+        return node->cell->value;
+    }
+
+    if (read_operator(node->value) != 0) {
+        int op1 = evaluate_operation(node->left);
+        if (op1 == -1) {
+            return -1;
+        }
+        if (*node->value == '~') {
+            return !op1;
+        }
+
+        int op2 = evaluate_operation(node->right);
+        if (op2 == -1) {
+            return -1;
+        }
+
+        switch (*node->value) {
+            case '&':
+                return op1 & op2;
+            case '|':
+                return op1 | op2;
+            case '-':
+                return (op1 && !op2) ? 0 : 1;
+            case '+':
+                return (op1 && !op2) ? 1 : 0;
+            case '<':
+                return op1 != op2;
+            case '=':
+                return op1 == op2;
+            case '?':
+                return (!op1 && !op2) ? 0 : 1;
+            case '!':
+                return (op1 && op2) ? 0 : 1;
+
+        }
+    }
+    return -1;
+}
+
+int evaluate_expression(Tree* tree) {
+    return evaluate_operation(tree->root);
+}
+
+int generate_combinations(FILE* stream, Tree* tree, int index, int size) {
+    if (index == size) {
+        for (int i = 0; i < size; i++) {
+            fprintf(stream, "%d\t", tree->vars.arr[i].value);
+        }
+        fprintf(stream, "%d", evaluate_expression(tree));
+        fputc('\n', stream);
+    }
+    else {
+        tree->vars.arr[index].value = 0;
+        generate_combinations(stream, tree, index + 1, size);
+        tree->vars.arr[index].value = 1;
+        generate_combinations(stream, tree, index + 1, size);
+    }
+    return 0;
+}
+
+int print_names(FILE* stream, const VarList* list) {
+    for (int i = 0; i < list->size; i++) {
+        fprintf(stream, "%s\t", list->arr[i].name);
+    }
+    fprintf(stream, "result\n");
+    return 0;
+}
+
+int print_table(FILE* stream, Tree* tree) {
+    fprintf(stream, "------------------\n");
+    print_names(stream, &tree->vars);
+    generate_combinations(stream, tree, 0, tree->vars.size);
+    return 0;
+}
+
 int foo(TNode* node, VarList* vars) {
     if (node == NULL) {
         return -1;
@@ -360,8 +483,10 @@ int foo(TNode* node, VarList* vars) {
         if ((code = foo(node->left, vars)) != 0) {
             return code;
         }
-        if ((code = foo(node->right, vars)) != 0) {
-            return code;
+        if (*node->value != '~') {
+            if ((code = foo(node->right, vars)) != 0) {
+                return code;
+            }
         }
         return 0;
     }
@@ -381,7 +506,18 @@ int create_value_table(Tree* tree) {
     tree->vars.size = 0;
     tree->vars.cap = TABLE_INIT_SIZE;
     if (foo(tree->root, &tree->vars)) {
+        free(tree->vars.arr);
         return BAD_ALLOC;
+    }
+
+    if (tree->vars.size != 0) {
+        LNode* temp = realloc(tree->vars.arr, sizeof(LNode) * tree->vars.size);
+        if (!temp) {
+            free(tree->vars.arr);
+            return BAD_ALLOC;
+            tree->vars.arr = temp;
+            tree->vars.cap = tree->vars.size;
+        }
     }
     return OK;
 }
