@@ -5,12 +5,12 @@
 
 
 typedef struct stack_node {
-  struct stack_node* next;
-  char* value;
+    struct stack_node* next;
+    char* value;
 } stack_node;
 
 typedef struct {
-  stack_node* top;
+    stack_node* top;
 } stack;
 
 char* stack_pop(stack* st);
@@ -19,22 +19,22 @@ int stack_push(stack* st, char* value);
 int stack_destr(stack* st);
 
 typedef enum {
-  OK,
-  INV_ARGC,
-  INV_FILE,
-  BAD_ALLOC
+    OK,
+    INV_ARGC,
+    INV_FILE,
+    BAD_ALLOC
 } st_code;
 int print_st_code(FILE* stream, st_code code);
 
 typedef enum {
-  EQ_OK,
-  EQ_INV_BRACKET,
-  EQ_INV_OP,
-  EQ_BAD_ALLOC,
-  EQ_UNCOMPUTABLE
+    EQ_OK,
+    EQ_INV_BRACKET,
+    EQ_INV_OP,
+    EQ_BAD_ALLOC,
+    EQ_UNCOMPUTABLE
 } eq_st_code;
 int print_eq_err(FILE* stream, const char* expression, eq_st_code code, int cnt);
-int print_eq_ok(FILE* stream, const char* expression, char** rev_exp, int value);
+int print_eq_ok(FILE* stream, const char* expression, char** rev_exp, long long value);
 
 st_code execute(int argc, char* argv[]);
 st_code compute_file(const char* filepath);
