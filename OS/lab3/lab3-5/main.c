@@ -4,9 +4,10 @@
 #include <sys/stat.h>
 #include <unistd.h>
 
-void listFiles(const char *path) {
-    struct dirent *entry;
-    DIR *dir = opendir(path);
+
+void listFiles(const char* path) {
+    struct dirent* entry;
+    DIR* dir = opendir(path);
     if (dir == NULL) {
         perror("Error opening directory");
         exit(EXIT_FAILURE);
@@ -24,24 +25,30 @@ void listFiles(const char *path) {
         printf("%-32s ", fullpath);
         if (S_ISREG(fileStat.st_mode)) {
             printf("Regular file\n");
-        } else if (S_ISDIR(fileStat.st_mode)) {
+        }
+        else if (S_ISDIR(fileStat.st_mode)) {
             printf("Directory\n");
-        } else if (S_ISLNK(fileStat.st_mode)) {
+        }
+        else if (S_ISLNK(fileStat.st_mode)) {
             printf("Symbolic link\n");
-        } else if (S_ISFIFO(fileStat.st_mode)) {
+        }
+        else if (S_ISFIFO(fileStat.st_mode)) {
             printf("FIFO/pipe\n");
-        } else if (S_ISSOCK(fileStat.st_mode)) {
+        }
+        else if (S_ISSOCK(fileStat.st_mode)) {
             printf("Socket\n");
-        } else if (S_ISCHR(fileStat.st_mode)) {
+        }
+        else if (S_ISCHR(fileStat.st_mode)) {
             printf("Character device\n");
-        } else if (S_ISBLK(fileStat.st_mode)) {
+        }
+        else if (S_ISBLK(fileStat.st_mode)) {
             printf("Block device\n");
         }
     }
     closedir(dir);
 }
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
     if (argc < 2) {
         printf("Usage: %s <directory1> <directory2> ... <directoryN>\n", argv[0]);
         return 1;
