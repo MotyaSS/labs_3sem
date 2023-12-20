@@ -306,6 +306,7 @@ int build_tree(const char* expr, Tree* tree) {
             strncpy(name, ptr, nucnt);
             name[nucnt] = 0;
             if (strcmp(name, "0") != 0 && strcmp(name, "1") != 0) {
+                free(name);
                 stack_destr(&operationStack);
                 stack_destr(&operandStack);
                 return INV_NUMBER;
@@ -514,9 +515,9 @@ int create_value_table(Tree* tree) {
         LNode* temp = realloc(tree->vars.arr, sizeof(LNode) * tree->vars.size);
         if (!temp) {
             free(tree->vars.arr);
-            return BAD_ALLOC;
             tree->vars.arr = temp;
             tree->vars.cap = tree->vars.size;
+            return BAD_ALLOC;
         }
     }
     return OK;
