@@ -102,7 +102,6 @@ st_code norm_m(vector* vec, double* nrm) {
     if (A == NULL) {
         return BAD_ALLOC;
     }
-
     for (int i = 0; i < vec->n; i++) {
         A[i] = (double*) malloc(sizeof(double) * vec->n);
         if (A[i] == NULL) {
@@ -112,7 +111,7 @@ st_code norm_m(vector* vec, double* nrm) {
             free(A);
             return BAD_ALLOC;
         }
-
+        // Единичная матрица - положительно определенная
         for (int j = 0; j < vec->n; ++j) {
             if (i == j) {
                 A[i][j] = 1;
@@ -142,16 +141,14 @@ st_code norm_m(vector* vec, double* nrm) {
     }
     free(A);
     free(mult_res);
-
     *nrm = sqrt(*nrm);
-
     return OK;
 }
 
-st_code longest_vector(st_code (* norm_1)(vector*, double*), unsigned int p,
-                       st_code (* norm_2)(vector*, unsigned int, double*), st_code (* norm_3)(vector*, double*),
-                       int* size_1, int* size_2, int* size_3, vector** res_1, vector** res_2, vector** res_3,
-                       int quantity, ...) {
+st_code longest_norm(st_code (* norm_1)(vector*, double*), unsigned int p,
+                     st_code (* norm_2)(vector*, unsigned int, double*), st_code (* norm_3)(vector*, double*),
+                     int* size_1, int* size_2, int* size_3, vector** res_1, vector** res_2, vector** res_3,
+                     int quantity, ...) {
 
     (*res_1) = (vector*) malloc(sizeof(vector) * quantity);
     if (res_1 == NULL) {
@@ -251,8 +248,8 @@ int main() {
     vector* res_1 = NULL, * res_2 = NULL, * res_3 = NULL;
     int size_1, size_2, size_3;
     st_code code;
-    code = longest_vector(norm, 3, norm_p, norm_m, &size_1, &size_2, &size_3, &res_1, &res_2, &res_3, 3, vec_1,
-                          vec_2, vec_3);
+    code = longest_norm(norm, 3, norm_p, norm_m, &size_1, &size_2, &size_3, &res_1, &res_2, &res_3, 3, vec_1,
+                        vec_2, vec_3);
     if (code != OK) {
         vector_dest(&vec_1);
         vector_dest(&vec_2);
